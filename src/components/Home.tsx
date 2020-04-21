@@ -9,9 +9,9 @@ export default () => (
         <p className="lead">
           A curated list of recipes for the best homemade meal and delicacies.
         </p>
-        <hr className="my-4" />
+        <hr className="my-4 secondary-color" />
         <Link
-          to="/recipes"
+          to="#"
           className="btn btn-lg custom-button"
           role="button"
         >
