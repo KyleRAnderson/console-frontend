@@ -9,9 +9,9 @@ export default () => (
         <p className="lead">
           For managing the Reindeer Hunt and similar competitions.
         </p>
-        <hr className="my-4" />
+        <hr className="my-4 secondary-color" />
         <Link
-          to="/recipes"
+          to="#"
           className="btn btn-lg custom-button"
           role="button"
         >

@@ -1,21 +1,23 @@
 {
-  "compilerOptions": {
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "lib": ["es6", "dom"],
-    "module": "es6",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "target": "es5",
-    "jsx": "react",
-    "allowSyntheticDefaultImports": true
-  },
-  "exclude": [
-    "**/*.spec.ts",
-    "node_modules",
-    "vendor",
-    "public"
-  ],
-  "compileOnSave": false
+    "compilerOptions": {
+        "declaration": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "lib": ["es6", "dom"],
+        "module": "es6",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "target": "ES6",
+        "jsx": "react",
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "allowJs": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true
+    },
+    "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
+    "compileOnSave": false
 }
