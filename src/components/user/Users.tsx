@@ -57,14 +57,18 @@ class UserList extends React.Component<any, State> {
 
         return (
             <div>
-                <h1>Users</h1>
-                <table>
-                    <tr>
-                        <th>Username</th>
-                        <th>Email</th>
-                    </tr>
-                    {allUsersDisplay}
-                </table>
+                <div className="table-responsive">
+                    <table className="table table-striped">
+                        <thead className="thead-dark">
+                            <tr>
+                                <th scope="col">Username</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>{allUsersDisplay}</tbody>
+                    </table>
+                </div>
             </div>
         );
     }
