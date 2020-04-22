@@ -21,6 +21,7 @@ class UserList extends React.Component<any, State> {
 
     componentDidMount() {
         this.loadUsers();
+        document.title = 'User List';
     }
 
     loadUsers(): void {
@@ -56,7 +57,7 @@ class UserList extends React.Component<any, State> {
         });
 
         return (
-            <div>
+            <>
                 <div className="table-responsive">
                     <table className="table table-striped">
                         <thead className="thead-dark">
@@ -69,7 +70,7 @@ class UserList extends React.Component<any, State> {
                         <tbody>{allUsersDisplay}</tbody>
                     </table>
                 </div>
-            </div>
+            </>
         );
     }
 
