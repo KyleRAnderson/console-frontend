@@ -25,7 +25,7 @@ class UserList extends React.Component<any, State> {
     }
 
     loadUsers(): void {
-        fetch(apiRoutes.usersIndexPath)
+        fetch(apiRoutes.usersRootPath)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -77,7 +77,7 @@ class UserList extends React.Component<any, State> {
     deleteUser(id: string): void {
         const token: string | undefined = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
         if (token) {
-            fetch(`${apiRoutes.usersDeletePath}/${id}`, {
+            fetch(`${apiRoutes.usersRootPath}/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-Token': token,
