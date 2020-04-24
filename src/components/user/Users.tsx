@@ -41,7 +41,6 @@ class UserList extends React.Component<any, State> {
         const allUsersDisplay: JSX.Element[] = users.map((user: User) => {
             return (
                 <tr key={user.id} className="">
-                    <td>{user.username}</td>
                     <td>{user.email}</td>
                     <td>
                         <button type="button" className="btn btn-danger" onClick={() => this.deleteUser(user.id)}>
@@ -58,7 +57,6 @@ class UserList extends React.Component<any, State> {
                     <table className="table table-striped">
                         <thead className="thead-dark">
                             <tr>
-                                <th scope="col">Username</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Actions</th>
                             </tr>
