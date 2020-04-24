@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import User from '../../models/User';
 import * as appRoutes from '../../routes/AppLocations';
 import * as apiRoutes from '../../routes/ApiPaths';
+import axios from 'axios';
 
 type State = {
     toHome: boolean;
@@ -25,14 +26,9 @@ class UserList extends React.Component<any, State> {
     }
 
     loadUsers(): void {
-        fetch(apiRoutes.usersRootPath)
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Failed to fetch users.');
-            })
-            .then((response) => this.setState(Object.assign({}, this.state, { users: response })))
+        axios
+            .get<User[]>(apiRoutes.usersRootPath)
+            .then((response) => this.setState(Object.assign({}, this.state, { users: response.data })))
             .catch(() => this.setState({ users: [], toHome: true }));
     }
 
@@ -78,6 +74,7 @@ class UserList extends React.Component<any, State> {
         const token: string | undefined = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
         if (token) {
             fetch(`${apiRoutes.usersRootPath}/${id}`, {
+                // FIXME use axios
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-Token': token,
