@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import User from '../../models/User';
 import * as appRoutes from '../../routes/AppLocations';
 import * as apiRoutes from '../../routes/ApiPaths';
-import axios from 'axios';
+import Axios from 'axios';
 
 type State = {
     toHome: boolean;
@@ -26,8 +26,7 @@ class UserList extends React.Component<any, State> {
     }
 
     loadUsers(): void {
-        axios
-            .get<User[]>(apiRoutes.usersRootPath)
+        Axios.get<User[]>(apiRoutes.usersRootPath)
             .then((response) => {
                 this.setState(Object.assign({}, this.state, { users: response.data }));
             })
@@ -73,17 +72,15 @@ class UserList extends React.Component<any, State> {
     deleteUser(id: string): void {
         const token: string | undefined = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
         if (token) {
-            axios
-                .delete(`${apiRoutes.usersRootPath}${id}`, {
-                    headers: {
-                        'X-CSRF-Token': token,
-                        'Content-Type': 'application/json',
-                    },
-                })
-                .then(() => {
-                    const newUsersArray: Array<User> = this.state.users.filter((user) => user.id !== id);
-                    this.setState(Object.assign({}, this.state, { users: newUsersArray }));
-                });
+            Axios.delete(`${apiRoutes.usersRootPath}${id}`, {
+                headers: {
+                    'X-CSRF-Token': token,
+                    'Content-Type': 'application/json',
+                },
+            }).then(() => {
+                const newUsersArray: Array<User> = this.state.users.filter((user) => user.id !== id);
+                this.setState(Object.assign({}, this.state, { users: newUsersArray }));
+            });
         }
     }
 }

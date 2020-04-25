@@ -6,24 +6,49 @@ import { usersLoginPath } from '../routes/ApiPaths';
 type State = {
     email: string;
     password: string;
+    success: boolean;
+    submitted: boolean;
 };
 
-class Login extends React.Component<any, State> {
+type LoginProps = {
+    onTokenReceived: (token: string) => void;
+};
+
+interface ServerResponse {
+    headers: ServerResponseHeader;
+}
+
+interface ServerResponseHeader {
+    authorization: string;
+}
+
+class Login extends React.Component<LoginProps, State> {
     state: State = {
         email: '',
         password: '',
+        success: false,
+        submitted: false,
     };
 
-    constructor(props: any) {
+    constructor(props: LoginProps) {
         super(props);
     }
 
     componentDidMount() {}
 
     render(): ReactNode {
+        const message: string = this.state.success ? 'Successful!' : 'Failed';
+        const alertClass: string = this.state.success ? 'alert-success' : 'alert-danger';
+        const popupMessage: ReactNode = (
+            <div className={`alert ${alertClass}`} role="alert">
+                Authentication {message}
+            </div>
+        );
+
         return (
-            <div className="Login" onSubmit={() => this.handleSubmit()}>
-                <Form>
+            <div className="Login col-md-5">
+                {this.state.submitted && popupMessage}
+                <Form onSubmit={() => this.handleSubmit()}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email</Form.Label>
                         <Form.Control
@@ -64,21 +89,24 @@ class Login extends React.Component<any, State> {
 
     handleSubmit(): void {
         const token: string | undefined = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
-        const user = {
-            user: {
-                email: this.state.email,
-                password: this.state.password,
-            },
-        };
-        Axios.post(usersLoginPath, {
+        Axios.post<ServerResponseHeader>(usersLoginPath, {
             headers: {
                 'X-CSRF-Token': token,
                 'Content-Type': 'application/json',
             },
-            user,
+            user: {
+                email: this.state.email,
+                password: this.state.password,
+            },
+            transformResponse: (r: ServerResponse) => r.headers,
         })
-            .then(() => console.log('success'))
-            .catch((err) => console.log(err));
+            .then((response: ServerResponse) => {
+                this.setState(Object.assign({}, this.state, { success: true, submitted: true }));
+                // this.props.onTokenReceived(response.headers.authorization);
+            })
+            .catch(() => {
+                this.setState(Object.assign({}, this.state, { success: false, submitted: true }));
+            });
     }
 }
 
