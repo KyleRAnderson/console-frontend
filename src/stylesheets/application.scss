@@ -12,6 +12,7 @@ $text-forefront: white;
 }
 .primary-color {
     background-color: black;
+    color: white;
 }
 .bg_secondary-color {
     background-color: $text-forefront;
@@ -19,6 +20,7 @@ $text-forefront: white;
 .secondary-color {
     color: $text-forefront;
 }
+
 .custom-button {
     &.btn {
         background-color: $reindeer-red;

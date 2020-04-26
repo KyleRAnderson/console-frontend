@@ -19,5 +19,6 @@
         "noUnusedLocals": true
     },
     "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
+    "include": ["app", "javascript", "decs.d.ts"],
     "compileOnSave": false
 }
