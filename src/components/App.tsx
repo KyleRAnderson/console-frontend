@@ -6,6 +6,6 @@ import ReactNotifications from 'react-notifications-component';
 export default () => (
     <>
         <ReactNotifications />
-        {Routes}
+        <Routes />
     </>
 );

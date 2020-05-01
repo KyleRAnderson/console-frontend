@@ -1,8 +1,8 @@
-import React from 'react';
-import { Button, Form, Container } from 'react-bootstrap';
 import Axios from 'axios';
-import { usersLoginPath } from '../routes/ApiPaths';
+import React from 'react';
+import { Button, Container, Form } from 'react-bootstrap';
 import { store } from 'react-notifications-component';
+import { usersLoginPath } from '../routes/ApiPaths';
 
 type State = {
     email: string;
@@ -12,15 +12,17 @@ type State = {
 };
 
 type LoginProps = {
-    onTokenReceived: (token: string) => void;
+    onTokenReceived: (email: string, token: string, id: string) => void;
 };
 
 interface ServerResponse {
-    headers: ServerResponseHeader;
-}
-
-interface ServerResponseHeader {
-    authorization: string;
+    headers: {
+        authorization: string;
+    };
+    data: {
+        id: string;
+        email: string;
+    };
 }
 
 class Login extends React.Component<LoginProps, State> {
@@ -83,7 +85,9 @@ class Login extends React.Component<LoginProps, State> {
 
     handleSubmit(event: React.FormEvent<HTMLElement>): void {
         const token: string | undefined = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
-        Axios.post<ServerResponseHeader>(usersLoginPath, {
+        let stateCopy: State = { ...this.state };
+        stateCopy.submitted = true;
+        Axios.post(usersLoginPath, {
             headers: {
                 'X-CSRF-Token': token,
                 'Content-Type': 'application/json',
@@ -92,19 +96,22 @@ class Login extends React.Component<LoginProps, State> {
                 email: this.state.email,
                 password: this.state.password,
             },
-            transformResponse: (r: ServerResponse) => r.headers,
         })
-            .then(() => {
-                this.setState(Object.assign({}, this.state, { success: true, submitted: true }));
-                this.sentNotification(true);
+            .then((response: ServerResponse) => {
+                stateCopy.success = true;
+                this.setState(stateCopy);
+                this.props.onTokenReceived(response.data.email, response.headers.authorization, response.data.id);
+                this.sendNotification(true);
             })
             .catch(() => {
-                this.setState(Object.assign({}, this.state, { success: false, submitted: true }));
-                this.sentNotification(false);
+                stateCopy.success = false;
+                this.setState(stateCopy);
+                this.sendNotification(false);
             });
         event.preventDefault();
     }
-    sentNotification(succeeded: boolean) {
+
+    sendNotification(succeeded: boolean) {
         store.addNotification({
             message: `Login ${succeeded ? 'Succeessful' : 'Unsuccessful'}`,
             type: `${succeeded ? 'success' : 'danger'}`,

@@ -12,7 +12,7 @@ type State = {
     submitted: boolean;
 };
 
-class Login extends React.Component<any, State> {
+class Register extends React.Component<any, State> {
     state: State = {
         email: '',
         password: '',
@@ -123,4 +123,4 @@ class Login extends React.Component<any, State> {
     }
 }
 
-export default Login;
+export default Register;
