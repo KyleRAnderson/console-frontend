@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Redirect } from 'react-router-dom';
 import User from '../../models/User';
 import * as appRoutes from '../../routes/AppLocations';
 import * as apiRoutes from '../../routes/ApiPaths';
+import Axios from 'axios';
 
 type State = {
     toHome: boolean;
@@ -25,18 +26,14 @@ class UserList extends React.Component<any, State> {
     }
 
     loadUsers(): void {
-        fetch(apiRoutes.usersIndexPath)
+        Axios.get<User[]>(apiRoutes.usersRootPath)
             .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Failed to fetch users.');
+                this.setState(Object.assign({}, this.state, { users: response.data }));
             })
-            .then((response) => this.setState(Object.assign({}, this.state, { users: response })))
             .catch(() => this.setState({ users: [], toHome: true }));
     }
 
-    render() {
+    render(): ReactNode {
         if (this.state.toHome) {
             return <Redirect to={appRoutes.root} />;
         }
@@ -45,7 +42,6 @@ class UserList extends React.Component<any, State> {
         const allUsersDisplay: JSX.Element[] = users.map((user: User) => {
             return (
                 <tr key={user.id} className="">
-                    <td>{user.username}</td>
                     <td>{user.email}</td>
                     <td>
                         <button type="button" className="btn btn-danger" onClick={() => this.deleteUser(user.id)}>
@@ -62,7 +58,6 @@ class UserList extends React.Component<any, State> {
                     <table className="table table-striped">
                         <thead className="thead-dark">
                             <tr>
-                                <th scope="col">Username</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -77,17 +72,14 @@ class UserList extends React.Component<any, State> {
     deleteUser(id: string): void {
         const token: string | undefined = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
         if (token) {
-            fetch(`${apiRoutes.usersDeletePath}/${id}`, {
-                method: 'DELETE',
+            Axios.delete(`${apiRoutes.usersRootPath}${id}`, {
                 headers: {
                     'X-CSRF-Token': token,
                     'Content-Type': 'application/json',
                 },
-            }).then((response) => {
-                if (response.ok) {
-                    const newUsersArray: Array<User> = this.state.users.filter((user) => user.id !== id);
-                    this.setState(Object.assign({}, this.state, { users: newUsersArray }));
-                }
+            }).then(() => {
+                const newUsersArray: Array<User> = this.state.users.filter((user) => user.id !== id);
+                this.setState(Object.assign({}, this.state, { users: newUsersArray }));
             });
         }
     }
