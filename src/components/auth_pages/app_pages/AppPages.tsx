@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 import { root, rostersPath } from '../../../routes/AppLocations';
-import Rosters from './Rosters';
+import Rosters from './rosters/Rosters';
 import { AuthProps } from '../AuthPages';
 
 function AppPage(props: AuthProps) {
@@ -15,7 +15,9 @@ function AppPage(props: AuthProps) {
                 </Nav>
             </Navbar>
             <BrowserRouter>
-                <Route path={rostersPath} render={() => <Rosters {...props} />} />
+                <Route path={rostersPath}>
+                    <Rosters {...props} />
+                </Route>
             </BrowserRouter>
         </>
     );
