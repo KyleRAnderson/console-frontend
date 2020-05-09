@@ -4,6 +4,7 @@ import User from '../../models/User';
 import * as appRoutes from '../../routes/AppLocations';
 import * as apiRoutes from '../../routes/ApiPaths';
 import Axios from 'axios';
+import { Table } from 'react-bootstrap';
 
 type State = {
     toHome: boolean;
@@ -15,10 +16,6 @@ class UserList extends React.Component<any, State> {
         toHome: false,
         users: Array<User>(),
     };
-
-    constructor(props: any) {
-        super(props);
-    }
 
     componentDidMount() {
         this.loadUsers();
@@ -54,7 +51,7 @@ class UserList extends React.Component<any, State> {
 
         return (
             <>
-                <table className="table table-responsive table-striped">
+                <Table striped responsive>
                     <thead className="thead-dark">
                         <tr>
                             <th scope="col">Email</th>
@@ -62,7 +59,7 @@ class UserList extends React.Component<any, State> {
                         </tr>
                     </thead>
                     <tbody>{allUsersDisplay}</tbody>
-                </table>
+                </Table>
             </>
         );
     }
