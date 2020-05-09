@@ -1,11 +1,10 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 import { root, rostersPath } from '../../../routes/AppLocations';
-import Rosters from './rosters/Rosters';
-import { AuthProps } from '../AuthPages';
+import RosterView from './rosters/RosterView';
 
-function AppPage(props: AuthProps) {
+function AppPage() {
     return (
         <>
             <Navbar bg="dark" variant="dark">
@@ -14,11 +13,9 @@ function AppPage(props: AuthProps) {
                     <Nav.Link href={rostersPath}>Rosters</Nav.Link>
                 </Nav>
             </Navbar>
-            <BrowserRouter>
-                <Route path={rostersPath}>
-                    <Rosters {...props} />
-                </Route>
-            </BrowserRouter>
+            <Route path={`${rostersPath}(:rosterID)`}>
+                <RosterView />
+            </Route>
         </>
     );
 }
