@@ -1,8 +1,9 @@
-import Axios from 'axios';
 import React from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { store } from 'react-notifications-component';
-import { usersLoginPath } from '../routes/ApiPaths';
+import * as Auth from '../auth';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
+import * as appPaths from '../routes/AppLocations';
 
 type State = {
     email: string;
@@ -11,21 +12,7 @@ type State = {
     submitted: boolean;
 };
 
-type LoginProps = {
-    onTokenReceived: (email: string, token: string, id: string) => void;
-};
-
-interface ServerResponse {
-    headers: {
-        authorization: string;
-    };
-    data: {
-        id: string;
-        email: string;
-    };
-}
-
-class Login extends React.Component<LoginProps, State> {
+class Login extends React.Component<RouteComponentProps<{}, any, { from: string }>, State> {
     state: State = {
         email: '',
         password: '',
@@ -33,13 +20,11 @@ class Login extends React.Component<LoginProps, State> {
         submitted: false,
     };
 
-    constructor(props: LoginProps) {
-        super(props);
-    }
+    render() {
+        if (this.state.submitted && this.state.success) {
+            return <Redirect to={this.props.location.state?.from || appPaths.app} />;
+        }
 
-    componentDidMount() {}
-
-    render(): React.ReactElement {
         return (
             <div className="vw-100 vh-100 primary-color d-flex">
                 <Container className="Login justify-content-center primary-color col-md-5">
@@ -71,11 +56,11 @@ class Login extends React.Component<LoginProps, State> {
         );
     }
 
-    setEmail(email: string): void {
+    setEmail(email: string) {
         this.setState(Object.assign({}, this.state, { email: email }));
     }
 
-    setPassword(password: string): void {
+    setPassword(password: string) {
         this.setState(Object.assign({}, this.state, { password: password }));
     }
 
@@ -83,37 +68,19 @@ class Login extends React.Component<LoginProps, State> {
         return this.state.email.length > 0 && this.state.password.length > 0; // TODO should have regex validation on email, and query server for min password length
     }
 
-    handleSubmit(event: React.FormEvent<HTMLElement>): void {
-        const token: string | undefined = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
-        let stateCopy: State = { ...this.state };
-        stateCopy.submitted = true;
-        Axios.post(usersLoginPath, {
-            headers: {
-                'X-CSRF-Token': token,
-                'Content-Type': 'application/json',
-            },
-            user: {
-                email: this.state.email,
-                password: this.state.password,
-            },
-        })
-            .then((response: ServerResponse) => {
-                stateCopy.success = true;
-                this.setState(stateCopy);
-                this.props.onTokenReceived(response.data.email, response.headers.authorization, response.data.id);
-                this.sendNotification(true);
-            })
-            .catch(() => {
-                stateCopy.success = false;
-                this.setState(stateCopy);
-                this.sendNotification(false);
-            });
+    handleSubmit(event: React.FormEvent<HTMLElement>) {
+        let stateCopy: State = { ...this.state, submitted: true };
+        Auth.login(this.state.email, this.state.password, (success) => {
+            stateCopy.success = success;
+            this.setState(stateCopy);
+            this.sendNotification(success);
+        });
         event.preventDefault();
     }
 
     sendNotification(succeeded: boolean) {
         store.addNotification({
-            message: `Login ${succeeded ? 'Succeessful' : 'Unsuccessful'}`,
+            message: `Login ${succeeded ? 'Successful' : 'Unsuccessful'}`,
             type: `${succeeded ? 'success' : 'danger'}`,
             insert: 'top',
             container: 'top-right',
