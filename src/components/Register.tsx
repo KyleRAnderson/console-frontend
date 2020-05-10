@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Form, Container } from 'react-bootstrap';
 import Axios from 'axios';
-import { usersRegistrationsPath } from '../routes/ApiPaths';
-import { store } from 'react-notifications-component';
+import ApiPaths from '../routes/ApiPaths';
+import Auth from '../auth';
 
 type State = {
     email: string;
@@ -85,12 +85,8 @@ class Register extends React.Component<any, State> {
     }
 
     handleSubmit(event: React.FormEvent<HTMLElement>): void {
-        const token: string | undefined = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
-        Axios.post(usersRegistrationsPath, {
-            headers: {
-                'X-CSRF-Token': token,
-                'Content-Type': 'application/json',
-            },
+        Axios.post(ApiPaths.usersRegistrationsPath, {
+            headers: Auth.getRequestHeaders(false),
             user: {
                 email: this.state.email,
                 password: this.state.password,

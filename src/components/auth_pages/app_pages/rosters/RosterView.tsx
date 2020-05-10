@@ -6,18 +6,20 @@ import { rostersPath as rostersApiPath, rostersPath } from '../../../../routes/A
 import RostersTable from './RostersTable';
 import RosterParticipantsView from '../participants/RosterParticipantsView';
 import { Route, Switch, Redirect, RouteComponentProps } from 'react-router-dom';
+import AppPaths from '../../../../routes/AppLocations';
+import RosterAPI from './rosterAPI';
 
 interface State {
     rosters: Roster[];
 }
 
-export default class RosterView extends React.Component<any, State> {
+export default class RosterView extends React.Component<RouteComponentProps, State> {
+    state: State = {
+        rosters: [],
+    };
+
     componentDidMount() {
-        Axios.get<Roster[]>(rostersApiPath, {
-            headers: {
-                Authorization: this.props.auth.auth_token,
-            },
-        })
+        RosterAPI.getRosters()
             .then((response) => {
                 this.setRosters(response.data);
             })
@@ -38,28 +40,29 @@ export default class RosterView extends React.Component<any, State> {
     }
 
     setRosters(rosters: Roster[]) {
-        let state: State = { ...this.state };
-        state.rosters = rosters;
-        this.setState(state);
+        this.setState({ ...this.state, rosters: rosters });
     }
 
     render(): JSX.Element {
+        const participantsView: JSX.Element = (
+            <Route
+                path={`${this.props.match.url}/:rosterId`}
+                render={(props: RouteComponentProps<{ rosterId: string }>) => {
+                    let foundRoster: Roster | undefined = this.state.rosters.find(
+                        (roster) => roster.id === props.match.params.rosterId,
+                    );
+                    if (foundRoster) {
+                        return <RosterParticipantsView roster={foundRoster} />;
+                    } else {
+                        return <Redirect to={AppPaths.rostersPath} />;
+                    }
+                }}
+            ></Route>
+        );
         return (
             <>
                 <Switch>
-                    <Route
-                        path=":rosterId"
-                        render={(props: RouteComponentProps<{ rosterId: string }>) => {
-                            let foundRoster: Roster | undefined = this.state.rosters.find(
-                                (roster) => roster.id === props.match.params.rosterId,
-                            );
-                            if (foundRoster) {
-                                return <RosterParticipantsView roster={foundRoster} />;
-                            } else {
-                                return <Redirect to={rostersPath} />;
-                            }
-                        }}
-                    ></Route>
+                    {this.state.rosters.length > 0 ? participantsView : null}
                     <Route>
                         <RostersTable rosters={this.state.rosters} />
                     </Route>

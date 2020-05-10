@@ -1,9 +1,8 @@
 import React from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
-import { store } from 'react-notifications-component';
-import * as Auth from '../auth';
+import Auth from '../auth';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import * as appPaths from '../routes/AppLocations';
+import AppPaths from '../routes/AppLocations';
 
 type State = {
     email: string;
@@ -21,8 +20,8 @@ class Login extends React.Component<RouteComponentProps<{}, any, { from: string 
     };
 
     render() {
-        if (this.state.submitted && this.state.success) {
-            return <Redirect to={this.props.location.state?.from || appPaths.app} />;
+        if ((this.state.submitted && this.state.success) || Auth.isLoggedIn()) {
+            return <Redirect to={this.props.location.state?.from || AppPaths.app} />;
         }
 
         return (

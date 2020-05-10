@@ -1,10 +1,11 @@
 import React, { ReactNode } from 'react';
 import { Redirect } from 'react-router-dom';
 import User from '../../models/User';
-import * as appRoutes from '../../routes/AppLocations';
-import * as apiRoutes from '../../routes/ApiPaths';
+import AppPaths from '../../routes/AppLocations';
+import ApiPaths from '../../routes/ApiPaths';
 import Axios from 'axios';
 import { Table } from 'react-bootstrap';
+import Auth from '../../auth';
 
 type State = {
     toHome: boolean;
@@ -23,7 +24,7 @@ class UserList extends React.Component<any, State> {
     }
 
     loadUsers(): void {
-        Axios.get<User[]>(apiRoutes.usersRootPath)
+        Axios.get<User[]>(ApiPaths.usersRootPath)
             .then((response) => {
                 this.setState(Object.assign({}, this.state, { users: response.data }));
             })
@@ -32,7 +33,7 @@ class UserList extends React.Component<any, State> {
 
     render(): ReactNode {
         if (this.state.toHome) {
-            return <Redirect to={appRoutes.root} />;
+            return <Redirect to={AppPaths.root} />;
         }
 
         const users = this.state.users;
@@ -67,11 +68,8 @@ class UserList extends React.Component<any, State> {
     deleteUser(id: string): void {
         const token: string | undefined = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
         if (token) {
-            Axios.delete(`${apiRoutes.usersRootPath}${id}`, {
-                headers: {
-                    'X-CSRF-Token': token,
-                    'Content-Type': 'application/json',
-                },
+            Axios.delete(`${ApiPaths.usersRootPath}${id}`, {
+                headers: Auth.getRequestHeaders(false),
             }).then(() => {
                 const newUsersArray: Array<User> = this.state.users.filter((user) => user.id !== id);
                 this.setState(Object.assign({}, this.state, { users: newUsersArray }));

@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
-import { loginUrl } from '../../routes/AppLocations';
-import * as Auth from '../../auth';
+import AppPaths from '../../routes/AppLocations';
+import Auth from '../../auth';
 
 export class AuthRoute extends Route {}
 
@@ -24,7 +24,7 @@ function authRoute<T extends RouteProps>({ children, component, render, ...rest 
                         return null;
                     }
                 } else {
-                    return <Redirect to={{ pathname: loginUrl, state: { from: props.location } }} />;
+                    return <Redirect to={{ pathname: AppPaths.loginUrl, state: { from: props.location } }} />;
                 }
             }}
         />
