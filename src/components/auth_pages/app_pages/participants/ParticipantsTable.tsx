@@ -11,21 +11,23 @@ export default function participantsTable(props: ParticipantsProps) {
     let participant_properties_ordered: string[] = props.participant_attributes.sort();
     return (
         <Table striped responsive>
-            <thead>
-                <th>First</th>
-                <th>Last</th>
-                {participant_properties_ordered.map((attribute) => {
-                    <th>{titleCase(attribute)}</th>;
-                })}
+            <thead className="thead-dark">
+                <tr>
+                    <th>First</th>
+                    <th>Last</th>
+                    {participant_properties_ordered.map((attribute, i) => {
+                        <th key={i}>{titleCase(attribute)}</th>;
+                    })}
+                </tr>
             </thead>
             <tbody>
-                {props.participants.map((participant) => {
+                {props.participants.map((participant, i) => {
                     return (
-                        <tr>
+                        <tr key={i}>
                             <td>{participant.first}</td>
                             <td>{participant.last}</td>
-                            {participant_properties_ordered.map((property) => {
-                                return <td>{participant.extras[property]}</td>;
+                            {participant_properties_ordered.map((property, j) => {
+                                return <td key={j}>{participant.extras[property]}</td>;
                             })}
                         </tr>
                     );

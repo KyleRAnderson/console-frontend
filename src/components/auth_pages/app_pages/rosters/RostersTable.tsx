@@ -1,11 +1,12 @@
 import React from 'react';
 import Roster from '../../../../models/Roster';
-import * as appPaths from '../../../../routes/AppLocations';
-import { Button, Table } from 'react-bootstrap';
+import AppPaths from '../../../../routes/AppLocations';
+import { Button, Table, ButtonGroup } from 'react-bootstrap';
 
-export interface RosterTableProps {
+export type RosterTableProps = {
     rosters: Roster[];
-}
+    onDeleteRoster?: (rosterToDelete: Roster) => void;
+};
 
 export default function rostersTable(props: RosterTableProps) {
     const rosters = props.rosters;
@@ -33,9 +34,22 @@ export default function rostersTable(props: RosterTableProps) {
                                     </ul>
                                 </td>
                                 <td>
-                                    <Button variant="outline-secondary" href={`${appPaths.rostersPath}/${roster.id}`}>
-                                        View
-                                    </Button>
+                                    <ButtonGroup aria-label="action-buttons">
+                                        <Button
+                                            variant="outline-secondary"
+                                            type="button"
+                                            href={`${AppPaths.rostersPath}/${roster.id}`}
+                                        >
+                                            View
+                                        </Button>
+                                        <Button
+                                            variant="outline-danger"
+                                            type="button"
+                                            onClick={() => props.onDeleteRoster?.(roster)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </ButtonGroup>
                                 </td>
                             </tr>
                         );
