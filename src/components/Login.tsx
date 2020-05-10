@@ -3,6 +3,7 @@ import { Button, Container, Form } from 'react-bootstrap';
 import Auth from '../auth';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import AppPaths from '../routes/AppLocations';
+import Notifications from '../notification';
 
 type State = {
     email: string;
@@ -78,17 +79,9 @@ class Login extends React.Component<RouteComponentProps<{}, any, { from: string 
     }
 
     sendNotification(succeeded: boolean) {
-        store.addNotification({
+        Notifications.createNotification({
             message: `Login ${succeeded ? 'Successful' : 'Unsuccessful'}`,
-            type: `${succeeded ? 'success' : 'danger'}`,
-            insert: 'top',
-            container: 'top-right',
-            animationIn: ['animated', 'fadeIn'],
-            animationOut: ['animated', 'fadeOut'],
-            dismiss: {
-                duration: 5000,
-                onScreen: true,
-            },
+            type: succeeded ? 'success' : 'danger',
         });
     }
 }

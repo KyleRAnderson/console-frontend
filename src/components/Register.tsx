@@ -3,6 +3,7 @@ import { Button, Form, Container } from 'react-bootstrap';
 import Axios from 'axios';
 import ApiPaths from '../routes/ApiPaths';
 import Auth from '../auth';
+import Notifications from '../notification';
 
 type State = {
     email: string;
@@ -80,6 +81,7 @@ class Register extends React.Component<any, State> {
         this.setState(Object.assign({}, this.state, { password_confirmation: password }));
     }
 
+    // TODO this isn't used anywhere.
     validateForm(): boolean {
         return this.state.email.length > 0 && this.state.password.length > 0; // TODO should have regex validation on email, and query server for min password length
     }
@@ -104,18 +106,7 @@ class Register extends React.Component<any, State> {
         event.preventDefault();
     }
     sentNotification(succeeded: boolean) {
-        store.addNotification({
-            message: `Registration ${succeeded ? 'Succeessful' : 'Unsuccessful'}`,
-            type: `${succeeded ? 'success' : 'danger'}`,
-            insert: 'top',
-            container: 'top-right',
-            animationIn: ['animated', 'fadeIn'],
-            animationOut: ['animated', 'fadeOut'],
-            dismiss: {
-                duration: 5000,
-                onScreen: true,
-            },
-        });
+        Notifications.createNotification({ message: `Registration ${succeeded ? 'Successful' : 'Unsuccessful'}` });
     }
 }
 
