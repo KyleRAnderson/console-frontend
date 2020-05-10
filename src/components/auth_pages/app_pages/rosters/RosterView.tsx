@@ -1,12 +1,11 @@
 import React from 'react';
-import Axios from 'axios';
 import Roster from '../../../../models/Roster';
 import { store } from 'react-notifications-component';
-import { rostersPath as rostersApiPath, rostersPath } from '../../../../routes/ApiPaths';
 import RostersTable from './RostersTable';
 import RosterParticipantsView from '../participants/RosterParticipantsView';
 import { Route, Switch, Redirect, RouteComponentProps } from 'react-router-dom';
 import AppPaths from '../../../../routes/AppLocations';
+import CreateRoster from './CreateRoster';
 import RosterAPI from './rosterAPI';
 
 interface State {
@@ -64,6 +63,7 @@ export default class RosterView extends React.Component<RouteComponentProps, Sta
                 <Switch>
                     {this.state.rosters.length > 0 ? participantsView : null}
                     <Route>
+                        <CreateRoster />
                         <RostersTable rosters={this.state.rosters} />
                     </Route>
                 </Switch>
