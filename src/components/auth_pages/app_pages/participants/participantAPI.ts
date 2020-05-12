@@ -11,8 +11,19 @@ namespace ParticipantAPI {
         num_pages: number;
     };
 
-    export function getParticipants(rosterId: string): Promise<AxiosResponse<ParticipantPaginatedResponse[]>> {
-        return ApiRequest.getItem(ApiPaths.participantsPath(rosterId));
+    export function getParticipants(
+        rosterId: string,
+        page: number,
+        participantsPerPage?: number,
+    ): Promise<AxiosResponse<ParticipantPaginatedResponse>> {
+        let params: { [key: string]: string } = {};
+        params[ApiPaths.ParticipantParams.page] = page.toString();
+        if (participantsPerPage) {
+            params[ApiPaths.ParticipantParams.perPage] = participantsPerPage.toString();
+        }
+        return ApiRequest.getItem<ParticipantPaginatedResponse>(ApiPaths.participantsPath(rosterId), {
+            params: params,
+        });
     }
 
     export function getParticipant(rosterId: string, participantId: string): Promise<AxiosResponse<Participant>> {
