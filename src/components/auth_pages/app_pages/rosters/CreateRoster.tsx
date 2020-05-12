@@ -72,9 +72,15 @@ export default class CreateRoster extends React.Component<Props, State> {
         this.setState({ ...CreateRoster.defaultState });
     }
 
-    notifySuccess(success: boolean = true) {
+    notifySuccess(success: boolean = true, message: string = '') {
+        let title: string = success ? 'Roster Created' : 'Error Creating Roster';
+        if (message.length === 0) {
+            message = title;
+            title = '';
+        }
         Notifications.createNotification({
-            message: success ? 'Roster Created' : 'Error Creating Roster',
+            title: title,
+            message: message,
             type: success ? 'success' : 'danger',
         });
     }
@@ -83,8 +89,17 @@ export default class CreateRoster extends React.Component<Props, State> {
         RosterAPI.createRoster({ name: rosterName, participant_properties: participant_properties })
             .then((response) => {
                 this.clearForm();
+                this.notifySuccess();
                 this.props.onSuccessfulCreate?.(response.data);
             })
-            .catch(() => this.props.onFailureToCreate?.());
+            .catch((error) => {
+                let errorMessage: string = '';
+                let errorFormatted: RosterAPI.RosterErrorResponse | null = RosterAPI.asErrorFormat(error);
+                if (errorFormatted !== null) {
+                    errorMessage = errorFormatted.response?.data.roster.join('\n') || '';
+                }
+                this.notifySuccess(false, errorMessage);
+                this.props.onFailureToCreate?.();
+            });
     }
 }
