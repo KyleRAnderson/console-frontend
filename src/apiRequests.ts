@@ -1,4 +1,4 @@
-import Axios, { AxiosResponse, AxiosError } from 'axios';
+import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import Auth from './auth';
 
 namespace ApiRequest {
@@ -37,23 +37,36 @@ namespace ApiRequest {
         return request;
     }
 
-    export function getItem<T>(path: string, useAuth: boolean = true): Promise<AxiosResponse<T>> {
+    export function getItem<T>(
+        path: string,
+        config?: AxiosRequestConfig,
+        useAuth: boolean = true,
+    ): Promise<AxiosResponse<T>> {
         return setupErrorSubscriber(
-            Axios.get<T>(path, { headers: Auth.getRequestHeaders(useAuth) }),
+            Axios.get<T>(path, { headers: Auth.getRequestHeaders(useAuth), ...config }),
             useAuth,
         );
     }
 
-    export function postItem<T, U>(path: string, item: T, useAuth: boolean = true): Promise<AxiosResponse<U>> {
+    export function postItem<T, U>(
+        path: string,
+        item: T,
+        config?: AxiosRequestConfig,
+        useAuth: boolean = true,
+    ): Promise<AxiosResponse<U>> {
         return setupErrorSubscriber(
-            Axios.post<U>(path, item, { headers: Auth.getRequestHeaders(useAuth) }),
+            Axios.post<U>(path, item, { headers: Auth.getRequestHeaders(useAuth), ...config }),
             useAuth,
         );
     }
 
-    export function deleteItem<T = any>(path: string, useAuth: boolean = true): Promise<AxiosResponse<T>> {
+    export function deleteItem<T = any>(
+        path: string,
+        config?: AxiosRequestConfig,
+        useAuth: boolean = true,
+    ): Promise<AxiosResponse<T>> {
         return setupErrorSubscriber(
-            Axios.delete<T>(path, { headers: Auth.getRequestHeaders(useAuth) }),
+            Axios.delete<T>(path, { headers: Auth.getRequestHeaders(useAuth), ...config }),
             useAuth,
         );
     }

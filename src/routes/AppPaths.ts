@@ -6,7 +6,9 @@ namespace AppPaths {
     export const app: string = '/app';
     export const rostersPath: string = app + '/rosters';
 
-    export function rosterPath(rosterId: string): string {
+    export const rosterIdParam: string = 'rosterId';
+
+    export function rosterPath(rosterId: string = `:${rosterIdParam}`): string {
         return `${rostersPath}/${rosterId}`;
     }
 }

@@ -17,7 +17,7 @@ namespace RosterAPI {
     }
 
     export function getRosters(): Promise<AxiosResponse<Roster[]>> {
-        return ApiRequest.getItem<Roster[]>(ApiPaths.rostersPath, true);
+        return ApiRequest.getItem<Roster[]>(ApiPaths.rostersPath, undefined, true);
     }
 
     export function getRoster(rosterId: string): Promise<AxiosResponse<Roster>> {

@@ -19,6 +19,11 @@ namespace ApiPaths {
     export function participantsPath(rosterId: string): string {
         return `${rosterPath(rosterId)}${participantsExtension}`;
     }
+
+    export namespace ParticipantParams {
+        export const page: string = 'page';
+        export const perPage: string = 'per_page';
+    }
 }
 
 export default ApiPaths;
