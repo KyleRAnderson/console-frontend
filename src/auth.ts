@@ -73,11 +73,10 @@ namespace Auth {
                 email = response.data.email;
                 userID = response.data.id;
                 storeAuthentication(email, authToken, userID);
+                callback?.(success);
             })
-            .finally(() => {
-                if (callback) {
-                    callback(success);
-                }
+            .catch(() => {
+                callback?.(success);
             });
     }
 
