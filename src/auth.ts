@@ -17,6 +17,25 @@ namespace Auth {
         };
     };
 
+    let subscribers: AuthFailureSubscriber[] = [];
+
+    export type AuthFailureSubscriber = () => void;
+
+    export function onAuthFailure(subscriber: AuthFailureSubscriber): void {
+        subscribers.push(subscriber);
+    }
+
+    export function removeAuthFailureSubscription(subscriber: AuthFailureSubscriber): void {
+        subscribers = subscribers.filter((s) => s !== subscriber);
+    }
+
+    ApiRequest.subscribeToFailureCode({ callback: callAuthFailureSubscribers, code: 401 });
+
+    function callAuthFailureSubscribers() {
+        clearLogin();
+        subscribers.forEach((subscriber) => subscriber());
+    }
+
     export function isLoggedIn(): boolean {
         return getToken().length > 0;
     }
@@ -63,6 +82,10 @@ namespace Auth {
 
     export function logout(callback?: () => void) {
         ApiRequest.deleteItem(ApiPaths.usersLogoutPath, false).then(callback);
+        clearLogin();
+    }
+
+    export function clearLogin(): void {
         localStorage.removeItem(emailKey);
         localStorage.removeItem(tokenKey);
         localStorage.removeItem(idKey);
