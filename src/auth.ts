@@ -64,6 +64,7 @@ namespace Auth {
         ApiRequest.postItem<LoginPost, UserResponse>(
             ApiPaths.usersLoginPath,
             { user: { email: email, password: password } },
+            undefined,
             false,
         )
             .then((response) => {
@@ -81,7 +82,7 @@ namespace Auth {
     }
 
     export function logout(callback?: () => void) {
-        ApiRequest.deleteItem(ApiPaths.usersLogoutPath, false).then(callback);
+        ApiRequest.deleteItem(ApiPaths.usersLogoutPath, undefined, false).then(callback);
         clearLogin();
     }
 
