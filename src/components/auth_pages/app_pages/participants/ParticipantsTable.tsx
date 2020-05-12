@@ -16,7 +16,7 @@ export default function participantsTable(props: ParticipantsProps) {
                     <th>First</th>
                     <th>Last</th>
                     {participant_properties_ordered.map((attribute, i) => {
-                        <th key={i}>{titleCase(attribute)}</th>;
+                        return <th key={i}>{titleCase(attribute)}</th>;
                     })}
                 </tr>
             </thead>

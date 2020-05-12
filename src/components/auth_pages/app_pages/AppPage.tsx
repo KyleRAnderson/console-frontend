@@ -1,9 +1,10 @@
 import React from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import RosterView from './rosters/RostersView';
+import RostersView from './rosters/RostersView';
 import AppPaths from '../../../routes/AppPaths';
 import Auth from '../../../auth';
+import RosterParticipantsView from './participants/RosterParticipantsView';
 
 function AppPage(props: RouteComponentProps) {
     return (
@@ -26,7 +27,8 @@ function AppPage(props: RouteComponentProps) {
                 </Container>
             </Navbar>
             <Switch>
-                <Route path={AppPaths.rostersPath} component={RosterView} />
+                <Route path={AppPaths.rosterPath()} component={RosterParticipantsView} />
+                <Route path={AppPaths.rostersPath} component={RostersView} />
             </Switch>
         </>
     );

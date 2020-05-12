@@ -2,21 +2,22 @@ import React from 'react';
 import Roster from '../../../../models/Roster';
 import { store } from 'react-notifications-component';
 import RostersTable from './RostersTable';
-import RosterParticipantsView from '../participants/RosterParticipantsView';
-import { Route, Switch, Redirect, RouteComponentProps } from 'react-router-dom';
-import AppPaths from '../../../../routes/AppPaths';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
 import CreateRoster from './CreateRoster';
 import RosterAPI from './rosterAPI';
 import Notifications from '../../../../notification';
+import { Button } from 'react-bootstrap';
+import AppPaths from '../../../../routes/AppPaths';
 
 interface State {
     rosters: Roster[];
+    rosterToView: Roster | null;
 }
 
 export default class RosterView extends React.Component<RouteComponentProps, State> {
     constructor(props: RouteComponentProps) {
         super(props);
-        this.state = { rosters: [] };
+        this.state = { rosters: [], rosterToView: null };
     }
 
     componentDidMount() {
@@ -45,34 +46,42 @@ export default class RosterView extends React.Component<RouteComponentProps, Sta
     }
 
     render(): JSX.Element {
-        const participantsView: JSX.Element = (
-            <Route
-                path={`${this.props.match.url}/:rosterId`}
-                render={(props: RouteComponentProps<{ rosterId: string }>) => {
-                    let foundRoster: Roster | undefined = this.state.rosters.find(
-                        (roster) => roster.id === props.match.params.rosterId,
-                    );
-                    if (foundRoster) {
-                        return <RosterParticipantsView roster={foundRoster} />;
-                    } else {
-                        return <Redirect to={AppPaths.rostersPath} />;
-                    }
-                }}
-            ></Route>
-        );
-        return (
+        const actionButtons: (roster: Roster) => JSX.Element = (roster) => {
+            return (
+                <>
+                    <Button variant="outline-secondary" type="button" onClick={() => this.setRosterToView(roster)}>
+                        View
+                    </Button>
+                    <Button variant="outline-danger" type="button" onClick={() => this.deleteRoster(roster)}>
+                        Delete
+                    </Button>
+                </>
+            );
+        };
+
+        const rostersTable: JSX.Element = (
             <>
-                <Switch>
-                    {this.state.rosters.length > 0 ? participantsView : null}
-                    <Route>
-                        <RostersTable
-                            rosters={this.state.rosters}
-                            onDeleteRoster={(roster) => this.deleteRoster(roster)}
-                        />
-                        <CreateRoster onSuccessfulCreate={(roster) => this.onRosterCreated(roster)} />
-                    </Route>
-                </Switch>
+                <RostersTable
+                    rosters={this.state.rosters}
+                    onDeleteRoster={(roster) => this.deleteRoster(roster)}
+                    actionButtons={actionButtons}
+                />
+                <CreateRoster onSuccessfulCreate={(roster) => this.onRosterCreated(roster)} />
             </>
+        );
+
+        return this.state.rosterToView ? (
+            <Redirect
+                push
+                to={{
+                    pathname: AppPaths.rosterPath(this.state.rosterToView.id),
+                    state: {
+                        roster: this.state.rosterToView,
+                    },
+                }}
+            />
+        ) : (
+            rostersTable
         );
     }
 
@@ -89,6 +98,10 @@ export default class RosterView extends React.Component<RouteComponentProps, Sta
                     type: 'danger',
                 });
             });
+    }
+
+    setRosterToView(roster: Roster): void {
+        this.setState({ ...this.state, rosterToView: roster });
     }
 
     onRosterCreated(roster: Roster): void {
