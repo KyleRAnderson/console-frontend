@@ -4,7 +4,7 @@ import { store } from 'react-notifications-component';
 import RostersTable from './RostersTable';
 import RosterParticipantsView from '../participants/RosterParticipantsView';
 import { Route, Switch, Redirect, RouteComponentProps } from 'react-router-dom';
-import AppPaths from '../../../../routes/AppLocations';
+import AppPaths from '../../../../routes/AppPaths';
 import CreateRoster from './CreateRoster';
 import RosterAPI from './rosterAPI';
 import Notifications from '../../../../notification';

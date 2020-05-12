@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import RosterView from './rosters/RostersView';
-import AppPaths from '../../../routes/AppLocations';
+import AppPaths from '../../../routes/AppPaths';
 import Auth from '../../../auth';
 
 function AppPage(props: RouteComponentProps) {

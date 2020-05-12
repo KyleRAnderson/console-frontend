@@ -1,6 +1,6 @@
 import React from 'react';
 import Roster from '../../../../models/Roster';
-import AppPaths from '../../../../routes/AppLocations';
+import AppPaths from '../../../../routes/AppPaths';
 import { Button, Table, ButtonGroup } from 'react-bootstrap';
 
 export type RosterTableProps = {
@@ -38,7 +38,7 @@ export default function rostersTable(props: RosterTableProps) {
                                         <Button
                                             variant="outline-secondary"
                                             type="button"
-                                            href={`${AppPaths.rostersPath}/${roster.id}`}
+                                            href={AppPaths.rosterPath(roster.id)}
                                         >
                                             View
                                         </Button>

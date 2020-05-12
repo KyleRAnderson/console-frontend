@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
-import AppPaths from '../../routes/AppLocations';
+import AppPaths from '../../routes/AppPaths';
 import Auth from '../../auth';
 import Notifications from '../../notification';
 

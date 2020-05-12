@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Redirect } from 'react-router-dom';
 import User from '../../models/User';
-import AppPaths from '../../routes/AppLocations';
+import AppPaths from '../../routes/AppPaths';
 import ApiPaths from '../../routes/ApiPaths';
 import Axios from 'axios';
 import { Table } from 'react-bootstrap';

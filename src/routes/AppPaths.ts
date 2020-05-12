@@ -5,5 +5,9 @@ namespace AppPaths {
     export const registerUrl: string = '/register';
     export const app: string = '/app';
     export const rostersPath: string = app + '/rosters';
+
+    export function rosterPath(rosterId: string): string {
+        return `${rostersPath}/${rosterId}`;
+    }
 }
 export default AppPaths;

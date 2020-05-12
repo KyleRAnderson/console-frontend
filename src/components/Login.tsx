@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import Auth from '../auth';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import AppPaths from '../routes/AppLocations';
+import AppPaths from '../routes/AppPaths';
 import Notifications from '../notification';
 
 type State = {
