@@ -4,10 +4,10 @@ import Notifications from '../../../../notification';
 import RosterAPI from './rosterAPI';
 import Roster from '../../../../models/Roster';
 
-interface State {
+type State = {
     name: string;
     participant_properties: string;
-}
+};
 
 type Props = {
     onSuccessfulCreate?: (newRoster: Roster) => void;
@@ -94,9 +94,9 @@ export default class CreateRoster extends React.Component<Props, State> {
             })
             .catch((error) => {
                 let errorMessage: string = '';
-                let errorFormatted: RosterAPI.RosterErrorResponse | null = RosterAPI.asErrorFormat(error);
-                if (errorFormatted !== null) {
-                    errorMessage = errorFormatted.response?.data.roster.join('\n') || '';
+                let errorFormatted: RosterAPI.RosterErrorResponse | undefined = RosterAPI.asRosterError(error);
+                if (errorFormatted) {
+                    errorMessage = errorFormatted.response?.data.detail.roster.join('\n') || '';
                 }
                 this.notifySuccess(false, errorMessage);
                 this.props.onFailureToCreate?.();

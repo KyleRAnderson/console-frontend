@@ -1,19 +1,15 @@
-import { AxiosResponse, AxiosError } from 'axios';
+import { AxiosResponse } from 'axios';
 import Roster from '../../../../models/Roster';
 import ApiPaths from '../../../../routes/ApiPaths';
 import ApiRequest from '../../../../apiRequests';
+import ServerError, { asServerError } from '../../../../models/ServerError';
 
 namespace RosterAPI {
     export type RosterPost = { name: string; participant_properties: string[] };
+    export type RosterErrorResponse = ServerError<{ roster: string[] }>;
 
-    export type RosterErrorResponse = AxiosError<{ roster: string[] }>;
-
-    export function isErrorFormat(error: RosterErrorResponse | any): boolean {
-        return (error as RosterErrorResponse).response?.data.roster !== undefined;
-    }
-
-    export function asErrorFormat(error: RosterErrorResponse | any): RosterErrorResponse | null {
-        return isErrorFormat(error) ? (error as RosterErrorResponse) : null;
+    export function asRosterError(error: RosterErrorResponse | any): RosterErrorResponse | undefined {
+        return asServerError<{ roster: string[] }>(error, (data) => 'roster' in data);
     }
 
     export function getRosters(): Promise<AxiosResponse<Roster[]>> {
