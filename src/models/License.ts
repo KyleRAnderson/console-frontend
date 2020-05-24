@@ -1,8 +1,8 @@
 import Timestamps from './Timestamps';
 import { ParticipantBase } from './Participant';
+import Identifiable from './Identifiable';
 
-type LicenseBase = {
-    id: string;
+type LicenseBase = Identifiable & {
     eliminated: boolean;
     participant: ParticipantBase;
 };

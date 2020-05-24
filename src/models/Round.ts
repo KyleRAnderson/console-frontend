@@ -1,8 +1,11 @@
 import Timestamps from './Timestamps';
+import Identifiable from './Identifiable';
 
-type Round = Timestamps & {
+type RoundBase = {
     number: number;
-    id: string;
 };
 
+type Round = Timestamps & Identifiable & RoundBase;
+
 export default Round;
+export { RoundBase };

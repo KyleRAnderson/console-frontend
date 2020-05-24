@@ -1,10 +1,10 @@
 import Timestamps from './Timestamps';
+import Identifiable from './Identifiable';
 
-type ParticipantBase = {
+type ParticipantBase = Identifiable & {
     first: string;
     last: string;
     extras: { [property: string]: string };
-    id: string;
 };
 
 type Participant = Timestamps & ParticipantBase;

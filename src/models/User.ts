@@ -1,8 +1,11 @@
 import Timestamps from './Timestamps';
+import Identifiable from './Identifiable';
 
-type User = Timestamps & {
+type UserBase = {
     email: string;
-    id: string;
 };
 
+type User = Timestamps & Identifiable & UserBase;
+
 export default User;
+export { UserBase };
