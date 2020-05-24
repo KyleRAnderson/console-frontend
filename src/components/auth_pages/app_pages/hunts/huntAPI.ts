@@ -2,9 +2,15 @@ import Hunt, { HuntBase } from '../../../../models/Hunt';
 import ApiRequest from '../../../../apiRequests';
 import ApiPaths from '../../../../routes/ApiPaths';
 import { AxiosResponse } from 'axios';
+import ServerError, { asServerError } from '../../../../models/ServerError';
 
 namespace HuntAPI {
     export type HuntPost = Pick<HuntBase, 'name'>;
+    export type HuntErrorResponse = ServerError<{ hunt: string[] }>;
+
+    export function asHuntError(error: HuntErrorResponse | any): HuntErrorResponse | undefined {
+        return asServerError<{ hunt: string[] }>(error, (data) => 'hunt' in data);
+    }
 
     export function getHunts(rosterId: string): Promise<AxiosResponse<Hunt[]>> {
         return ApiRequest.getItem<Hunt[]>(ApiPaths.huntsPath(rosterId));

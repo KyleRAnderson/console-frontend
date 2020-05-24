@@ -8,6 +8,7 @@ import { RouteComponentProps, Redirect } from 'react-router-dom';
 import Roster from '../../../../models/Roster';
 import AppPaths from '../../../../routes/AppPaths';
 import RosterAPI from '../rosters/rosterAPI';
+import HuntsView from '../hunts/HuntsView';
 
 type RosterParticipantsProps = RouteComponentProps<{ [key: string]: string }, any, { roster?: Roster }> & {
     roster?: Roster | string;
@@ -97,6 +98,7 @@ class RosterParticipantsView extends React.Component<RosterParticipantsProps, St
 
         return (
             <>
+                <HuntsView rosterId={this.state.currentRoster.id} />
                 <ParticipantsTable
                     participant_attributes={this.state.currentRoster.participant_properties}
                     participants={this.state.participants}
