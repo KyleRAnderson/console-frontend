@@ -41,10 +41,16 @@ namespace ParticipantAPI {
         return ApiRequest.deleteItem(ApiPaths.participantPath(rosterId, participantId));
     }
 
-    // TODO implement this for updating participants
-    // export function editParticipant(rosterId: string, participant: Participant): Promise<AxiosResponse<Participant>> {
-    //     throw 'Edit participant not implemented.';
-    // }
+    export function updateParticipant(
+        rosterId: string,
+        participantId: string,
+        participant: ParticipantPost,
+    ): Promise<AxiosResponse<Participant>> {
+        return ApiRequest.updateItem<ParticipantPost, Participant>(
+            ApiPaths.participantPath(rosterId, participantId),
+            participant,
+        );
+    }
 }
 
 export default ParticipantAPI;

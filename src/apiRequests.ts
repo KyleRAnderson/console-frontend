@@ -70,6 +70,18 @@ namespace ApiRequest {
             useAuth,
         );
     }
+
+    export function updateItem<T = any, U = any>(
+        path: string,
+        item: T,
+        config?: AxiosRequestConfig,
+        useAuth: boolean = true,
+    ): Promise<AxiosResponse<U>> {
+        return setupErrorSubscriber(
+            Axios.patch(path, item, { headers: Auth.getRequestHeaders(useAuth), ...config }),
+            useAuth,
+        );
+    }
 }
 
 export default ApiRequest;

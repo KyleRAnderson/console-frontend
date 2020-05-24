@@ -13,7 +13,7 @@ namespace RosterAPI {
     }
 
     export function getRosters(): Promise<AxiosResponse<Roster[]>> {
-        return ApiRequest.getItem<Roster[]>(ApiPaths.rostersPath, undefined, true);
+        return ApiRequest.getItem<Roster[]>(ApiPaths.rostersPath);
     }
 
     export function getRoster(rosterId: string): Promise<AxiosResponse<Roster>> {
@@ -25,7 +25,7 @@ namespace RosterAPI {
     }
 
     export function createRoster(roster: RosterPost): Promise<AxiosResponse<Roster>> {
-        return ApiRequest.postItem(ApiPaths.rostersPath, roster);
+        return ApiRequest.postItem<RosterPost, Roster>(ApiPaths.rostersPath, roster);
     }
 }
 
