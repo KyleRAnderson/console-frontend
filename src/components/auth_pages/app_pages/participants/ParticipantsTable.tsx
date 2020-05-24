@@ -7,7 +7,7 @@ export interface ParticipantsProps {
     participant_attributes: string[];
 }
 
-export default function participantsTable(props: ParticipantsProps): JSX.Element {
+export default function ParticipantsTable(props: ParticipantsProps): JSX.Element {
     let participant_properties_ordered: string[] = props.participant_attributes.sort();
     return (
         <Table striped responsive>
