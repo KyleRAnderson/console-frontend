@@ -1,4 +1,6 @@
-type User = {
+import Timestamps from './Timestamps';
+
+type User = Timestamps & {
     email: string;
     id: string;
 };
