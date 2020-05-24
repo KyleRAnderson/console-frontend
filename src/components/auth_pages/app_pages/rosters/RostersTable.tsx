@@ -4,7 +4,6 @@ import { Table, ButtonGroup } from 'react-bootstrap';
 
 export type RosterTableProps = {
     rosters: Roster[];
-    onDeleteRoster?: (rosterToDelete: Roster) => void;
     actionButtons?: (roster: Roster) => JSX.Element;
 };
 

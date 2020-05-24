@@ -61,11 +61,7 @@ export default class RosterView extends React.Component<RouteComponentProps, Sta
 
         const rostersTable: JSX.Element = (
             <>
-                <RostersTable
-                    rosters={this.state.rosters}
-                    onDeleteRoster={(roster) => this.deleteRoster(roster)}
-                    actionButtons={actionButtons}
-                />
+                <RostersTable rosters={this.state.rosters} actionButtons={actionButtons} />
                 <CreateRoster onSuccessfulCreate={(roster) => this.onRosterCreated(roster)} />
             </>
         );
