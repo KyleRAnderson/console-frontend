@@ -2,22 +2,23 @@ import React from 'react';
 import Roster from '../../../../models/Roster';
 import { store } from 'react-notifications-component';
 import RostersTable from './RostersTable';
-import { RouteComponentProps, Redirect } from 'react-router-dom';
+import { RouteComponentProps, Route, Switch } from 'react-router-dom';
 import CreateRoster from './CreateRoster';
 import RosterAPI from './rosterAPI';
 import Notifications from '../../../../notification';
 import { Button } from 'react-bootstrap';
 import AppPaths from '../../../../routes/AppPaths';
+import RosterDetails from './RosterDetails';
 
 interface State {
     rosters: Roster[];
-    rosterToView: Roster | null;
+    rosterToView?: Roster;
 }
 
-export default class RosterView extends React.Component<RouteComponentProps, State> {
+export default class Rosters extends React.Component<RouteComponentProps, State> {
     constructor(props: RouteComponentProps) {
         super(props);
-        this.state = { rosters: [], rosterToView: null };
+        this.state = { rosters: [] };
     }
 
     componentDidMount() {
@@ -66,18 +67,18 @@ export default class RosterView extends React.Component<RouteComponentProps, Sta
             </>
         );
 
-        return this.state.rosterToView ? (
-            <Redirect
-                push
-                to={{
-                    pathname: AppPaths.rosterPath(this.state.rosterToView),
-                    state: {
-                        roster: this.state.rosterToView,
-                    },
-                }}
-            />
-        ) : (
-            rostersTable
+        return (
+            <>
+                <Switch>
+                    <Route
+                        path={AppPaths.rosterPath()}
+                        render={(props) => {
+                            return <RosterDetails roster={this.state.rosterToView} {...props} />;
+                        }}
+                    ></Route>
+                    <Route>{rostersTable}</Route>
+                </Switch>
+            </>
         );
     }
 
@@ -97,7 +98,9 @@ export default class RosterView extends React.Component<RouteComponentProps, Sta
     }
 
     setRosterToView(roster: Roster): void {
-        this.setState({ ...this.state, rosterToView: roster });
+        this.setState({ ...this.state, rosterToView: roster }, () =>
+            this.props.history.push(AppPaths.rosterPath(roster)),
+        );
     }
 
     onRosterCreated(roster: Roster): void {

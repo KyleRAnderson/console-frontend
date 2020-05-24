@@ -4,19 +4,16 @@ import React from 'react';
 import ParticipantsTable from './ParticipantsTable';
 import { Pagination, Container, Row } from 'react-bootstrap';
 import ParticipantAPI from './participantAPI';
-import { RouteComponentProps, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Roster from '../../../../models/Roster';
 import AppPaths from '../../../../routes/AppPaths';
-import RosterAPI from '../rosters/rosterAPI';
-import HuntsView from '../hunts/HuntsView';
 
-type RosterParticipantsProps = RouteComponentProps<{ [key: string]: string }, any, { roster?: Roster }> & {
-    roster?: Roster | string;
+type Props = {
+    roster: Roster;
 };
 
 type State = ParticipantAPI.ParticipantPaginatedResponse & {
     currentPage: number;
-    currentRoster: Roster | null;
     failedToLoadRoster: boolean;
 };
 
@@ -24,57 +21,25 @@ type State = ParticipantAPI.ParticipantPaginatedResponse & {
  * There are three ways via props that a roster can be provided to this component.
  * Way 1: The component could be passed a roster prop directly, either containing the rosterId or a roster object.
  * Way 2: The component could have a rosterId passed to it as a param in the URL. This will require loading the roster.
- * Way 3: Upon redirect, there may be a roster provided if the place of redirection had them loaded.
  */
-class RosterParticipantsView extends React.Component<RosterParticipantsProps, State> {
-    constructor(props: RosterParticipantsProps) {
+class ParticipantsView extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             currentPage: 1,
             num_pages: 1,
             participants: [],
-            currentRoster: null,
             failedToLoadRoster: false,
         };
     }
 
     componentDidMount() {
-        let roster: Roster | string = '';
-
-        // Check the roster prop, as first priority.
-        if (this.props.roster) {
-            roster = this.props.roster;
-        }
-        // Then check the redirect param.
-        else if (this.props.location.state.roster) {
-            roster = this.props.location.state.roster;
-        }
-        // Last check the URL param.
-        else if (this.props.match.params[AppPaths.rosterIdParam]) {
-            roster = this.props.match.params[AppPaths.rosterIdParam];
-        }
-        // Otherwise the roster shall remain null and we have to redirect out of here.
-
-        if (typeof roster === 'string') {
-            this.loadRoster(roster);
-        } else {
-            this.setState({ ...this.state, currentRoster: roster }, () => this.loadParticipants());
-        }
-    }
-
-    loadRoster(rosterId: string): void {
-        RosterAPI.getRoster(rosterId)
-            .then((response) => {
-                this.setState({ ...this.state, currentRoster: response.data }, () => this.loadParticipants());
-            })
-            .catch(() => {
-                this.setState({ ...this.state, failedToLoadRoster: true });
-            });
+        this.loadParticipants();
     }
 
     loadParticipants() {
-        if (this.state.currentRoster) {
-            ParticipantAPI.getParticipants(this.state.currentRoster.id, this.state.currentPage).then((response) => {
+        if (this.props.roster) {
+            ParticipantAPI.getParticipants(this.props.roster.id, this.state.currentPage).then((response) => {
                 this.setState({ ...this.state, ...response.data });
             });
         }
@@ -83,7 +48,8 @@ class RosterParticipantsView extends React.Component<RosterParticipantsProps, St
     render(): JSX.Element {
         if (this.state.failedToLoadRoster) {
             return <Redirect to={AppPaths.rostersPath} />;
-        } else if (!this.state.currentRoster) {
+        }
+        if (this.state.participants.length == 0) {
             return <h1>Loading...</h1>;
         }
 
@@ -98,9 +64,8 @@ class RosterParticipantsView extends React.Component<RosterParticipantsProps, St
 
         return (
             <>
-                <HuntsView rosterId={this.state.currentRoster.id} />
                 <ParticipantsTable
-                    participant_attributes={this.state.currentRoster.participant_properties}
+                    participant_attributes={this.props.roster.participant_properties}
                     participants={this.state.participants}
                 />
                 <Container>
@@ -123,4 +88,4 @@ class RosterParticipantsView extends React.Component<RosterParticipantsProps, St
     }
 }
 
-export default RosterParticipantsView;
+export default ParticipantsView;

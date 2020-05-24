@@ -15,7 +15,7 @@ type HuntsProps = {
     rosterId: string;
 };
 
-class HuntsView extends React.Component<HuntsProps, State> {
+class Hunts extends React.Component<HuntsProps, State> {
     constructor(props: HuntsProps) {
         super(props);
         this.state = {
@@ -82,4 +82,4 @@ class HuntsView extends React.Component<HuntsProps, State> {
     }
 }
 
-export default HuntsView;
+export default Hunts;
