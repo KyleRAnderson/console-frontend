@@ -13,11 +13,11 @@ namespace ApiPaths {
     const licensesExtension: string = 'licenses/';
 
     export function rosterPath(rosterId: string): string {
-        return `${rostersPath}${rosterId}`;
+        return `${rostersPath}${rosterId}/`;
     }
 
     export function participantPath(participantId: string): string {
-        return `${apiRootPath}${participantsExtension}${participantId}`;
+        return `${apiRootPath}${participantsExtension}${participantId}/`;
     }
 
     export function participantsPath(rosterId: string): string {
@@ -30,7 +30,7 @@ namespace ApiPaths {
     }
 
     export function huntPath(huntId: string): string {
-        return `${apiRootPath}${huntsExtension}${huntId}`;
+        return `${apiRootPath}${huntsExtension}${huntId}/`;
     }
 
     export function huntsPath(rosterId: string): string {
@@ -38,7 +38,7 @@ namespace ApiPaths {
     }
 
     export function roundPath(huntId: string, roundNumber: number): string {
-        return `${roundsPath(huntId)}${roundNumber}`;
+        return `${roundsPath(huntId)}${roundNumber}/`;
     }
 
     export function roundsPath(huntId: string): string {
@@ -46,7 +46,7 @@ namespace ApiPaths {
     }
 
     export function matchPath(huntId: string, matchNumber: number): string {
-        return `${matchesPath(huntId)}${matchNumber}`;
+        return `${matchesPath(huntId)}${matchNumber}/`;
     }
 
     export function matchesPath(huntId: string): string {
@@ -54,7 +54,7 @@ namespace ApiPaths {
     }
 
     export function licensePath(licenseId: string): string {
-        return `${apiRootPath}${licensesExtension}${licenseId}`;
+        return `${apiRootPath}${licensesExtension}${licenseId}/`;
     }
 
     export function licensesPath(huntId: string): string {
