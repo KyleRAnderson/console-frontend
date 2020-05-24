@@ -40,7 +40,7 @@ export default class CreateRoster extends React.Component<Props, State> {
                     </Col>
                     <Col md="3">
                         <Button variant="primary" type="submit">
-                            Create Roster{' '}
+                            Create Roster
                         </Button>
                     </Col>
                 </Row>

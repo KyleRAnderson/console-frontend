@@ -49,7 +49,7 @@ export default class RosterView extends React.Component<RouteComponentProps, Sta
         const actionButtons: (roster: Roster) => JSX.Element = (roster) => {
             return (
                 <>
-                    <Button variant="outline-secondary" type="button" onClick={() => this.setRosterToView(roster)}>
+                    <Button variant="outline-primary" type="button" onClick={() => this.setRosterToView(roster)}>
                         View
                     </Button>
                     <Button variant="outline-danger" type="button" onClick={() => this.deleteRoster(roster)}>
@@ -70,7 +70,7 @@ export default class RosterView extends React.Component<RouteComponentProps, Sta
             <Redirect
                 push
                 to={{
-                    pathname: AppPaths.rosterPath(this.state.rosterToView.id),
+                    pathname: AppPaths.rosterPath(this.state.rosterToView),
                     state: {
                         roster: this.state.rosterToView,
                     },
@@ -90,7 +90,7 @@ export default class RosterView extends React.Component<RouteComponentProps, Sta
             })
             .catch(() => {
                 Notifications.createNotification({
-                    title: 'Failed to delete roster.',
+                    message: 'Failed to delete roster.',
                     type: 'danger',
                 });
             });
