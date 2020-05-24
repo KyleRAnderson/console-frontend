@@ -1,10 +1,11 @@
 import ApiRequest from '../../../../apiRequests';
 import ApiPaths from '../../../../routes/ApiPaths';
-import Participant from '../../../../models/Participant';
+import Participant, { ParticipantBase } from '../../../../models/Participant';
 import { AxiosResponse } from 'axios';
+import PartialBy from '../../../../util/partialBy';
 
 namespace ParticipantAPI {
-    export type ParticipantPost = { first: string; last: string; extras: { [property: string]: string } };
+    export type ParticipantPost = PartialBy<ParticipantBase, 'extras'>;
 
     export type ParticipantPaginatedResponse = {
         participants: Participant[];

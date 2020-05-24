@@ -1,11 +1,12 @@
 import { AxiosResponse } from 'axios';
-import Roster from '../../../../models/Roster';
+import Roster, { RosterBase } from '../../../../models/Roster';
 import ApiPaths from '../../../../routes/ApiPaths';
 import ApiRequest from '../../../../apiRequests';
 import ServerError, { asServerError } from '../../../../models/ServerError';
+import PartialBy from '../../../../util/partialBy';
 
 namespace RosterAPI {
-    export type RosterPost = { name: string; participant_properties: string[] };
+    export type RosterPost = Omit<PartialBy<RosterBase, 'participant_properties'>, 'user_id'>;
     export type RosterErrorResponse = ServerError<{ roster: string[] }>;
 
     export function asRosterError(error: RosterErrorResponse | any): RosterErrorResponse | undefined {

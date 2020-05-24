@@ -1,10 +1,10 @@
-import Hunt from '../../../../models/Hunt';
+import Hunt, { HuntBase } from '../../../../models/Hunt';
 import ApiRequest from '../../../../apiRequests';
 import ApiPaths from '../../../../routes/ApiPaths';
 import { AxiosResponse } from 'axios';
 
 namespace HuntAPI {
-    export type HuntPost = { name: string };
+    export type HuntPost = Pick<HuntBase, 'name'>;
 
     export function getHunts(rosterId: string): Promise<AxiosResponse<Hunt[]>> {
         return ApiRequest.getItem<Hunt[]>(ApiPaths.huntsPath(rosterId));

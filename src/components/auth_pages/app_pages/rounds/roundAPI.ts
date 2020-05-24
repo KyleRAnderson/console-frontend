@@ -1,10 +1,11 @@
-import Round from '../../../../models/Round';
+import Round, { RoundBase } from '../../../../models/Round';
 import ApiRequest from '../../../../apiRequests';
 import ApiPaths from '../../../../routes/ApiPaths';
 import { AxiosResponse } from 'axios';
+import PartialBy from '../../../../util/partialBy';
 
 namespace RoundAPI {
-    export type RoundPost = { number?: number };
+    export type RoundPost = PartialBy<RoundBase, 'number'>;
 
     export function getRounds(huntId: string): Promise<AxiosResponse<Round[]>> {
         return ApiRequest.getItem<Round[]>(ApiPaths.roundsPath(huntId));

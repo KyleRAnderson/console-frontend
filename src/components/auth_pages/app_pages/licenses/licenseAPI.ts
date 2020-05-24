@@ -1,10 +1,11 @@
 import { AxiosResponse } from 'axios';
-import License from '../../../../models/License';
+import License, { LicenseBase } from '../../../../models/License';
 import ApiRequest from '../../../../apiRequests';
 import ApiPaths from '../../../../routes/ApiPaths';
+import PartialBy from '../../../../util/partialBy';
 
 namespace LicenseAPI {
-    export type LicensePost = { participant_id: string; eliminated?: boolean };
+    export type LicensePost = PartialBy<Omit<LicenseBase, 'participant'>, 'eliminated'> & { participant_id: string };
 
     export function getLicenses(huntId: string): Promise<AxiosResponse<License[]>> {
         return ApiRequest.getItem<License[]>(ApiPaths.licensesPath(huntId));
