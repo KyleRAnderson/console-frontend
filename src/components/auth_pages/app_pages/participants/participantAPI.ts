@@ -26,8 +26,8 @@ namespace ParticipantAPI {
         });
     }
 
-    export function getParticipant(rosterId: string, participantId: string): Promise<AxiosResponse<Participant>> {
-        return ApiRequest.getItem<Participant>(ApiPaths.participantPath(rosterId, participantId));
+    export function getParticipant(participantId: string): Promise<AxiosResponse<Participant>> {
+        return ApiRequest.getItem<Participant>(ApiPaths.participantPath(participantId));
     }
 
     export function createParticipant(
@@ -37,17 +37,16 @@ namespace ParticipantAPI {
         return ApiRequest.postItem(ApiPaths.participantsPath(rosterId), participant);
     }
 
-    export function deleteParticipant(rosterId: string, participantId: string): Promise<AxiosResponse> {
-        return ApiRequest.deleteItem(ApiPaths.participantPath(rosterId, participantId));
+    export function deleteParticipant(participantId: string): Promise<AxiosResponse> {
+        return ApiRequest.deleteItem(ApiPaths.participantPath(participantId));
     }
 
     export function updateParticipant(
-        rosterId: string,
         participantId: string,
         participant: ParticipantPost,
     ): Promise<AxiosResponse<Participant>> {
         return ApiRequest.updateItem<ParticipantPost, Participant>(
-            ApiPaths.participantPath(rosterId, participantId),
+            ApiPaths.participantPath(participantId),
             participant,
         );
     }

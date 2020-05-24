@@ -6,8 +6,8 @@ import { AxiosResponse } from 'axios';
 namespace HuntAPI {
     export type HuntPost = { name: string };
 
-    export function getHunts(): Promise<AxiosResponse<Hunt[]>> {
-        return ApiRequest.getItem<Hunt[]>(ApiPaths.huntsPath);
+    export function getHunts(rosterId: string): Promise<AxiosResponse<Hunt[]>> {
+        return ApiRequest.getItem<Hunt[]>(ApiPaths.huntsPath(rosterId));
     }
 
     export function getHunt(huntId: string): Promise<AxiosResponse<Hunt>> {
@@ -18,8 +18,8 @@ namespace HuntAPI {
         return ApiRequest.deleteItem(ApiPaths.huntPath(huntId));
     }
 
-    export function createHunt(hunt: HuntPost): Promise<AxiosResponse<Hunt>> {
-        return ApiRequest.postItem<HuntPost, Hunt>(ApiPaths.huntsPath, hunt);
+    export function createHunt(rosterId: string, hunt: HuntPost): Promise<AxiosResponse<Hunt>> {
+        return ApiRequest.postItem<HuntPost, Hunt>(ApiPaths.huntsPath(rosterId), hunt);
     }
 
     export function updateHunt(huntId: string, hunt: HuntPost): Promise<AxiosResponse<Hunt>> {

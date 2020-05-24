@@ -10,12 +10,12 @@ namespace LicenseAPI {
         return ApiRequest.getItem<License[]>(ApiPaths.licensesPath(huntId));
     }
 
-    export function getLicense(huntId: string, licenseId: string): Promise<AxiosResponse<License>> {
-        return ApiRequest.getItem<License>(ApiPaths.licensePath(huntId, licenseId));
+    export function getLicense(licenseId: string): Promise<AxiosResponse<License>> {
+        return ApiRequest.getItem<License>(ApiPaths.licensePath(licenseId));
     }
 
-    export function deleteLicense(huntId: string, licenseId: string): Promise<AxiosResponse> {
-        return ApiRequest.deleteItem(ApiPaths.licensePath(huntId, licenseId));
+    export function deleteLicense(licenseId: string): Promise<AxiosResponse> {
+        return ApiRequest.deleteItem(ApiPaths.licensePath(licenseId));
     }
 
     export function createLicense(huntId: string, license: LicensePost): Promise<AxiosResponse<License>> {

@@ -6,18 +6,18 @@ namespace ApiPaths {
     export const usersLogoutPath: string = apiRootPath + 'logout/';
     export const usersRegistrationsPath: string = apiRootPath + 'signup/';
     export const rostersPath: string = apiRootPath + 'rosters/';
-    const participantsExtension: string = '/participants/';
-    export const huntsPath: string = apiRootPath + 'hunts/';
-    const roundsExtension: string = '/rounds/';
-    const matchesExtension: string = '/matches/';
-    const licensesExtension: string = '/licenses/';
+    const participantsExtension: string = 'participants/';
+    const huntsExtension: string = 'hunts/';
+    const roundsExtension: string = 'rounds/';
+    const matchesExtension: string = 'matches/';
+    const licensesExtension: string = 'licenses/';
 
     export function rosterPath(rosterId: string): string {
         return `${rostersPath}${rosterId}`;
     }
 
-    export function participantPath(rosterId: string, participantId: string): string {
-        return `${participantsPath(rosterId)}${participantId}`;
+    export function participantPath(participantId: string): string {
+        return `${apiRootPath}${participantsExtension}${participantId}`;
     }
 
     export function participantsPath(rosterId: string): string {
@@ -30,7 +30,11 @@ namespace ApiPaths {
     }
 
     export function huntPath(huntId: string): string {
-        return `${huntsPath}${huntId}`;
+        return `${apiRootPath}${huntsExtension}${huntId}`;
+    }
+
+    export function huntsPath(rosterId: string): string {
+        return `${rosterPath(rosterId)}${huntsExtension}`;
     }
 
     export function roundPath(huntId: string, roundNumber: number): string {
@@ -49,8 +53,8 @@ namespace ApiPaths {
         return `${huntPath(huntId)}${matchesExtension}`;
     }
 
-    export function licensePath(huntId: string, licenseId: string): string {
-        return `${licensesPath(huntId)}${licenseId}`;
+    export function licensePath(licenseId: string): string {
+        return `${apiRootPath}${licensesExtension}${licenseId}`;
     }
 
     export function licensesPath(huntId: string): string {
