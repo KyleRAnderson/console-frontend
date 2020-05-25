@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import RostersView from './rosters/Rosters';
 import AppPaths from '../../../routes/AppPaths';
 import Auth from '../../../auth';
+import Roster from '../../../models/Roster';
+import HuntDetails from './hunts/HuntDetails';
 
 function AppPage(props: RouteComponentProps) {
+    const [currentRoster, setCurrentRoster] = useState<Roster | undefined>(undefined);
+
     return (
         <>
             <Navbar className="primary-color" variant="dark">
@@ -26,7 +30,26 @@ function AppPage(props: RouteComponentProps) {
                 </Container>
             </Navbar>
             <Switch>
-                <Route path={AppPaths.rostersPath} component={RostersView} />
+                <Route
+                    path={AppPaths.rostersPath}
+                    render={(props) => {
+                        return (
+                            <RostersView
+                                {...props}
+                                rosterToView={currentRoster}
+                                onRosterSelect={(roster) => setCurrentRoster(roster)}
+                            />
+                        );
+                    }}
+                />
+                <Route
+                    path={AppPaths.huntPath()}
+                    render={(props) => {
+                        return (
+                            <HuntDetails participant_properties={currentRoster?.participant_properties} {...props} />
+                        );
+                    }}
+                />
             </Switch>
         </>
     );

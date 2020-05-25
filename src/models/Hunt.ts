@@ -1,5 +1,6 @@
 import Timestamps from './Timestamps';
 import Identifiable from './Identifiable';
+import Roster from './Roster';
 
 type HuntBase = {
     name: string;
@@ -10,5 +11,9 @@ type HuntBase = {
 
 type Hunt = Timestamps & Identifiable & HuntBase;
 
+type HuntWithProperties = Hunt & {
+    roster: Pick<Roster, 'participant_properties'>;
+};
+
 export default Hunt;
-export { HuntBase };
+export { HuntBase, HuntWithProperties };

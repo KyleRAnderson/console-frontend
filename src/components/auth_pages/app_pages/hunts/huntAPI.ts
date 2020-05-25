@@ -1,4 +1,4 @@
-import Hunt, { HuntBase } from '../../../../models/Hunt';
+import Hunt, { HuntBase, HuntWithProperties } from '../../../../models/Hunt';
 import ApiRequest from '../../../../apiRequests';
 import ApiPaths from '../../../../routes/ApiPaths';
 import { AxiosResponse } from 'axios';
@@ -16,8 +16,8 @@ namespace HuntAPI {
         return ApiRequest.getItem<Hunt[]>(ApiPaths.huntsPath(rosterId));
     }
 
-    export function getHunt(huntId: string): Promise<AxiosResponse<Hunt>> {
-        return ApiRequest.getItem<Hunt>(ApiPaths.huntPath(huntId));
+    export function getHunt(huntId: string): Promise<AxiosResponse<HuntWithProperties>> {
+        return ApiRequest.getItem<HuntWithProperties>(ApiPaths.huntPath(huntId));
     }
 
     export function deleteHunt(huntId: string): Promise<AxiosResponse> {

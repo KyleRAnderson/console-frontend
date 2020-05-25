@@ -10,13 +10,17 @@ import { Button } from 'react-bootstrap';
 import AppPaths from '../../../../routes/AppPaths';
 import RosterDetails from './RosterDetails';
 
-interface State {
+type State = {
     rosters: Roster[];
-    rosterToView?: Roster;
-}
+};
 
-export default class Rosters extends React.Component<RouteComponentProps, State> {
-    constructor(props: RouteComponentProps) {
+type Props = RouteComponentProps & {
+    onRosterSelect: (roster: Roster) => void;
+    rosterToView?: Roster;
+};
+
+export default class Rosters extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = { rosters: [] };
     }
@@ -73,7 +77,7 @@ export default class Rosters extends React.Component<RouteComponentProps, State>
                     <Route
                         path={AppPaths.rosterPath()}
                         render={(props) => {
-                            return <RosterDetails roster={this.state.rosterToView} {...props} />;
+                            return <RosterDetails roster={this.props.rosterToView} {...props} />;
                         }}
                     ></Route>
                     <Route>{rostersTable}</Route>
@@ -98,9 +102,8 @@ export default class Rosters extends React.Component<RouteComponentProps, State>
     }
 
     setRosterToView(roster: Roster): void {
-        this.setState({ ...this.state, rosterToView: roster }, () =>
-            this.props.history.push(AppPaths.rosterPath(roster)),
-        );
+        this.props.onRosterSelect(roster);
+        this.props.history.push(AppPaths.rosterPath(roster));
     }
 
     onRosterCreated(roster: Roster): void {
