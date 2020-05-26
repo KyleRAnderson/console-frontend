@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import RostersView from './rosters/Rosters';
+import Rosters from './rosters/Rosters';
 import AppPaths from '../../../routes/AppPaths';
 import Auth from '../../../auth';
 import Roster from '../../../models/Roster';
@@ -34,7 +34,7 @@ function AppPage(props: RouteComponentProps) {
                     path={AppPaths.rostersPath}
                     render={(props) => {
                         return (
-                            <RostersView
+                            <Rosters
                                 {...props}
                                 rosterToView={currentRoster}
                                 onRosterSelect={(roster) => setCurrentRoster(roster)}
@@ -45,9 +45,7 @@ function AppPage(props: RouteComponentProps) {
                 <Route
                     path={AppPaths.huntPath()}
                     render={(props) => {
-                        return (
-                            <HuntDetails participant_properties={currentRoster?.participant_properties} {...props} />
-                        );
+                        return <HuntDetails participantProperties={currentRoster?.participant_properties} {...props} />;
                     }}
                 />
             </Switch>

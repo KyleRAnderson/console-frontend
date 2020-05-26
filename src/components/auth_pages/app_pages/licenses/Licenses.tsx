@@ -52,7 +52,7 @@ export default class Licenses extends React.Component<Props, State> {
 
         return (
             <ParticipantsTable
-                participant_attributes={this.props.participantProperties}
+                participantProperties={this.props.participantProperties}
                 participants={participants}
                 extraColumns={[extraColumn]}
             />

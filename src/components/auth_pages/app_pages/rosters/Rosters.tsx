@@ -8,7 +8,7 @@ import RosterAPI from './rosterAPI';
 import Notifications from '../../../../notification';
 import { Button } from 'react-bootstrap';
 import AppPaths from '../../../../routes/AppPaths';
-import RosterDetails from './RosterDetails';
+import RosterDashboard from './RosterDashboard';
 
 type State = {
     rosters: Roster[];
@@ -77,7 +77,12 @@ export default class Rosters extends React.Component<Props, State> {
                     <Route
                         path={AppPaths.rosterPath()}
                         render={(props) => {
-                            return <RosterDetails roster={this.props.rosterToView} {...props} />;
+                            return (
+                                <RosterDashboard
+                                    roster={this.props.rosterToView}
+                                    {...props}
+                                />
+                            );
                         }}
                     ></Route>
                     <Route>{rostersTable}</Route>

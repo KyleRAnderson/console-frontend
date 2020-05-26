@@ -3,10 +3,10 @@ import { RouteComponentProps, Redirect } from 'react-router-dom';
 import AppPaths from '../../../../routes/AppPaths';
 import HuntAPI from './huntAPI';
 import Notifications from '../../../../notification';
-import Licenses from '../licenses/Licenses';
+import LicensesAdapter from '../licenses/LicensesAdapter';
 
 type Props = RouteComponentProps<{ [key: string]: string }> & {
-    participant_properties?: string[];
+    participantProperties?: string[];
 };
 
 export default function HuntDetails(props: Props): JSX.Element {
@@ -23,11 +23,13 @@ export default function HuntDetails(props: Props): JSX.Element {
     }
 
     useEffect(() => {
-        let loadedProperties: string[] | undefined = props.participant_properties;
-        if (!loadedProperties && props.match.params[AppPaths.huntIdParam]) {
-            loadHunt(props.match.params[AppPaths.huntIdParam]);
-        } else {
-            setFailedToLoadHunt(true);
+        let loadedProperties: string[] | undefined = props.participantProperties;
+        if (!loadedProperties) {
+            if (props.match.params[AppPaths.huntIdParam]) {
+                loadHunt(props.match.params[AppPaths.huntIdParam]);
+            } else {
+                setFailedToLoadHunt(true);
+            }
         }
 
         if (loadedProperties) {
@@ -43,5 +45,10 @@ export default function HuntDetails(props: Props): JSX.Element {
         return <Redirect to={props.history.location} />;
     }
 
-    return <Licenses huntId={props.match.params[AppPaths.huntIdParam]} participantProperties={participantProperties} />;
+    return (
+        <LicensesAdapter
+            huntId={props.match.params[AppPaths.huntIdParam]}
+            participantProperties={participantProperties}
+        />
+    );
 }

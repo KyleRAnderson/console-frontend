@@ -4,7 +4,6 @@ import HuntAPI from './huntAPI';
 import Notifications from '../../../../notification';
 import HuntsTable from './HuntsTable';
 import { Button } from 'react-bootstrap';
-import AppPaths from '../../../../routes/AppPaths';
 import CreateHunt from './CreateHunt';
 
 type State = {
@@ -13,6 +12,7 @@ type State = {
 
 type HuntsProps = {
     rosterId: string;
+    onHuntSelect?: (hunt: Hunt) => void;
 };
 
 class Hunts extends React.Component<HuntsProps, State> {
@@ -37,7 +37,7 @@ class Hunts extends React.Component<HuntsProps, State> {
         const actionButtons: (hunt: Hunt) => JSX.Element = (hunt) => {
             return (
                 <>
-                    <Button type="button" variant="outline-primary" href={AppPaths.huntPath(hunt)}>
+                    <Button type="button" variant="outline-primary" onClick={() => this.goToHunt(hunt)}>
                         View
                     </Button>
                     <Button type="button" variant="outline-danger" onClick={() => this.deleteHunt(hunt)}>
@@ -54,6 +54,10 @@ class Hunts extends React.Component<HuntsProps, State> {
             </>
         );
     }
+    goToHunt(hunt: Hunt) {
+        this.props.onHuntSelect?.(hunt);
+    }
+
     createHunt(hunt: HuntAPI.HuntPost): void {
         HuntAPI.createHunt(this.props.rosterId, hunt)
             .then(() => {

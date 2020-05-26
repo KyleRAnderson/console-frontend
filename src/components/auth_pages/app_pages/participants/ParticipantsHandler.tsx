@@ -1,20 +1,30 @@
 // All-encompassing view for participants, with API calls and all the surrounding UI.
 
 import React from 'react';
-import ParticipantsTable from './ParticipantsTable';
+import ParticipantsTable, { ParticipantsProps } from './ParticipantsTable';
 import { Pagination, Container, Row } from 'react-bootstrap';
-import ParticipantAPI from './participantAPI';
 import { Redirect } from 'react-router-dom';
-import Roster from '../../../../models/Roster';
 import AppPaths from '../../../../routes/AppPaths';
+import { ParticipantBase } from '../../../../models/Participant';
 
-type Props = {
-    roster: Roster;
+export type ParticipantPaginatedResponse<U extends ParticipantBase> = {
+    participants: U[];
+    num_pages: number;
 };
 
-type State = ParticipantAPI.ParticipantPaginatedResponse & {
+type Props<T extends ParticipantBase> = {
+    participantProperties: string[];
+    getParticipants: (currentPage: number, recordsPerPage?: number) => Promise<ParticipantPaginatedResponse<T>>;
+    participantTable?: (
+        tableProps: Pick<ParticipantsProps<T>, 'participantProperties' | 'participants'>,
+    ) => JSX.Element;
+};
+
+type State<T extends ParticipantBase> = {
+    participants: T[];
     currentPage: number;
     failedToLoadRoster: boolean;
+    num_pages: number;
 };
 
 /**
@@ -22,8 +32,8 @@ type State = ParticipantAPI.ParticipantPaginatedResponse & {
  * Way 1: The component could be passed a roster prop directly, either containing the rosterId or a roster object.
  * Way 2: The component could have a rosterId passed to it as a param in the URL. This will require loading the roster.
  */
-class ParticipantsView extends React.Component<Props, State> {
-    constructor(props: Props) {
+class ParticipantsHandler<T extends ParticipantBase> extends React.Component<Props<T>, State<T>> {
+    constructor(props: Props<T>) {
         super(props);
         this.state = {
             currentPage: 1,
@@ -38,11 +48,9 @@ class ParticipantsView extends React.Component<Props, State> {
     }
 
     loadParticipants() {
-        if (this.props.roster) {
-            ParticipantAPI.getParticipants(this.props.roster.id, this.state.currentPage).then((response) => {
-                this.setState({ ...this.state, ...response.data });
-            });
-        }
+        this.props.getParticipants(this.state.currentPage).then((response) => {
+            this.setState({ ...this.state, ...response });
+        });
     }
 
     render(): JSX.Element {
@@ -52,7 +60,6 @@ class ParticipantsView extends React.Component<Props, State> {
         if (this.state.participants.length == 0) {
             return <h1>Loading...</h1>;
         }
-
         let paginationItems: JSX.Element[] = [];
         for (let i = 1; i <= this.state.num_pages; i++) {
             paginationItems.push(
@@ -62,12 +69,20 @@ class ParticipantsView extends React.Component<Props, State> {
             );
         }
 
+        const defaultTable: JSX.Element = (
+            <ParticipantsTable
+                participantProperties={this.props.participantProperties}
+                participants={this.state.participants}
+            />
+        );
+
         return (
             <>
-                <ParticipantsTable
-                    participant_attributes={this.props.roster.participant_properties}
-                    participants={this.state.participants}
-                />
+                {this.props.participantTable?.({
+                    participantProperties: this.props.participantProperties,
+                    participants: this.state.participants,
+                }) || defaultTable}
+
                 <Container>
                     <Row className="justify-content-center">
                         <Pagination>
@@ -82,10 +97,8 @@ class ParticipantsView extends React.Component<Props, State> {
     }
 
     setPage(page: number) {
-        let state: State = { ...this.state };
-        state.currentPage = page;
-        this.setState(state, () => this.loadParticipants());
+        this.setState({ ...this.state, currentPage: page }, () => this.loadParticipants());
     }
 }
 
-export default ParticipantsView;
+export default ParticipantsHandler;

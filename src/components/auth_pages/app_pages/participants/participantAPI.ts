@@ -3,26 +3,16 @@ import ApiPaths from '../../../../routes/ApiPaths';
 import Participant, { ParticipantBase } from '../../../../models/Participant';
 import { AxiosResponse } from 'axios';
 import PartialBy from '../../../../util/partialBy';
+import { ParticipantPaginatedResponse } from './ParticipantsHandler';
 
 namespace ParticipantAPI {
     export type ParticipantPost = PartialBy<ParticipantBase, 'extras'>;
 
-    export type ParticipantPaginatedResponse = {
-        participants: Participant[];
-        num_pages: number;
-    };
-
     export function getParticipants(
         rosterId: string,
-        page: number,
-        participantsPerPage?: number,
-    ): Promise<AxiosResponse<ParticipantPaginatedResponse>> {
-        let params: { [key: string]: string } = {};
-        params[ApiPaths.ParticipantParams.page] = page.toString();
-        if (participantsPerPage) {
-            params[ApiPaths.ParticipantParams.perPage] = participantsPerPage.toString();
-        }
-        return ApiRequest.getItem<ParticipantPaginatedResponse>(ApiPaths.participantsPath(rosterId), {
+        params: ApiPaths.ParticipantParams,
+    ): Promise<AxiosResponse<ParticipantPaginatedResponse<Participant>>> {
+        return ApiRequest.getItem<ParticipantPaginatedResponse<Participant>>(ApiPaths.participantsPath(rosterId), {
             params: params,
         });
     }

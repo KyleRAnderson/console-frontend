@@ -2,9 +2,9 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 import { ParticipantBase } from '../../../../models/Participant';
 
-type ParticipantsProps<T extends ParticipantBase> = {
+export type ParticipantsProps<T extends ParticipantBase> = {
     participants: T[];
-    participant_attributes: string[];
+    participantProperties: string[];
     /* Any sort of special rendering for extra columns. First entry in the tuple
      * is the <th> to go with the column, second entry is a function that takes the participant
      * and transforms it into the column entry. Extra columns go after participant properties by default.
@@ -13,7 +13,7 @@ type ParticipantsProps<T extends ParticipantBase> = {
 };
 
 export default function ParticipantsTable<T extends ParticipantBase>(props: ParticipantsProps<T>): JSX.Element {
-    let participant_properties_ordered: string[] = props.participant_attributes.sort();
+    let participant_properties_ordered: string[] = props.participantProperties.sort();
     return (
         <Table striped responsive>
             <thead className="thead-dark">

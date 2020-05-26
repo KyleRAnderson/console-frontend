@@ -4,13 +4,14 @@ import { RouteComponentProps, Redirect } from 'react-router-dom';
 import Roster from '../../../../models/Roster';
 import AppPaths from '../../../../routes/AppPaths';
 import RosterAPI from './rosterAPI';
-import ParticipantsView from '../participants/Participants';
+import ParticipantAdapter from '../participants/ParticipantAdapter';
+import Hunt from '../../../../models/Hunt';
 
 type Props = RouteComponentProps<{ [key: string]: string }> & {
     roster?: Roster | string;
 };
 
-export default function RosterDetails(props: Props): JSX.Element {
+export default function RosterDashboard(props: Props): JSX.Element {
     const [roster, setRoster] = useState<Roster | undefined>(undefined);
     const [failedToLoadRoster, setFailedToLoadRoster] = useState<boolean>(false);
 
@@ -22,6 +23,10 @@ export default function RosterDetails(props: Props): JSX.Element {
             .catch(() => {
                 setFailedToLoadRoster(true);
             });
+    }
+
+    function selectHunt(hunt: Hunt): void {
+        props.history.push(AppPaths.huntPath(hunt));
     }
 
     useEffect(() => {
@@ -55,8 +60,8 @@ export default function RosterDetails(props: Props): JSX.Element {
 
     return (
         <>
-            <Hunts rosterId={roster.id} />
-            <ParticipantsView roster={roster} />
+            <Hunts rosterId={roster.id} onHuntSelect={(hunt) => selectHunt(hunt)} />
+            <ParticipantAdapter roster={roster} />
         </>
     );
 }
