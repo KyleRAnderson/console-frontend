@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Route, RouteComponentProps, Switch } from 'react-router-dom';
+import { Route, RouteComponentProps, Switch, Redirect } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import Rosters from './rosters/Rosters';
 import AppPaths from '../../../routes/AppPaths';
@@ -48,6 +48,9 @@ function AppPage(props: RouteComponentProps) {
                         return <HuntDetails participantProperties={currentRoster?.participant_properties} {...props} />;
                     }}
                 />
+                <Route>
+                    <Redirect to={AppPaths.rostersPath} />
+                </Route>
             </Switch>
         </>
     );
