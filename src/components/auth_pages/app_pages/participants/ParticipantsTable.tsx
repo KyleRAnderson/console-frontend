@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { ParticipantBase } from '../../../../models/Participant';
+import GenericTable, { PropertyMapping } from '../../../GenericTable';
 
 export type ParticipantsProps<T extends ParticipantBase> = {
     participants: T[];
@@ -14,6 +15,19 @@ export type ParticipantsProps<T extends ParticipantBase> = {
 
 export default function ParticipantsTable<T extends ParticipantBase>(props: ParticipantsProps<T>): JSX.Element {
     let participant_properties_ordered: string[] = props.participantProperties.sort();
+    let propertyMappings: PropertyMapping<T>[] = [
+        ['First', 'first'],
+        ['Last', 'last'],
+        ...participant_properties_ordered.map(
+            (property): PropertyMapping<T> => {
+                return [property, (participant) => participant.extras[property]];
+            },
+        ),
+    ];
+    if (props.extraColumns) {
+        propertyMappings.push(...props.extraColumns);
+    }
+    return <GenericTable striped responsive propertyMappings={propertyMappings} values={props.participants} />;
     return (
         <Table striped responsive>
             <thead className="thead-dark">
