@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { Route, RouteComponentProps, Switch, Redirect } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import Rosters from './rosters/Rosters';
 import AppPaths from '../../../routes/AppPaths';
 import Auth from '../../../auth';
 import Roster from '../../../models/Roster';
-import HuntDetails from './hunts/HuntDetails';
+import UserDashboard from './UserDashboard';
 
 function AppPage(props: RouteComponentProps) {
-    const [currentRoster, setCurrentRoster] = useState<Roster | undefined>(undefined);
+    const [] = useState<Roster | undefined>(undefined);
 
     return (
         <>
@@ -29,29 +28,7 @@ function AppPage(props: RouteComponentProps) {
                     </Button>
                 </Container>
             </Navbar>
-            <Switch>
-                <Route
-                    path={AppPaths.rostersPath}
-                    render={(props) => {
-                        return (
-                            <Rosters
-                                {...props}
-                                rosterToView={currentRoster}
-                                onRosterSelect={(roster) => setCurrentRoster(roster)}
-                            />
-                        );
-                    }}
-                />
-                <Route
-                    path={AppPaths.huntPath()}
-                    render={(props) => {
-                        return <HuntDetails participantProperties={currentRoster?.participant_properties} {...props} />;
-                    }}
-                />
-                <Route>
-                    <Redirect to={AppPaths.rostersPath} />
-                </Route>
-            </Switch>
+            <UserDashboard {...props} />
         </>
     );
 }

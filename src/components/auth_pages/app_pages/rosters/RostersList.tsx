@@ -1,25 +1,20 @@
 import React from 'react';
 import Roster from '../../../../models/Roster';
-import { store } from 'react-notifications-component';
 import RostersTable from './RostersTable';
-import { RouteComponentProps, Route, Switch } from 'react-router-dom';
 import CreateRoster from './CreateRoster';
 import RosterAPI from './rosterAPI';
 import Notifications from '../../../../notification';
 import { Button } from 'react-bootstrap';
-import AppPaths from '../../../../routes/AppPaths';
-import RosterDashboard from './RosterDashboard';
 
 type State = {
     rosters: Roster[];
 };
 
-type Props = RouteComponentProps & {
+type Props = {
     onRosterSelect: (roster: Roster) => void;
-    rosterToView?: Roster;
 };
 
-export default class Rosters extends React.Component<Props, State> {
+export default class RostersList extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = { rosters: [] };
@@ -31,17 +26,9 @@ export default class Rosters extends React.Component<Props, State> {
                 this.setRosters(response.data);
             })
             .catch(() => {
-                store.addNotification({
+                Notifications.createNotification({
                     message: 'Failed to load rosters 😢',
                     type: 'danger',
-                    insert: 'top',
-                    container: 'top-right',
-                    animationIn: ['animated', 'fadeIn'],
-                    animationOut: ['animated', 'fadeOut'],
-                    dismiss: {
-                        duration: 2000,
-                        onScreen: true,
-                    },
                 });
             });
     }
@@ -64,29 +51,10 @@ export default class Rosters extends React.Component<Props, State> {
             );
         };
 
-        const rostersTable: JSX.Element = (
+        return (
             <>
                 <RostersTable rosters={this.state.rosters} actionButtons={actionButtons} />
                 <CreateRoster onSuccessfulCreate={(roster) => this.onRosterCreated(roster)} />
-            </>
-        );
-
-        return (
-            <>
-                <Switch>
-                    <Route
-                        path={AppPaths.rosterPath()}
-                        render={(props) => {
-                            return (
-                                <RosterDashboard
-                                    roster={this.props.rosterToView}
-                                    {...props}
-                                />
-                            );
-                        }}
-                    ></Route>
-                    <Route>{rostersTable}</Route>
-                </Switch>
             </>
         );
     }
@@ -108,7 +76,6 @@ export default class Rosters extends React.Component<Props, State> {
 
     setRosterToView(roster: Roster): void {
         this.props.onRosterSelect(roster);
-        this.props.history.push(AppPaths.rosterPath(roster));
     }
 
     onRosterCreated(roster: Roster): void {

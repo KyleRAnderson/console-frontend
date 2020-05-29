@@ -4,9 +4,10 @@ import AppPaths from '../../../../routes/AppPaths';
 import HuntAPI from './huntAPI';
 import Notifications from '../../../../notification';
 import LicensesAdapter from '../licenses/LicensesAdapter';
+import { HuntWithProperties } from '../../../../models/Hunt';
 
 type Props = RouteComponentProps<{ [key: string]: string }> & {
-    participantProperties?: string[];
+    hunt?: HuntWithProperties;
 };
 
 export default function HuntDetails(props: Props): JSX.Element {
@@ -23,7 +24,7 @@ export default function HuntDetails(props: Props): JSX.Element {
     }
 
     useEffect(() => {
-        let loadedProperties: string[] | undefined = props.participantProperties;
+        let loadedProperties: string[] | undefined = props.hunt?.roster.participant_properties;
         if (!loadedProperties) {
             if (props.match.params[AppPaths.huntIdParam]) {
                 loadHunt(props.match.params[AppPaths.huntIdParam]);

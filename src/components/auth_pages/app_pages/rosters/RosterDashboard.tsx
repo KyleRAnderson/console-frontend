@@ -5,10 +5,11 @@ import Roster from '../../../../models/Roster';
 import AppPaths from '../../../../routes/AppPaths';
 import RosterAPI from './rosterAPI';
 import ParticipantAdapter from '../participants/ParticipantAdapter';
-import Hunt from '../../../../models/Hunt';
+import Hunt, { HuntWithProperties } from '../../../../models/Hunt';
 
 type Props = RouteComponentProps<{ [key: string]: string }> & {
     roster?: Roster | string;
+    onSelectHunt?: (hunt: HuntWithProperties) => void;
 };
 
 export default function RosterDashboard(props: Props): JSX.Element {
@@ -26,7 +27,9 @@ export default function RosterDashboard(props: Props): JSX.Element {
     }
 
     function selectHunt(hunt: Hunt): void {
-        props.history.push(AppPaths.huntPath(hunt));
+        if (roster) {
+            props.onSelectHunt?.({ ...hunt, roster: { participant_properties: roster.participant_properties } });
+        }
     }
 
     useEffect(() => {
