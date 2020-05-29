@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, TableProps } from 'react-bootstrap';
 
-type PropertiesOfType<U, V> = {
+export type PropertyOfType<U, V> = {
     [P in keyof U]: U[P] extends V ? P : never;
 }[keyof U];
 
@@ -9,7 +9,7 @@ type AllowedPropertyTypes = string | number | JSX.Element;
 
 export type PropertyMapping<T> = [
     string | JSX.Element,
-    PropertiesOfType<T, AllowedPropertyTypes> | ((value: T) => string | JSX.Element),
+    PropertyOfType<T, AllowedPropertyTypes> | ((value: T) => string | JSX.Element),
 ];
 
 /* Note that T can still have properties that aren't of type string | JSX.Element, but they won't be known of
@@ -22,11 +22,11 @@ type Props<T> = TableProps & {
 export default function GenericTable<T>(props: Props<T>): JSX.Element {
     function valueEntry(value: T, converter: Props<T>['propertyMappings']): JSX.Element[] {
         let elements: JSX.Element[] = converter.map(([, adapter], i) => {
-            let currentValue: AllowedPropertyTypes;
+            let currentValue: T[PropertyOfType<T, AllowedPropertyTypes>] | JSX.Element | string;
             if (typeof adapter === 'function') {
                 currentValue = adapter(value);
             } else {
-                currentValue = value[adapter as PropertiesOfType<T, AllowedPropertyTypes>];
+                currentValue = value[adapter];
             }
             return <td key={i}>{currentValue}</td>;
         });
@@ -36,9 +36,10 @@ export default function GenericTable<T>(props: Props<T>): JSX.Element {
     let tableRows: JSX.Element[] = props.values.map((value, i) => {
         return <tr key={i}>{valueEntry(value, props.propertyMappings)}</tr>;
     });
+    let { propertyMappings, values, ...tableProps }: Props<T> = props;
 
     return (
-        <Table {...props}>
+        <Table {...tableProps}>
             <thead className="thead-dark">
                 <tr>
                     {props.propertyMappings.map((mapping, i) => {

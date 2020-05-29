@@ -1,5 +1,4 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
 import { ParticipantBase } from '../../../../models/Participant';
 import GenericTable, { PropertyMapping } from '../../../GenericTable';
 
@@ -16,11 +15,11 @@ export type ParticipantsProps<T extends ParticipantBase> = {
 export default function ParticipantsTable<T extends ParticipantBase>(props: ParticipantsProps<T>): JSX.Element {
     let participant_properties_ordered: string[] = props.participantProperties.sort();
     let propertyMappings: PropertyMapping<T>[] = [
-        ['First', 'first'],
-        ['Last', 'last'],
+        ['First', 'first'] as PropertyMapping<T>,
+        ['Last', 'last'] as PropertyMapping<T>,
         ...participant_properties_ordered.map(
             (property): PropertyMapping<T> => {
-                return [property, (participant) => participant.extras[property]];
+                return [titleCase(property), (participant) => participant.extras[property]];
             },
         ),
     ];
@@ -28,38 +27,6 @@ export default function ParticipantsTable<T extends ParticipantBase>(props: Part
         propertyMappings.push(...props.extraColumns);
     }
     return <GenericTable striped responsive propertyMappings={propertyMappings} values={props.participants} />;
-    return (
-        <Table striped responsive>
-            <thead className="thead-dark">
-                <tr>
-                    <th>First</th>
-                    <th>Last</th>
-                    {participant_properties_ordered.map((attribute, i) => {
-                        return <th key={i}>{titleCase(attribute)}</th>;
-                    })}
-                    {props.extraColumns?.map((column, i) => {
-                        return <th key={i}>{column[0]}</th>;
-                    })}
-                </tr>
-            </thead>
-            <tbody>
-                {props.participants.map((participant, i) => {
-                    return (
-                        <tr key={i}>
-                            <td>{participant.first}</td>
-                            <td>{participant.last}</td>
-                            {participant_properties_ordered.map((property, j) => {
-                                return <td key={j}>{participant.extras[property]}</td>;
-                            })}
-                            {props.extraColumns?.map((column) => {
-                                return <td key={i}>{column[1](participant)}</td>;
-                            })}
-                        </tr>
-                    );
-                })}
-            </tbody>
-        </Table>
-    );
 }
 
 function titleCase(word: string): string {
