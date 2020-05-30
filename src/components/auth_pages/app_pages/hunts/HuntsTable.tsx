@@ -14,7 +14,7 @@ export default function huntsTable(props: HuntsTableProps): JSX.Element {
         if (props.actionButtons) {
             buttonGroup = <ButtonGroup aria-label="action-buttons">{props.actionButtons(hunt)}</ButtonGroup>;
         }
-        return buttonGroup;
+        return <td key={hunt.id}>{buttonGroup}</td>;
     }
 
     const propertyMappings: PropertyMapping<Hunt>[] = [

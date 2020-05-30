@@ -8,7 +8,7 @@ export type PropertyOfType<U, V> = {
 type AllowedPropertyTypes = string | number | JSX.Element | null;
 
 export type PropertyMapping<T> = [
-    string | JSX.Element,
+    AllowedPropertyTypes,
     PropertyOfType<T, AllowedPropertyTypes> | ((value: T) => AllowedPropertyTypes),
 ];
 
@@ -28,7 +28,9 @@ export default function GenericTable<T>(props: Props<T>): JSX.Element {
             } else {
                 currentValue = value[adapter];
             }
-            return <td key={i}>{currentValue}</td>;
+            // Should only be an object if it's not a string or a number, in which case
+            // it is expected that the returned element has the <td> in it.
+            return typeof currentValue === 'object' ? (currentValue as JSX.Element) : <td key={i}>{currentValue}</td>;
         });
         return elements;
     }
@@ -43,7 +45,7 @@ export default function GenericTable<T>(props: Props<T>): JSX.Element {
             <thead className="thead-dark">
                 <tr>
                     {props.propertyMappings.map((mapping, i) => {
-                        return <th key={i}>{mapping[0]}</th>;
+                        return typeof mapping[0] !== 'object' ? <th key={i}>{mapping[0]}</th> : mapping[0];
                     })}
                 </tr>
             </thead>

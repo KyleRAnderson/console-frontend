@@ -16,7 +16,7 @@ export default function rostersTable(props: RosterTableProps) {
         if (props.actionButtons) {
             buttonGroup = <ButtonGroup aria-label="action-buttons">{props.actionButtons(roster)}</ButtonGroup>;
         }
-        return buttonGroup;
+        return <td key={roster.id}>{buttonGroup}</td>;
     }
 
     function formatParticipantProperties(roster: Roster): JSX.Element {
