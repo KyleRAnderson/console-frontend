@@ -33,11 +33,6 @@ namespace ApiPaths {
         return `${rosterPath(rosterId)}${participantsExtension}`;
     }
 
-    export type ParticipantParams = {
-        page: number;
-        per_page?: number;
-    };
-
     export function huntPath(huntId: string): string {
         return `${apiRootPath}${huntsExtension}${huntId}/`;
     }
@@ -69,11 +64,6 @@ namespace ApiPaths {
     export function licensesPath(hunt: string | Hunt): string {
         return `${huntPath(getId(hunt))}${licensesExtension}`;
     }
-
-    export type LicenseParams = {
-        page: number;
-        per_page?: number;
-    };
 }
 
 export default ApiPaths;

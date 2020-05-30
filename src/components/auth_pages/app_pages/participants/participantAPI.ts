@@ -10,7 +10,7 @@ namespace ParticipantAPI {
 
     export function getParticipants(
         rosterId: string,
-        params: ApiPaths.ParticipantParams,
+        params: ApiRequest.PaginationParams,
     ): Promise<AxiosResponse<ParticipantPaginatedResponse<Participant>>> {
         return ApiRequest.getItem<ParticipantPaginatedResponse<Participant>>(ApiPaths.participantsPath(rosterId), {
             params: params,

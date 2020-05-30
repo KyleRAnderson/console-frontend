@@ -2,6 +2,11 @@ import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import Auth from './auth';
 
 namespace ApiRequest {
+    export type PaginationParams = {
+        page: number;
+        per_page?: number;
+    };
+
     export type FailureCodeSubscriber = {
         callback: (response: AxiosError) => void;
         code?: number;

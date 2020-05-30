@@ -19,7 +19,7 @@ namespace LicenseAPI {
      */
     export function getLicenses(
         huntId: string,
-        params: ApiPaths.LicenseParams,
+        params: ApiRequest.PaginationParams,
     ): Promise<AxiosResponse<LicensePaginatedResponse>> {
         return ApiRequest.getItem<LicensePaginatedResponse>(ApiPaths.licensesPath(huntId), {
             params: params,
