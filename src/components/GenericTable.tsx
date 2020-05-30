@@ -5,11 +5,11 @@ export type PropertyOfType<U, V> = {
     [P in keyof U]: U[P] extends V ? P : never;
 }[keyof U];
 
-type AllowedPropertyTypes = string | number | JSX.Element;
+type AllowedPropertyTypes = string | number | JSX.Element | null;
 
 export type PropertyMapping<T> = [
     string | JSX.Element,
-    PropertyOfType<T, AllowedPropertyTypes> | ((value: T) => string | JSX.Element),
+    PropertyOfType<T, AllowedPropertyTypes> | ((value: T) => AllowedPropertyTypes),
 ];
 
 /* Note that T can still have properties that aren't of type string | JSX.Element, but they won't be known of
@@ -22,7 +22,7 @@ type Props<T> = TableProps & {
 export default function GenericTable<T>(props: Props<T>): JSX.Element {
     function valueEntry(value: T, converter: Props<T>['propertyMappings']): JSX.Element[] {
         let elements: JSX.Element[] = converter.map(([, adapter], i) => {
-            let currentValue: T[PropertyOfType<T, AllowedPropertyTypes>] | JSX.Element | string;
+            let currentValue: T[PropertyOfType<T, AllowedPropertyTypes>] | AllowedPropertyTypes;
             if (typeof adapter === 'function') {
                 currentValue = adapter(value);
             } else {

@@ -1,6 +1,7 @@
 import React from 'react';
 import Roster from '../../../../models/Roster';
-import { Table, ButtonGroup } from 'react-bootstrap';
+import { ButtonGroup } from 'react-bootstrap';
+import GenericTable, { PropertyMapping } from '../../../GenericTable';
 
 export type RosterTableProps = {
     rosters: Roster[];
@@ -13,41 +14,29 @@ export default function rostersTable(props: RosterTableProps) {
     function buttonGroupForRoster(roster: Roster): JSX.Element | null {
         let buttonGroup: JSX.Element | null = null;
         if (props.actionButtons) {
-            buttonGroup = (
-                <td>
-                    <ButtonGroup aria-label="action-buttons">{props.actionButtons(roster)}</ButtonGroup>
-                </td>
-            );
+            buttonGroup = <ButtonGroup aria-label="action-buttons">{props.actionButtons(roster)}</ButtonGroup>;
         }
         return buttonGroup;
     }
 
-    return (
-        <Table striped responsive>
-            <thead className="thead-dark">
-                <tr>
-                    <th scope="col">Roster Name</th>
-                    <th scope="col">Participant Properties</th>
-                    {props.actionButtons ? <th scope="col"></th> : null}
-                </tr>
-            </thead>
-            <tbody>
-                {rosters.map((roster: Roster) => {
-                    return (
-                        <tr key={roster.id} className="">
-                            <td>{roster.name}</td>
-                            <td>
-                                <ul>
-                                    {roster.participant_properties.map((property: string, index) => {
-                                        return <li key={index}>{property}</li>;
-                                    })}
-                                </ul>
-                            </td>
-                            {buttonGroupForRoster(roster)}
-                        </tr>
-                    );
+    function formatParticipantProperties(roster: Roster): JSX.Element {
+        return (
+            <>
+                {roster.participant_properties.map((property: string, index) => {
+                    return <li key={index}>{property}</li>;
                 })}
-            </tbody>
-        </Table>
-    );
+            </>
+        );
+    }
+
+    const propertyMappings: PropertyMapping<Roster>[] = [
+        ['Roster Name', 'name'],
+        ['Participant Properties', formatParticipantProperties],
+    ];
+
+    if (props.actionButtons) {
+        propertyMappings.push(['Actions', buttonGroupForRoster]);
+    }
+
+    return <GenericTable<Roster> striped responsive values={rosters} propertyMappings={propertyMappings} />;
 }

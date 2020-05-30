@@ -1,6 +1,7 @@
 import Hunt from '../../../../models/Hunt';
-import { ButtonGroup, Table } from 'react-bootstrap';
+import { ButtonGroup } from 'react-bootstrap';
 import React from 'react';
+import GenericTable, { PropertyMapping } from '../../../GenericTable';
 
 export type HuntsTableProps = {
     hunts: Hunt[];
@@ -11,35 +12,16 @@ export default function huntsTable(props: HuntsTableProps): JSX.Element {
     function buttonGroupForHunt(hunt: Hunt): JSX.Element | null {
         let buttonGroup: JSX.Element | null = null;
         if (props.actionButtons) {
-            buttonGroup = (
-                <td>
-                    <ButtonGroup aria-label="action-buttons">{props.actionButtons(hunt)}</ButtonGroup>
-                </td>
-            );
+            buttonGroup = <ButtonGroup aria-label="action-buttons">{props.actionButtons(hunt)}</ButtonGroup>;
         }
         return buttonGroup;
     }
 
-    return (
-        <Table striped responsive>
-            <thead className="thead-dark">
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Active Participants</th>
-                    {props.actionButtons ? <th scope="col">Actions</th> : null}
-                </tr>
-            </thead>
-            <tbody>
-                {props.hunts.map((hunt) => {
-                    return (
-                        <tr key={hunt.id}>
-                            <td>{hunt.name}</td>
-                            <td>{hunt.num_active_licenses}</td>
-                            {buttonGroupForHunt(hunt)}
-                        </tr>
-                    );
-                })}
-            </tbody>
-        </Table>
-    );
+    const propertyMappings: PropertyMapping<Hunt>[] = [
+        ['Name', 'name'],
+        ['Active Participants', 'num_active_licenses'],
+        ['Actions', buttonGroupForHunt],
+    ];
+
+    return <GenericTable<Hunt> propertyMappings={propertyMappings} values={props.hunts} striped responsive />;
 }
