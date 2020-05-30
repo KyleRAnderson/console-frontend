@@ -7,13 +7,21 @@ import { ParticipantPaginatedResponse } from './ParticipantsHandler';
 
 namespace ParticipantAPI {
     export type ParticipantPost = PartialBy<ParticipantBase, 'extras'>;
+    /**
+     * The properties that are orderable on the server end for the participant.
+     */
+    export type ParticipantOrdering = {
+        first?: string;
+        last?: string;
+    };
 
     export function getParticipants(
         rosterId: string,
         params: ApiRequest.PaginationParams,
+        ordering?: ParticipantOrdering,
     ): Promise<AxiosResponse<ParticipantPaginatedResponse<Participant>>> {
         return ApiRequest.getItem<ParticipantPaginatedResponse<Participant>>(ApiPaths.participantsPath(rosterId), {
-            params: params,
+            params: { ...params, ...ordering },
         });
     }
 
