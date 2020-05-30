@@ -60,8 +60,9 @@ class Hunts extends React.Component<HuntsProps, State> {
 
     createHunt(hunt: HuntAPI.HuntPost): void {
         HuntAPI.createHunt(this.props.rosterId, hunt)
-            .then(() => {
+            .then(({ data }) => {
                 Notifications.createNotification({ message: 'Successfully created hunt.', type: 'success' });
+                this.setState({ ...this.state, hunts: [...this.state.hunts, data] });
             })
             .catch((error) => {
                 let errorCasted: HuntAPI.HuntErrorResponse | undefined = HuntAPI.asHuntError(error);
@@ -79,6 +80,9 @@ class Hunts extends React.Component<HuntsProps, State> {
         HuntAPI.deleteHunt(hunt.id)
             .then(() => {
                 Notifications.createNotification({ message: 'Successfully deleted hunt', type: 'success' });
+                const newHuntsList = [...this.state.hunts];
+                newHuntsList.splice(this.state.hunts.indexOf(hunt), 1);
+                this.setState({ ...this.state, hunts: newHuntsList });
             })
             .catch(() => {
                 Notifications.createNotification({ message: 'Failed to delete hunt.', type: 'danger' });
