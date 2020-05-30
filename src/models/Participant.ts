@@ -1,13 +1,13 @@
 import Timestamps from './Timestamps';
 import Identifiable from './Identifiable';
 
-type ParticipantBase = Identifiable & {
+type ParticipantBase = {
     first: string;
     last: string;
     extras: { [property: string]: string };
 };
 
-type Participant = Timestamps & ParticipantBase;
+type Participant = Identifiable & Timestamps & ParticipantBase;
 
 export default Participant;
 export { ParticipantBase };

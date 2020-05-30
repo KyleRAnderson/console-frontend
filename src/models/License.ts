@@ -1,16 +1,18 @@
 import Timestamps from './Timestamps';
-import { ParticipantBase } from './Participant';
 import Identifiable from './Identifiable';
+import { ParticipantBase } from './Participant';
 
-type LicenseBase = Identifiable & {
-    eliminated: boolean;
-    participant: ParticipantBase;
+type LicenseBase = {
+    eliminated?: boolean;
+    participant_id: string;
 };
 
-type License = Timestamps &
-    LicenseBase & {
+type License = Identifiable &
+    Timestamps &
+    Required<Omit<LicenseBase, 'participant_id'>> & {
         match_ids: string[];
         hunt_id: string;
+        participant: ParticipantBase;
     };
 
 export default License;

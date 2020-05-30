@@ -1,15 +1,19 @@
 import Timestamps from './Timestamps';
-import { LicenseBase } from './License';
+import License from './License';
 import Identifiable from './Identifiable';
 
-type MatchBase = Identifiable & {
-    open: boolean;
-    round_id: string;
-    local_id: number;
-    licenses: LicenseBase[];
+type MatchBase = {
+    open?: boolean;
+    license_ids: string[];
 };
 
-type Match = Timestamps & MatchBase;
+type Match = Identifiable &
+    Timestamps &
+    Required<MatchBase> & {
+        round_id: string;
+        local_id: number;
+        licenses: Pick<License, 'id' | 'eliminated' | 'participant'>[];
+    };
 
 export default Match;
 export { MatchBase };
