@@ -9,8 +9,13 @@ type CreateHuntProps = {
 export default function CreateHunt(props: CreateHuntProps): JSX.Element {
     const [huntName, setHuntName] = useState<string>('');
 
+    function clearForm(): void {
+        setHuntName('');
+    }
+
     function submitForm(event: React.FormEvent<HTMLFormElement>): void {
         props.onSubmission?.({ name: huntName });
+        clearForm();
         event.preventDefault();
     }
 
