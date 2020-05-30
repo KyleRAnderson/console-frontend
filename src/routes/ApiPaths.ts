@@ -1,3 +1,8 @@
+import Identifiable from '../models/Identifiable';
+import Hunt from '../models/Hunt';
+import Roster from '../models/Roster';
+import License from '../models/License';
+
 namespace ApiPaths {
     export const apiRootPath: string = '/api/v1/';
 
@@ -11,6 +16,10 @@ namespace ApiPaths {
     const roundsExtension: string = 'rounds/';
     const matchesExtension: string = 'matches/';
     const licensesExtension: string = 'licenses/';
+
+    function getId<T extends Identifiable>(model: T | string): string {
+        return typeof model === 'string' ? model : model.id;
+    }
 
     export function rosterPath(rosterId: string): string {
         return `${rostersPath}${rosterId}/`;
@@ -33,32 +42,32 @@ namespace ApiPaths {
         return `${apiRootPath}${huntsExtension}${huntId}/`;
     }
 
-    export function huntsPath(rosterId: string): string {
-        return `${rosterPath(rosterId)}${huntsExtension}`;
+    export function huntsPath(roster: string | Roster): string {
+        return `${rosterPath(getId(roster))}${huntsExtension}`;
     }
 
-    export function roundPath(huntId: string, roundNumber: number): string {
-        return `${roundsPath(huntId)}${roundNumber}/`;
+    export function roundPath(hunt: string | Hunt, roundNumber: number): string {
+        return `${roundsPath(getId(hunt))}${roundNumber}/`;
     }
 
-    export function roundsPath(huntId: string): string {
-        return `${huntPath(huntId)}${roundsExtension}`;
+    export function roundsPath(hunt: string | Hunt): string {
+        return `${huntPath(getId(hunt))}${roundsExtension}`;
     }
 
-    export function matchPath(huntId: string, matchNumber: number): string {
-        return `${matchesPath(huntId)}${matchNumber}/`;
+    export function matchPath(hunt: string | Hunt, matchNumber: number): string {
+        return `${matchesPath(getId(hunt))}${matchNumber}/`;
     }
 
-    export function matchesPath(huntId: string): string {
-        return `${huntPath(huntId)}${matchesExtension}`;
+    export function matchesPath(hunt: string | Hunt): string {
+        return `${huntPath(getId(hunt))}${matchesExtension}`;
     }
 
-    export function licensePath(licenseId: string): string {
-        return `${apiRootPath}${licensesExtension}${licenseId}/`;
+    export function licensePath(license: string | License): string {
+        return `${apiRootPath}${licensesExtension}${getId(license)}/`;
     }
 
-    export function licensesPath(huntId: string): string {
-        return `${huntPath(huntId)}${licensesExtension}`;
+    export function licensesPath(hunt: string | Hunt): string {
+        return `${huntPath(getId(hunt))}${licensesExtension}`;
     }
 
     export type LicenseParams = {

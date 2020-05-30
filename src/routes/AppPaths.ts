@@ -1,5 +1,5 @@
-import Hunt from '../models/Hunt';
 import Roster from '../models/Roster';
+import Hunt from '../models/Hunt';
 
 namespace AppPaths {
     export const root: string = '/';
@@ -20,6 +20,11 @@ namespace AppPaths {
     export function huntPath(hunt: Hunt | string = `:${huntIdParam}`): string {
         const huntId: string = typeof hunt == 'string' ? hunt : hunt.id;
         return `${app}${huntsExtension}${huntId}/`;
+    }
+
+    export const matchesExtension: string = 'matches/';
+    export function matchesPath(hunt?: Hunt | string): string {
+        return `${huntPath(hunt)}${matchesExtension}`;
     }
 }
 export default AppPaths;
