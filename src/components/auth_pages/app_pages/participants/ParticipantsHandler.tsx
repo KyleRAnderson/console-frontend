@@ -7,10 +7,10 @@ import { Redirect } from 'react-router-dom';
 import AppPaths from '../../../../routes/AppPaths';
 import { ParticipantBase } from '../../../../models/Participant';
 import Loading from '../../../Loading';
+import PaginatedResponse from '../../../../models/PaginatedResponse';
 
-export type ParticipantPaginatedResponse<U extends ParticipantBase> = {
+export type ParticipantPaginatedResponse<U extends ParticipantBase> = PaginatedResponse & {
     participants: U[];
-    num_pages: number;
 };
 
 type Props<T extends ParticipantBase> = {
