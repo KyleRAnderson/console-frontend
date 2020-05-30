@@ -6,6 +6,7 @@ import AppPaths from '../../../../routes/AppPaths';
 import RosterAPI from './rosterAPI';
 import ParticipantAdapter from '../participants/ParticipantAdapter';
 import Hunt, { HuntWithProperties } from '../../../../models/Hunt';
+import Loading from '../../../Loading';
 
 type Props = RouteComponentProps<{ [key: string]: string }> & {
     roster?: Roster | string;
@@ -54,7 +55,7 @@ export default function RosterDashboard(props: Props): JSX.Element {
     }, []);
 
     if (!roster) {
-        return <h1>Loading...</h1>;
+        return <Loading />;
     }
     if (failedToLoadRoster) {
         props.history.goBack();

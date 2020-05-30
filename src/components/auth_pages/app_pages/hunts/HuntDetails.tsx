@@ -5,6 +5,7 @@ import HuntAPI from './huntAPI';
 import Notifications from '../../../../notification';
 import LicensesAdapter from '../licenses/LicensesAdapter';
 import { HuntWithProperties } from '../../../../models/Hunt';
+import Loading from '../../../Loading';
 
 type Props = RouteComponentProps<{ [key: string]: string }> & {
     hunt?: HuntWithProperties;
@@ -39,7 +40,7 @@ export default function HuntDetails(props: Props): JSX.Element {
     }, []);
 
     if (!participantProperties) {
-        return <h1>Loading...</h1>;
+        return <Loading />;
     }
     if (failedToLoadHunt) {
         props.history.goBack();

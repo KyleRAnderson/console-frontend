@@ -6,6 +6,7 @@ import { Pagination, Container, Row } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import AppPaths from '../../../../routes/AppPaths';
 import { ParticipantBase } from '../../../../models/Participant';
+import Loading from '../../../Loading';
 
 export type ParticipantPaginatedResponse<U extends ParticipantBase> = {
     participants: U[];
@@ -58,7 +59,7 @@ class ParticipantsHandler<T extends ParticipantBase> extends React.Component<Pro
             return <Redirect to={AppPaths.rostersPath} />;
         }
         if (this.state.participants.length == 0) {
-            return <h1>Loading...</h1>;
+            return <Loading />;
         }
         let paginationItems: JSX.Element[] = [];
         for (let i = 1; i <= this.state.num_pages; i++) {

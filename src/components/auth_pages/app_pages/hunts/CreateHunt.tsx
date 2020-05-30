@@ -20,10 +20,10 @@ export default function CreateHunt(props: CreateHuntProps): JSX.Element {
     }
 
     return (
-        <Container className="ml-0 pl-1 pb-3">
+        <Container fluid className="ml-0 pl-1 pb-3">
             <Form onSubmit={(event: React.FormEvent<HTMLFormElement>) => submitForm(event)}>
-                <Row>
-                    <Col md="9">
+                <Row className="justify-content-around">
+                    <Col md="6">
                         <Form.Control
                             required
                             placeholder="Hunt Name"
