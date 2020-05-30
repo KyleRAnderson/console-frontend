@@ -15,7 +15,7 @@ type HuntsProps = {
     onHuntSelect?: (hunt: Hunt) => void;
 };
 
-class Hunts extends React.Component<HuntsProps, State> {
+class HuntsList extends React.Component<HuntsProps, State> {
     constructor(props: HuntsProps) {
         super(props);
         this.state = {
@@ -90,4 +90,4 @@ class Hunts extends React.Component<HuntsProps, State> {
     }
 }
 
-export default Hunts;
+export default HuntsList;

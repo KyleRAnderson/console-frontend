@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Hunts from '../hunts/Hunts';
+import HuntsList from '../hunts/HuntsList';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import Roster from '../../../../models/Roster';
 import AppPaths from '../../../../routes/AppPaths';
@@ -64,7 +64,7 @@ export default function RosterDashboard(props: Props): JSX.Element {
 
     return (
         <>
-            <Hunts rosterId={roster.id} onHuntSelect={(hunt) => selectHunt(hunt)} />
+            <HuntsList rosterId={roster.id} onHuntSelect={(hunt) => selectHunt(hunt)} />
             <ParticipantAdapter roster={roster} />
         </>
     );
