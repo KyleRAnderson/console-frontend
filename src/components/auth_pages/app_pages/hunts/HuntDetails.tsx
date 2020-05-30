@@ -3,21 +3,21 @@ import { RouteComponentProps, Redirect } from 'react-router-dom';
 import AppPaths from '../../../../routes/AppPaths';
 import HuntAPI from './huntAPI';
 import Notifications from '../../../../notification';
-import LicensesAdapter from '../licenses/LicensesAdapter';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import Loading from '../../../Loading';
+import HuntNavigator from './HuntNavigator';
 
 type Props = RouteComponentProps<{ [key: string]: string }> & {
     hunt?: HuntWithProperties;
 };
 
 export default function HuntDetails(props: Props): JSX.Element {
-    const [participantProperties, setParticipantProperties] = useState<string[] | undefined>(undefined);
+    const [currentHunt, setCurrentHunt] = useState<HuntWithProperties | undefined>(undefined);
     const [failedToLoadHunt, setFailedToLoadHunt] = useState<boolean>(false);
 
     function loadHunt(huntId: string) {
         HuntAPI.getHunt(huntId)
-            .then((response) => setParticipantProperties(response.data.roster.participant_properties))
+            .then(({ data }) => setCurrentHunt(data))
             .catch(() => {
                 Notifications.createNotification({ message: 'Failed to load hunt data.', type: 'danger' });
                 setFailedToLoadHunt(true);
@@ -25,8 +25,8 @@ export default function HuntDetails(props: Props): JSX.Element {
     }
 
     useEffect(() => {
-        let loadedProperties: string[] | undefined = props.hunt?.roster.participant_properties;
-        if (!loadedProperties) {
+        let loadedHunt: HuntWithProperties | undefined = props.hunt;
+        if (!loadedHunt) {
             if (props.match.params[AppPaths.huntIdParam]) {
                 loadHunt(props.match.params[AppPaths.huntIdParam]);
             } else {
@@ -34,12 +34,12 @@ export default function HuntDetails(props: Props): JSX.Element {
             }
         }
 
-        if (loadedProperties) {
-            setParticipantProperties(loadedProperties);
+        if (loadedHunt) {
+            setCurrentHunt(loadedHunt);
         }
     }, []);
 
-    if (!participantProperties) {
+    if (!currentHunt) {
         return <Loading />;
     }
     if (failedToLoadHunt) {
@@ -47,10 +47,5 @@ export default function HuntDetails(props: Props): JSX.Element {
         return <Redirect to={props.history.location} />;
     }
 
-    return (
-        <LicensesAdapter
-            huntId={props.match.params[AppPaths.huntIdParam]}
-            participantProperties={participantProperties}
-        />
-    );
+    return <HuntNavigator currentHunt={currentHunt} {...props} />;
 }
