@@ -33,8 +33,8 @@ namespace ApiPaths {
         return `${rosterPath(rosterId)}${participantsExtension}`;
     }
 
-    export function huntPath(huntId: string): string {
-        return `${apiRootPath}${huntsExtension}${huntId}/`;
+    export function huntPath(hunt: string | Hunt): string {
+        return `${apiRootPath}${huntsExtension}${getId(hunt)}/`;
     }
 
     export function huntsPath(roster: string | Roster): string {
@@ -55,6 +55,11 @@ namespace ApiPaths {
 
     export function matchesPath(hunt: string | Hunt): string {
         return `${huntPath(getId(hunt))}${matchesExtension}`;
+    }
+
+    const matchmakeExtension: string = 'matchmake/';
+    export function matchmakePath(hunt: string | Hunt): string {
+        return `${huntPath(hunt)}${matchmakeExtension}`;
     }
 
     export function licensePath(license: string | License): string {

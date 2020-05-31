@@ -26,5 +26,10 @@ namespace AppPaths {
     export function matchesPath(hunt?: Hunt | string): string {
         return `${huntPath(hunt)}${matchesExtension}`;
     }
+
+    export const matchmakeExtension: string = 'matchmake/';
+    export function matchmakePath(hunt: Hunt | string): string {
+        return `${huntPath(hunt)}${matchmakeExtension}`;
+    }
 }
 export default AppPaths;
