@@ -19,19 +19,19 @@ export default function rostersTable(props: RosterTableProps) {
         return <td key={roster.id}>{buttonGroup}</td>;
     }
 
-    function formatParticipantProperties(roster: Roster): JSX.Element {
+    function renderParticipantProperties(roster: Roster): JSX.Element {
         return (
-            <>
+            <td key={`${roster.id}_properties`}>
                 {roster.participant_properties.map((property: string, index) => {
                     return <li key={index}>{property}</li>;
                 })}
-            </>
+            </td>
         );
     }
 
     const propertyMappings: PropertyMapping<Roster>[] = [
         ['Roster Name', 'name'],
-        ['Participant Properties', formatParticipantProperties],
+        ['Participant Properties', renderParticipantProperties],
     ];
 
     if (props.actionButtons) {
