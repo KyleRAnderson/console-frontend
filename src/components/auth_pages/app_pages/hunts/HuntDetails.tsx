@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import AppPaths from '../../../../routes/AppPaths';
-import HuntAPI from './huntAPI';
+import HuntAPI from '../../../../api/huntAPI';
 import Notifications from '../../../../notification';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import Loading from '../../../Loading';

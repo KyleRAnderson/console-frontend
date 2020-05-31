@@ -1,9 +1,9 @@
-import ApiRequest from '../../../../apiRequests';
-import ApiPaths from '../../../../routes/ApiPaths';
-import Participant, { ParticipantBase } from '../../../../models/Participant';
+import ApiRequest from './apiRequests';
+import ApiPaths from '../routes/ApiPaths';
+import Participant, { ParticipantBase } from '../models/Participant';
 import { AxiosResponse } from 'axios';
-import PartialBy from '../../../../util/partialBy';
-import { ParticipantPaginatedResponse } from './ParticipantsHandler';
+import PartialBy from '../util/partialBy';
+import { ParticipantPaginatedResponse } from '../components/auth_pages/app_pages/participants/ParticipantsHandler';
 
 namespace ParticipantAPI {
     export type ParticipantPost = PartialBy<ParticipantBase, 'extras'>;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Col, Row, Button } from 'react-bootstrap';
 import Notifications from '../../../../notification';
-import RosterAPI from './rosterAPI';
+import RosterAPI from '../../../../api/rosterAPI';
 import Roster from '../../../../models/Roster';
 
 type State = {

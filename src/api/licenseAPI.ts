@@ -1,8 +1,8 @@
 import { AxiosResponse } from 'axios';
-import License, { LicenseBase } from '../../../../models/License';
-import ApiRequest from '../../../../apiRequests';
-import ApiPaths from '../../../../routes/ApiPaths';
-import PartialBy from '../../../../util/partialBy';
+import License, { LicenseBase } from '../models/License';
+import ApiRequest from './apiRequests';
+import ApiPaths from '../routes/ApiPaths';
+import PartialBy from '../util/partialBy';
 
 namespace LicenseAPI {
     export type LicensePost = PartialBy<Omit<LicenseBase, 'participant'>, 'eliminated'> & { participant_id: string };

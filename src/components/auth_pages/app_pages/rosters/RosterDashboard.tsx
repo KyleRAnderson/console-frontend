@@ -3,7 +3,7 @@ import HuntsList from '../hunts/HuntsList';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import Roster from '../../../../models/Roster';
 import AppPaths from '../../../../routes/AppPaths';
-import RosterAPI from './rosterAPI';
+import RosterAPI from '../../../../api/rosterAPI';
 import ParticipantAdapter from '../participants/ParticipantAdapter';
 import Hunt, { HuntWithProperties } from '../../../../models/Hunt';
 import Loading from '../../../Loading';

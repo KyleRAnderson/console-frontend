@@ -1,8 +1,8 @@
-import Round, { RoundBase } from '../../../../models/Round';
-import ApiRequest from '../../../../apiRequests';
-import ApiPaths from '../../../../routes/ApiPaths';
+import Round, { RoundBase } from '../models/Round';
+import ApiRequest from './apiRequests';
+import ApiPaths from '../routes/ApiPaths';
 import { AxiosResponse } from 'axios';
-import PartialBy from '../../../../util/partialBy';
+import PartialBy from '../util/partialBy';
 
 namespace RoundAPI {
     export type RoundPost = PartialBy<RoundBase, 'number'>;

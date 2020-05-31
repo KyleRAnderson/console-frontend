@@ -1,8 +1,8 @@
-import PaginatedResponse from '../../../../models/PaginatedResponse';
-import Match, { MatchBase } from '../../../../models/Match';
-import ApiRequest from '../../../../apiRequests';
-import ApiPaths from '../../../../routes/ApiPaths';
-import Hunt from '../../../../models/Hunt';
+import PaginatedResponse from '../models/PaginatedResponse';
+import Match, { MatchBase } from '../models/Match';
+import ApiRequest from './apiRequests';
+import ApiPaths from '../routes/ApiPaths';
+import Hunt from '../models/Hunt';
 import { AxiosResponse } from 'axios';
 
 namespace MatchAPI {
@@ -24,6 +24,15 @@ namespace MatchAPI {
 
     export function postMatch(hunt: Hunt | string, match: MatchBase): Promise<AxiosResponse<Match>> {
         return ApiRequest.postItem<MatchBase, Match>(ApiPaths.matchesPath(hunt), match);
+    }
+
+    export type MatchmakeParams = {
+        within?: string[];
+        between?: string[];
+    };
+
+    export function matchmake(hunt: Hunt | string, params?: MatchmakeParams): Promise<AxiosResponse> {
+        return ApiRequest.postItem<MatchmakeParams | undefined>(ApiPaths.matchmakePath(hunt), params);
     }
 }
 

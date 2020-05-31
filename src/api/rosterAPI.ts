@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios';
-import Roster, { RosterBase } from '../../../../models/Roster';
-import ApiPaths from '../../../../routes/ApiPaths';
-import ApiRequest from '../../../../apiRequests';
-import ServerError, { asServerError } from '../../../../models/ServerError';
-import PartialBy from '../../../../util/partialBy';
+import Roster, { RosterBase } from '../models/Roster';
+import ApiPaths from '../routes/ApiPaths';
+import ApiRequest from './apiRequests';
+import ServerError, { asServerError } from '../models/ServerError';
+import PartialBy from '../util/partialBy';
 
 namespace RosterAPI {
     export type RosterPost = Omit<PartialBy<RosterBase, 'participant_properties'>, 'user_id'>;

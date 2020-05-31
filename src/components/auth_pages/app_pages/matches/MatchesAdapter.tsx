@@ -2,7 +2,7 @@ import React from 'react';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import GenericPaginated from '../../../GenericPaginated';
 import Match from '../../../../models/Match';
-import MatchAPI from './matchAPI';
+import MatchAPI from '../../../../api/matchAPI';
 import { PropertyMapping } from '../../../GenericTable';
 
 type Props = {

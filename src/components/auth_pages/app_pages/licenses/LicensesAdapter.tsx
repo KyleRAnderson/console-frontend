@@ -1,6 +1,6 @@
 import React from 'react';
 import ParticipantsHandler, { ParticipantPaginatedResponse } from '../participants/ParticipantsHandler';
-import LicenseAPI from './licenseAPI';
+import LicenseAPI from '../../../../api/licenseAPI';
 import { ParticipantBase } from '../../../../models/Participant';
 import License from '../../../../models/License';
 import ParticipantsTable from '../participants/ParticipantsTable';

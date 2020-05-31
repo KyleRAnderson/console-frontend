@@ -8,7 +8,7 @@ export type HuntsTableProps = {
     actionButtons?: (hunt: Hunt) => JSX.Element;
 };
 
-export default function huntsTable(props: HuntsTableProps): JSX.Element {
+export default function HuntsTable(props: HuntsTableProps): JSX.Element {
     function buttonGroupForHunt(hunt: Hunt): JSX.Element | null {
         let buttonGroup: JSX.Element | null = null;
         if (props.actionButtons) {

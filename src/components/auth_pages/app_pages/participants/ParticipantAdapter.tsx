@@ -1,7 +1,7 @@
 import React from 'react';
 import Roster from '../../../../models/Roster';
 import ParticipantsHandler, { ParticipantPaginatedResponse } from './ParticipantsHandler';
-import ParticipantAPI from './participantAPI';
+import ParticipantAPI from '../../../../api/participantAPI';
 import Participant from '../../../../models/Participant';
 
 type Props = {

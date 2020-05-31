@@ -1,6 +1,6 @@
 import Hunt from '../../../../models/Hunt';
 import React from 'react';
-import HuntAPI from './huntAPI';
+import HuntAPI from '../../../../api/huntAPI';
 import Notifications from '../../../../notification';
 import HuntsTable from './HuntsTable';
 import { Button } from 'react-bootstrap';

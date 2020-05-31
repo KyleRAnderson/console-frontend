@@ -1,8 +1,8 @@
-import Hunt, { HuntBase, HuntWithProperties } from '../../../../models/Hunt';
-import ApiRequest from '../../../../apiRequests';
-import ApiPaths from '../../../../routes/ApiPaths';
+import Hunt, { HuntBase, HuntWithProperties } from '../models/Hunt';
+import ApiRequest from './apiRequests';
+import ApiPaths from '../routes/ApiPaths';
 import { AxiosResponse } from 'axios';
-import ServerError, { asServerError } from '../../../../models/ServerError';
+import ServerError, { asServerError } from '../models/ServerError';
 
 namespace HuntAPI {
     export type HuntPost = Pick<HuntBase, 'name'>;

@@ -1,5 +1,5 @@
 import ApiPaths from './routes/ApiPaths';
-import ApiRequest from './apiRequests';
+import ApiRequest from './api/apiRequests';
 namespace Auth {
     const emailKey: string = 'email';
     const tokenKey: string = 'token';

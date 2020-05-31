@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import HuntAPI from './huntAPI';
+import HuntAPI from '../../../../api/huntAPI';
 import { Form, Row, Col, Button, Container } from 'react-bootstrap';
 
 type CreateHuntProps = {

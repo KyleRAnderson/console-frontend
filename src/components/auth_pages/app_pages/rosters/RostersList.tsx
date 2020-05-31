@@ -2,7 +2,7 @@ import React from 'react';
 import Roster from '../../../../models/Roster';
 import RostersTable from './RostersTable';
 import CreateRoster from './CreateRoster';
-import RosterAPI from './rosterAPI';
+import RosterAPI from '../../../../api/rosterAPI';
 import Notifications from '../../../../notification';
 import { Button } from 'react-bootstrap';
 

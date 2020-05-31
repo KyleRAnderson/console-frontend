@@ -1,5 +1,5 @@
 import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
-import Auth from './auth';
+import Auth from '../auth';
 
 namespace ApiRequest {
     export type PaginationParams = {
@@ -53,7 +53,7 @@ namespace ApiRequest {
         );
     }
 
-    export function postItem<T, U>(
+    export function postItem<T, U = any>(
         path: string,
         item: T,
         config?: AxiosRequestConfig,
