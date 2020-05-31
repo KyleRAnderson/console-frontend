@@ -4,7 +4,7 @@ import Notifications from '../notification';
 import Loading from './Loading';
 import PaginationBar from './PaginationBar';
 
-type Props<Model> = Pick<GenericTableProps<Model>, 'propertyMappings'> & {
+type Props<Model> = Partial<Pick<GenericTableProps<Model>, 'propertyMappings'>> & {
     table?: (values: Model[]) => JSX.Element;
     getValues: (currentPage: number, recordsPerPage?: number) => Promise<[Model[], number]>;
 };
@@ -16,6 +16,10 @@ type State<Model> = {
     loaded: boolean;
 };
 
+/**
+ * A Generic class for managing and displaying a paginated API.
+ * Either the table or the propertyMappings prop must be provided in the Props.
+ */
 export default class GenericPaginated<Model> extends React.Component<Props<Model>, State<Model>> {
     constructor(props: Props<Model>) {
         super(props);
@@ -44,11 +48,14 @@ export default class GenericPaginated<Model> extends React.Component<Props<Model
         if (!this.state.loaded) {
             return <Loading />;
         }
-        let dataTable: JSX.Element = this.props.table ? (
-            this.props.table(this.state.data)
-        ) : (
-            <GenericTable<Model> propertyMappings={this.props.propertyMappings} values={this.state.data} />
-        );
+        let dataTable: JSX.Element | undefined;
+        if (this.props.table) {
+            dataTable = this.props.table(this.state.data);
+        } else if (this.props.propertyMappings) {
+            dataTable = <GenericTable<Model> propertyMappings={this.props.propertyMappings} values={this.state.data} />;
+        } else {
+            console.error('Either table or propertyMappings needs to be provided to GenericPaginated!');
+        }
 
         return (
             <>
