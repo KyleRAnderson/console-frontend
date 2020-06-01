@@ -24,7 +24,7 @@ export default function HuntNav(props: Props): JSX.Element {
                     Matches
                 </Nav.Link>
                 <Nav.Link eventKey={ActiveTab.Matchmake} onClick={() => props.goTo(ActiveTab.Matchmake)}>
-                    Matches
+                    Matchmake
                 </Nav.Link>
             </Nav>
         </Container>

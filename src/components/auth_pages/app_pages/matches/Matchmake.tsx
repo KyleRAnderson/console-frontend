@@ -2,6 +2,7 @@ import React from 'react';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import MatchmakeForm from './MatchmakeForm';
 import MatchAPI from '../../../../api/matchAPI';
+import Notifications from '../../../../notification';
 
 type Props = {
     hunt: HuntWithProperties;
@@ -12,6 +13,7 @@ type Props = {
 export default function Matchmake(props: Props): JSX.Element {
     function submitMatchmake(matchmakeParams: MatchAPI.MatchmakeParams) {
         MatchAPI.matchmake(props.hunt, matchmakeParams);
+        Notifications.createNotification({ type: 'info', message: 'Matchmake request submitted...' });
         props.onMatchmake?.(matchmakeParams);
     }
 

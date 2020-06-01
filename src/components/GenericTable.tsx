@@ -45,7 +45,7 @@ export default function GenericTable<T>(props: GenericTableProps<T>): JSX.Elemen
         noData = (
             <Container fluid>
                 <Row className="justify-content-center">
-                    <Col md="4">
+                    <Col xs="4">
                         <h1>No Data</h1>
                     </Col>
                 </Row>

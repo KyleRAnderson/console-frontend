@@ -31,8 +31,14 @@ namespace MatchAPI {
         between?: string[];
     };
 
-    export function matchmake(hunt: Hunt | string, params?: MatchmakeParams): Promise<AxiosResponse> {
-        return ApiRequest.postItem<MatchmakeParams | undefined>(ApiPaths.matchmakePath(hunt), params);
+    type RootMatchmakeParams = {
+        matchmake: MatchmakeParams;
+    };
+
+    export function matchmake(hunt: Hunt | string, params: MatchmakeParams): Promise<AxiosResponse> {
+        return ApiRequest.postItem<RootMatchmakeParams>(ApiPaths.matchmakePath(hunt), {
+            matchmake: params,
+        });
     }
 }
 
