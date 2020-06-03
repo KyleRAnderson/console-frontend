@@ -6,7 +6,7 @@ import Notifications from '../../../../notification';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import Loading from '../../../Loading';
 import HuntNavigator from './HuntNavigator';
-import App from '../../../../channels/matches_channel';
+import App from '../../../../channels/consumer';
 import * as MiniSignal from 'mini-signals';
 
 type Props = RouteComponentProps<{ [key: string]: string }> & {
