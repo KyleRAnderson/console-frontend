@@ -40,8 +40,12 @@ namespace Auth {
         return getToken().length > 0;
     }
 
-    export function getToken(): string {
-        return localStorage.getItem(tokenKey) || '';
+    export function getToken(includeBearer: boolean = true): string {
+        let token: string = localStorage.getItem(tokenKey) || '';
+        if (!includeBearer) {
+            token = token.replace('Bearer', '').trim();
+        }
+        return token;
     }
 
     export function getEmail(): string {

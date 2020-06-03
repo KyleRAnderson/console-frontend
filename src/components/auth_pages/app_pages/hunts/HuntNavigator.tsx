@@ -6,13 +6,16 @@ import LicensesAdapter from '../licenses/LicensesAdapter';
 import HuntNav, { ActiveTab } from './HuntNav';
 import MatchesAdapter from '../matches/MatchesAdapter';
 import Matchmake from '../matches/Matchmake';
+import * as MiniSignal from 'mini-signals';
 
 type Props = RouteComponentProps<{ [key: string]: string }> & {
     currentHunt: HuntWithProperties;
+    matchmakingCompleteSignal?: MiniSignal;
 };
 
 export default function HuntNavigator(props: Props): JSX.Element {
     const currentHunt = props.currentHunt;
+    const matchmakeCompleteSignal = props.matchmakingCompleteSignal;
 
     function goTo(tab: ActiveTab): void {
         switch (tab) {
@@ -71,7 +74,13 @@ export default function HuntNavigator(props: Props): JSX.Element {
                     exact
                     path={matchesPath}
                     render={(props) => {
-                        return <MatchesAdapter hunt={currentHunt} {...props} />;
+                        return (
+                            <MatchesAdapter
+                                matchmakingCompleteSignal={matchmakeCompleteSignal}
+                                hunt={currentHunt}
+                                {...props}
+                            />
+                        );
                     }}
                 />
                 <Route

@@ -3,10 +3,12 @@ import GenericTable, { GenericTableProps } from './GenericTable';
 import Notifications from '../notification';
 import Loading from './Loading';
 import PaginationBar from './PaginationBar';
+import * as MiniSignal from 'mini-signals';
 
 type Props<Model> = Partial<Pick<GenericTableProps<Model>, 'propertyMappings'>> & {
     table?: (values: Model[]) => JSX.Element;
     getValues: (currentPage: number, recordsPerPage?: number) => Promise<[Model[], number]>;
+    updateSignal?: MiniSignal;
 };
 
 type State<Model> = {
@@ -21,6 +23,7 @@ type State<Model> = {
  * Either the table or the propertyMappings prop must be provided in the Props.
  */
 export default class GenericPaginated<Model> extends React.Component<Props<Model>, State<Model>> {
+    updateBinding: MiniSignal.MiniSignalBinding | undefined;
     constructor(props: Props<Model>) {
         super(props);
         this.state = {
@@ -33,6 +36,11 @@ export default class GenericPaginated<Model> extends React.Component<Props<Model
 
     componentDidMount() {
         this.loadData();
+        this.updateBinding = this.props.updateSignal?.add(() => this.loadData());
+    }
+
+    componentWillUnmount() {
+        this.updateBinding?.detach();
     }
 
     private loadData() {

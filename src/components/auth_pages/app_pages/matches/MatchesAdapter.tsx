@@ -4,9 +4,11 @@ import GenericPaginated from '../../../GenericPaginated';
 import Match from '../../../../models/Match';
 import MatchAPI from '../../../../api/matchAPI';
 import { PropertyMapping } from '../../../GenericTable';
+import * as MiniSignal from 'mini-signals';
 
 type Props = {
     hunt: HuntWithProperties;
+    matchmakingCompleteSignal?: MiniSignal;
 };
 
 export default function MatchesAdapter(props: Props): JSX.Element {
@@ -22,5 +24,11 @@ export default function MatchesAdapter(props: Props): JSX.Element {
         ['Last 2', (match) => match.licenses[1].participant.last],
     ];
 
-    return <GenericPaginated getValues={getMatches} propertyMappings={propertyMappings} />;
+    return (
+        <GenericPaginated
+            updateSignal={props.matchmakingCompleteSignal}
+            getValues={getMatches}
+            propertyMappings={propertyMappings}
+        />
+    );
 }
