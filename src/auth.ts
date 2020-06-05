@@ -1,42 +1,31 @@
 import ApiPaths from './routes/ApiPaths';
 import ApiRequest from './api/apiRequests';
 import { AxiosResponse } from 'axios';
+import * as MiniSignal from 'mini-signals';
+import User, { UserBase } from './models/User';
 
 namespace Auth {
     const emailKey: string = 'email';
     const idKey: string = 'id';
     const signedInKey: string = 'signedIn';
 
-    type UserResponse = {
-        id: string;
-        email: string;
-    };
-
     type LoginPost = {
-        user: {
-            email: string;
-            password: string;
-        };
+        user: UserBase & { password: string };
     };
 
-    let subscribers: AuthFailureSubscriber[] = [];
+    const unauthenticatedSignal: MiniSignal = new MiniSignal();
 
-    export type AuthFailureSubscriber = () => void;
-
-    export function onAuthFailure(subscriber: AuthFailureSubscriber): void {
-        subscribers.push(subscriber);
+    export function setOnAuthFailure(subscriber: Function): MiniSignal.MiniSignalBinding {
+        return unauthenticatedSignal.add(subscriber);
     }
 
-    export function removeAuthFailureSubscription(subscriber: AuthFailureSubscriber): void {
-        subscribers = subscribers.filter((s) => s !== subscriber);
-    }
-
-    ApiRequest.subscribeToFailureCode({ callback: callAuthFailureSubscribers, code: 401 });
-
-    function callAuthFailureSubscribers() {
-        clearLogin();
-        subscribers.forEach((subscriber) => subscriber());
-    }
+    ApiRequest.subscribeToFailureCode({
+        code: 401,
+        callback: () => {
+            clearLogin();
+            unauthenticatedSignal.dispatch();
+        },
+    });
 
     export function isLoggedIn(): boolean {
         return localStorage.getItem(signedInKey) === 'true';
@@ -50,19 +39,14 @@ namespace Auth {
         return localStorage.getItem(idKey) || '';
     }
 
-    export function getCSRFToken(): string | undefined {
-        return document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
-    }
-
     export function login(email: string, password: string, callback?: (success: boolean) => void) {
         let userID: string = '';
         let success: boolean = false;
 
-        ApiRequest.postItem<LoginPost, UserResponse>(
+        ApiRequest.postItem<LoginPost, User>(
             ApiPaths.usersLoginPath,
             { user: { email: email, password: password } },
             undefined,
-            false,
         )
             .then((response) => {
                 success = true;
@@ -77,7 +61,7 @@ namespace Auth {
     }
 
     export function logout(): Promise<AxiosResponse> {
-        const response: Promise<AxiosResponse> = ApiRequest.deleteItem(ApiPaths.usersLogoutPath, undefined, false);
+        const response: Promise<AxiosResponse> = ApiRequest.deleteItem(ApiPaths.usersLogoutPath, undefined);
         clearLogin();
         return response;
     }
@@ -93,12 +77,6 @@ namespace Auth {
         localStorage.setItem(signedInKey, true.toString());
         localStorage.setItem(idKey, userID);
     }
-
-    export function getRequestHeaders(): { 'X-CSRF-Token'?: string; 'Content-Type': string } {
-        return {
-            'X-CSRF-Token': getCSRFToken(),
-            'Content-Type': 'application/json',
-        };
-    }
 }
+
 export default Auth;
