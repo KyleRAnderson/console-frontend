@@ -1,14 +1,16 @@
 import React from 'react';
 import { Button, Form, Container } from 'react-bootstrap';
-import Axios from 'axios';
 import ApiPaths from '../routes/ApiPaths';
-import Auth from '../auth';
 import Notifications from '../notification';
+import ApiRequest from '../api/apiRequests';
+import { UserBase } from '../models/User';
 
-type State = {
-    email: string;
+type UserPost = UserBase & {
     password: string;
     password_confirmation: string;
+};
+
+type State = UserPost & {
     success: boolean;
     submitted: boolean;
 };
@@ -87,8 +89,7 @@ class Register extends React.Component<any, State> {
     }
 
     handleSubmit(event: React.FormEvent<HTMLElement>): void {
-        Axios.post(ApiPaths.usersRegistrationsPath, {
-            headers: Auth.getRequestHeaders(false),
+        ApiRequest.postItem<{ user: UserPost }>(ApiPaths.usersRegistrationsPath, {
             user: {
                 email: this.state.email,
                 password: this.state.password,
@@ -96,7 +97,7 @@ class Register extends React.Component<any, State> {
             },
         })
             .then(() => {
-                this.setState(Object.assign({}, this.state, { success: true, submitted: true }));
+                this.setState({ ...this.state, success: true, submitted: true });
                 this.sentNotification(true);
             })
             .catch(() => {
