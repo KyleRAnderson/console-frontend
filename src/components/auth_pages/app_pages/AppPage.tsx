@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 import AppPaths from '../../../routes/AppPaths';
-import Auth from '../../../auth';
 import Roster from '../../../models/Roster';
 import UserDashboard from './UserDashboard';
+import LogoutButton from './LogoutButton';
 
 function AppPage(props: RouteComponentProps) {
     const [] = useState<Roster | undefined>(undefined);
@@ -17,15 +17,7 @@ function AppPage(props: RouteComponentProps) {
                     <Nav.Link href={AppPaths.rostersPath}>Rosters</Nav.Link>
                 </Nav>
                 <Container className="justify-content-end">
-                    <Button
-                        className="custom-button"
-                        size="sm"
-                        type="button"
-                        href={AppPaths.root}
-                        onClick={() => Auth.logout()}
-                    >
-                        Logout
-                    </Button>
+                    <LogoutButton />
                 </Container>
             </Navbar>
             <UserDashboard {...props} />

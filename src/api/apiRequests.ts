@@ -48,7 +48,7 @@ namespace ApiRequest {
         useAuth: boolean = true,
     ): Promise<AxiosResponse<T>> {
         return setupErrorSubscriber(
-            Axios.get<T>(path, { headers: Auth.getRequestHeaders(useAuth), ...config }),
+            Axios.get<T>(path, { headers: Auth.getRequestHeaders(), ...config }),
             useAuth,
         );
     }
@@ -60,7 +60,7 @@ namespace ApiRequest {
         useAuth: boolean = true,
     ): Promise<AxiosResponse<U>> {
         return setupErrorSubscriber(
-            Axios.post<U>(path, item, { headers: Auth.getRequestHeaders(useAuth), ...config }),
+            Axios.post<U>(path, item, { headers: Auth.getRequestHeaders(), ...config }),
             useAuth,
         );
     }
@@ -71,7 +71,7 @@ namespace ApiRequest {
         useAuth: boolean = true,
     ): Promise<AxiosResponse<T>> {
         return setupErrorSubscriber(
-            Axios.delete<T>(path, { headers: Auth.getRequestHeaders(useAuth), ...config }),
+            Axios.delete<T>(path, { headers: Auth.getRequestHeaders(), ...config }),
             useAuth,
         );
     }
@@ -82,10 +82,7 @@ namespace ApiRequest {
         config?: AxiosRequestConfig,
         useAuth: boolean = true,
     ): Promise<AxiosResponse<U>> {
-        return setupErrorSubscriber(
-            Axios.patch(path, item, { headers: Auth.getRequestHeaders(useAuth), ...config }),
-            useAuth,
-        );
+        return setupErrorSubscriber(Axios.patch(path, item, { headers: Auth.getRequestHeaders(), ...config }), useAuth);
     }
 }
 
