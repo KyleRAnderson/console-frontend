@@ -15,7 +15,6 @@ export default () => {
                 <Route exact path={AppPaths.root} component={Home} />
                 <Route path={AppPaths.usersRoot} component={UserList} />
                 <Route path={AppPaths.registerUrl} component={Register} />
-                // The following are all for AuthPages. Couldn't find a better way of doing multiple like this.
                 <Route exact path={AppPaths.loginUrl} component={Login} />
                 <AuthRoute path={AppPaths.app} component={AppPage} />
             </Switch>

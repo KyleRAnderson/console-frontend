@@ -2,6 +2,7 @@ import Identifiable from '../models/Identifiable';
 import Hunt from '../models/Hunt';
 import Roster from '../models/Roster';
 import License from '../models/License';
+import User from '../models/User';
 
 namespace ApiPaths {
     export const apiRootPath: string = '/api/v1/';
@@ -19,6 +20,10 @@ namespace ApiPaths {
 
     function getId<T extends Identifiable>(model: T | string): string {
         return typeof model === 'string' ? model : model.id;
+    }
+
+    export function userPath(user: string | User): string {
+        return `${usersRootPath}${getId(user)}`;
     }
 
     export function rosterPath(rosterId: string): string {

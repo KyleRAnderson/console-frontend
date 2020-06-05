@@ -3,9 +3,8 @@ import { Redirect } from 'react-router-dom';
 import User from '../../models/User';
 import AppPaths from '../../routes/AppPaths';
 import ApiPaths from '../../routes/ApiPaths';
-import Axios from 'axios';
 import { Table } from 'react-bootstrap';
-import Auth from '../../auth';
+import ApiRequest from '../../api/apiRequests';
 
 type State = {
     toHome: boolean;
@@ -24,7 +23,7 @@ class UserList extends React.Component<any, State> {
     }
 
     loadUsers(): void {
-        Axios.get<User[]>(ApiPaths.usersRootPath)
+        ApiRequest.getItem<User[]>(ApiPaths.usersRootPath)
             .then((response) => {
                 this.setState(Object.assign({}, this.state, { users: response.data }));
             })
@@ -68,10 +67,8 @@ class UserList extends React.Component<any, State> {
     deleteUser(id: string): void {
         const token: string | undefined = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
         if (token) {
-            Axios.delete(`${ApiPaths.usersRootPath}${id}`, {
-                headers: Auth.getRequestHeaders(false),
-            }).then(() => {
-                const newUsersArray: Array<User> = this.state.users.filter((user) => user.id !== id);
+            ApiRequest.deleteItem(ApiPaths.userPath(id)).then(() => {
+                const newUsersArray: User[] = this.state.users.filter((user) => user.id !== id);
                 this.setState(Object.assign({}, this.state, { users: newUsersArray }));
             });
         }

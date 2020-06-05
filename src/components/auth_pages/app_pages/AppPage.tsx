@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import AppPaths from '../../../routes/AppPaths';
-import Roster from '../../../models/Roster';
 import UserDashboard from './UserDashboard';
 import LogoutButton from './LogoutButton';
 
 function AppPage(props: RouteComponentProps) {
-    const [] = useState<Roster | undefined>(undefined);
-
     return (
         <>
             <Navbar className="primary-color" variant="dark">
