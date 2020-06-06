@@ -79,7 +79,22 @@ function getRequestHeaders(): { 'X-CSRF-Token'?: string; 'Content-Type': string 
 }
 
 function getCSRFToken(): string | undefined {
-    return document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
+    let cookieValue: string | undefined = readCookie('X-CSRF-Token');
+    let csrfToken: string | undefined;
+    if (cookieValue) {
+        csrfToken = decodeURIComponent(cookieValue);
+    }
+    return csrfToken;
+}
+
+/**
+ * Reads a cookie at the given key, returning its value, or undefined if it isn't set.
+ * @param name The key of the cookie to be read
+ */
+function readCookie(name: string): string | undefined {
+    name = name.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // Escape regex characters
+    let matches = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return matches?.pop();
 }
 
 export default ApiRequest;
