@@ -1,6 +1,5 @@
 import ApiPaths from './routes/ApiPaths';
 import ApiRequest from './api/apiRequests';
-import { AxiosResponse } from 'axios';
 import * as MiniSignal from 'mini-signals';
 import User, { UserBase } from './models/User';
 
@@ -39,31 +38,35 @@ namespace Auth {
         return localStorage.getItem(idKey) || '';
     }
 
-    export function login(email: string, password: string, callback?: (success: boolean) => void) {
+    export async function login(email: string, password: string): Promise<boolean> {
         let userID: string = '';
         let success: boolean = false;
 
-        ApiRequest.postItem<LoginPost, User>(
-            ApiPaths.usersLoginPath,
-            { user: { email: email, password: password } },
-            undefined,
-        )
-            .then((response) => {
-                success = true;
-                email = response.data.email;
-                userID = response.data.id;
-                storeAuthentication(email, userID);
-                callback?.(success);
-            })
-            .catch(() => {
-                callback?.(success);
-            });
+        try {
+            const response = await ApiRequest.postItem<LoginPost, User>(
+                ApiPaths.usersLoginPath,
+                { user: { email: email, password: password } },
+                undefined,
+            );
+            success = true;
+            email = response.data.email;
+            userID = response.data.id;
+            storeAuthentication(email, userID);
+            return true;
+        } catch (_) {
+            return false;
+        }
     }
 
-    export function logout(): Promise<AxiosResponse> {
-        const response: Promise<AxiosResponse> = ApiRequest.deleteItem(ApiPaths.usersLogoutPath, undefined);
-        clearLogin();
-        return response;
+    export async function logout(): Promise<boolean> {
+        try {
+            await ApiRequest.deleteItem(ApiPaths.usersLogoutPath, undefined);
+            console.log('Success');
+            clearLogin();
+            return true;
+        } catch (_) {
+            return false;
+        }
     }
 
     export function clearLogin(): void {

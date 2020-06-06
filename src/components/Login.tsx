@@ -69,10 +69,8 @@ class Login extends React.Component<RouteComponentProps<{}, any, { from: string 
     }
 
     handleSubmit(event: React.FormEvent<HTMLElement>) {
-        let stateCopy: State = { ...this.state, submitted: true };
-        Auth.login(this.state.email, this.state.password, (success) => {
-            stateCopy.success = success;
-            this.setState(stateCopy);
+        Auth.login(this.state.email, this.state.password).then((success) => {
+            this.setState({ ...this.state, submitted: true, success: success });
             this.sendNotification(success);
         });
         event.preventDefault();
