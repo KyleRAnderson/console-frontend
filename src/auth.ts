@@ -52,9 +52,9 @@ namespace Auth {
             email = response.data.email;
             userID = response.data.id;
             storeAuthentication(email, userID);
-            return true;
-        } catch (_) {
-            return false;
+            success = true;
+        } finally {
+            return success;
         }
     }
 
