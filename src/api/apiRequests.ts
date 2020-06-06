@@ -1,5 +1,5 @@
 import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
-import Auth from '../auth';
+import * as MiniSignal from 'mini-signals';
 
 namespace ApiRequest {
     export type PaginationParams = {
@@ -9,47 +9,40 @@ namespace ApiRequest {
 
     export type FailureCodeSubscriber = {
         callback: (response: AxiosError) => void;
-        code?: number;
+        code: number;
     };
-    let subscribers: FailureCodeSubscriber[] = [];
+
+    const failureSignals: { [key: number]: MiniSignal } = {};
 
     function callSubscribers(error: AxiosError): void {
-        subscribers
-            .filter((subscriber) => subscriber.code === undefined || subscriber.code === error.response?.status)
-            .forEach((subscriber) => subscriber.callback(error));
+        if (error.response !== undefined) {
+            failureSignals[error.response.status]?.dispatch(error);
+        }
     }
 
-    export function subscribeToFailureCode(callback: FailureCodeSubscriber): void {
-        if (callback.code !== undefined && !(400 <= callback.code && callback.code <= 599)) {
+    export function subscribeToFailureCode(callback: FailureCodeSubscriber): MiniSignal.MiniSignalBinding {
+        if (!(400 <= callback.code && callback.code <= 599)) {
             // Very loose error checking.
             throw new Error(`Invalid HTTP failure code: ${callback.code}.`);
         }
-        subscribers.push(callback);
-    }
-
-    export function unsubscribeFromAuthFailure(callback: FailureCodeSubscriber): void {
-        subscribers = subscribers.filter((subscriber) => subscriber !== callback);
-    }
-
-    function setupErrorSubscriber<T>(request: Promise<AxiosResponse<T>>, useAuth: boolean): Promise<AxiosResponse<T>> {
-        if (useAuth) {
-            request.catch((error) => {
-                if ((error as AxiosError).response !== undefined) {
-                    callSubscribers(error);
-                }
-            });
+        if (!failureSignals[callback.code]) {
+            failureSignals[callback.code] = new MiniSignal();
         }
+        return failureSignals[callback.code].add(callback.callback);
+    }
+
+    function setupErrorSubscriber<T>(request: Promise<AxiosResponse<T>>): Promise<AxiosResponse<T>> {
+        request.catch((error) => {
+            if ((error as AxiosError).response !== undefined) {
+                callSubscribers(error);
+            }
+        });
         return request;
     }
 
-    export function getItem<T>(
-        path: string,
-        config?: AxiosRequestConfig,
-        useAuth: boolean = true,
-    ): Promise<AxiosResponse<T>> {
+    export function getItem<T>(path: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
         return setupErrorSubscriber(
-            Axios.get<T>(path, { headers: Auth.getRequestHeaders(useAuth), ...config }),
-            useAuth,
+            Axios.get<T>(path, { headers: getRequestHeaders(), ...config }),
         );
     }
 
@@ -57,22 +50,15 @@ namespace ApiRequest {
         path: string,
         item: T,
         config?: AxiosRequestConfig,
-        useAuth: boolean = true,
     ): Promise<AxiosResponse<U>> {
         return setupErrorSubscriber(
-            Axios.post<U>(path, item, { headers: Auth.getRequestHeaders(useAuth), ...config }),
-            useAuth,
+            Axios.post<U>(path, item, { headers: getRequestHeaders(), ...config }),
         );
     }
 
-    export function deleteItem<T = any>(
-        path: string,
-        config?: AxiosRequestConfig,
-        useAuth: boolean = true,
-    ): Promise<AxiosResponse<T>> {
+    export function deleteItem<T = any>(path: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
         return setupErrorSubscriber(
-            Axios.delete<T>(path, { headers: Auth.getRequestHeaders(useAuth), ...config }),
-            useAuth,
+            Axios.delete<T>(path, { headers: getRequestHeaders(), ...config }),
         );
     }
 
@@ -80,13 +66,20 @@ namespace ApiRequest {
         path: string,
         item: T,
         config?: AxiosRequestConfig,
-        useAuth: boolean = true,
     ): Promise<AxiosResponse<U>> {
-        return setupErrorSubscriber(
-            Axios.patch(path, item, { headers: Auth.getRequestHeaders(useAuth), ...config }),
-            useAuth,
-        );
+        return setupErrorSubscriber(Axios.patch(path, item, { headers: getRequestHeaders(), ...config }));
     }
+}
+
+function getRequestHeaders(): { 'X-CSRF-Token'?: string; 'Content-Type': string } {
+    return {
+        'X-CSRF-Token': getCSRFToken(),
+        'Content-Type': 'application/json',
+    };
+}
+
+function getCSRFToken(): string | undefined {
+    return document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
 }
 
 export default ApiRequest;

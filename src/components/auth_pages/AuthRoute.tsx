@@ -11,16 +11,16 @@ export class AuthRoute extends Route {}
 function authRoute<T extends RouteProps>({ children, component, render, ...rest }: T): JSX.Element {
     const [authenticated, setAuthenticated] = useState(Auth.isLoggedIn());
 
-    const onAuthFailure: Auth.AuthFailureSubscriber = () => {
-        setAuthenticated(Auth.isLoggedIn());
+    function onAuthFailure(): void {
         Notifications.createNotification({ message: 'Session has Expired', type: 'warning' });
-    };
+        setAuthenticated(Auth.isLoggedIn());
+    }
 
     useEffect(() => {
-        Auth.onAuthFailure(onAuthFailure);
+        const authFailureSubscription = Auth.setOnAuthFailure(onAuthFailure);
 
         return function cleanup() {
-            Auth.removeAuthFailureSubscription(onAuthFailure);
+            authFailureSubscription.detach();
         };
     }, []);
 
