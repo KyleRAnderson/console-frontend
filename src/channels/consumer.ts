@@ -4,15 +4,10 @@
 
 import { createConsumer } from '@rails/actioncable';
 import { Cable } from 'actioncable';
-import Auth from '../auth';
 
-type AppType = {
+type AppCable = {
     cable: Cable;
 };
 
-function getWebsocketUrl(): string {
-    return `ws://${location.host}/cable?auth_token=${Auth.getToken(false)}`;
-}
-
-const App: AppType = { cable: createConsumer(getWebsocketUrl) };
+const App: AppCable = { cable: createConsumer() };
 export default App;
