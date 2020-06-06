@@ -23,7 +23,7 @@ class UserList extends React.Component<any, State> {
     }
 
     loadUsers(): void {
-        ApiRequest.getItem<User[]>(ApiPaths.usersRootPath)
+        ApiRequest.getItem<User[]>(ApiPaths.USERS_ROOT_PATH)
             .then((response) => {
                 this.setState(Object.assign({}, this.state, { users: response.data }));
             })

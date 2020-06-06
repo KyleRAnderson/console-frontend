@@ -44,7 +44,7 @@ namespace Auth {
 
         try {
             const response = await ApiRequest.postItem<LoginPost, User>(
-                ApiPaths.usersLoginPath,
+                ApiPaths.USERS_LOGIN_PATH,
                 { user: { email: email, password: password } },
                 undefined,
             );
@@ -52,15 +52,15 @@ namespace Auth {
             email = response.data.email;
             userID = response.data.id;
             storeAuthentication(email, userID);
-            return true;
-        } catch (_) {
-            return false;
+            success = true;
+        } finally {
+            return success;
         }
     }
 
     export async function logout(): Promise<boolean> {
         try {
-            await ApiRequest.deleteItem(ApiPaths.usersLogoutPath, undefined);
+            await ApiRequest.deleteItem(ApiPaths.USERS_LOGOUT_PATH, undefined);
             console.log('Success');
             clearLogin();
             return true;

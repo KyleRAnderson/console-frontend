@@ -4,10 +4,11 @@
 
 import { createConsumer } from '@rails/actioncable';
 import { Cable } from 'actioncable';
+import ApiPaths from '../routes/ApiPaths';
 
 type AppCable = {
     cable: Cable;
 };
 
-const App: AppCable = { cable: createConsumer() };
+const App: AppCable = { cable: createConsumer(ApiPaths.CABLE_PATH) };
 export default App;

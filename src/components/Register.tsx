@@ -89,7 +89,7 @@ class Register extends React.Component<any, State> {
     }
 
     handleSubmit(event: React.FormEvent<HTMLElement>): void {
-        ApiRequest.postItem<{ user: UserPost }>(ApiPaths.usersRegistrationsPath, {
+        ApiRequest.postItem<{ user: UserPost }>(ApiPaths.USERS_REGISTRATIONS_PATH, {
             user: {
                 email: this.state.email,
                 password: this.state.password,

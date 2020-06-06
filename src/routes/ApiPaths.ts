@@ -5,45 +5,47 @@ import License from '../models/License';
 import User from '../models/User';
 
 namespace ApiPaths {
-    export const apiRootPath: string = '/api/v1/';
+    export const CABLE_PATH: string = '/cable';
 
-    export const usersRootPath: string = apiRootPath + 'users/';
-    export const usersLoginPath: string = apiRootPath + 'login/';
-    export const usersLogoutPath: string = apiRootPath + 'logout/';
-    export const usersRegistrationsPath: string = apiRootPath + 'signup/';
-    export const rostersPath: string = apiRootPath + 'rosters/';
-    const participantsExtension: string = 'participants/';
-    const huntsExtension: string = 'hunts/';
-    const roundsExtension: string = 'rounds/';
-    const matchesExtension: string = 'matches/';
-    const licensesExtension: string = 'licenses/';
+    export const API_ROOT_PATH: string = '/api/v1/';
+
+    export const USERS_ROOT_PATH: string = API_ROOT_PATH + 'users/';
+    export const USERS_LOGIN_PATH: string = API_ROOT_PATH + 'login/';
+    export const USERS_LOGOUT_PATH: string = API_ROOT_PATH + 'logout/';
+    export const USERS_REGISTRATIONS_PATH: string = API_ROOT_PATH + 'signup/';
+    export const ROSTERS_PATH: string = API_ROOT_PATH + 'rosters/';
+    const PARTICIPANTS_EXTENSION: string = 'participants/';
+    const HUNTS_EXTENSION: string = 'hunts/';
+    const ROUNDS_EXTENSION: string = 'rounds/';
+    const MATCHES_EXTENSION: string = 'matches/';
+    const LICENSES_EXTENSION: string = 'licenses/';
 
     function getId<T extends Identifiable>(model: T | string): string {
         return typeof model === 'string' ? model : model.id;
     }
 
     export function userPath(user: string | User): string {
-        return `${usersRootPath}${getId(user)}`;
+        return `${USERS_ROOT_PATH}${getId(user)}`;
     }
 
     export function rosterPath(rosterId: string): string {
-        return `${rostersPath}${rosterId}/`;
+        return `${ROSTERS_PATH}${rosterId}/`;
     }
 
     export function participantPath(participantId: string): string {
-        return `${apiRootPath}${participantsExtension}${participantId}/`;
+        return `${API_ROOT_PATH}${PARTICIPANTS_EXTENSION}${participantId}/`;
     }
 
     export function participantsPath(rosterId: string): string {
-        return `${rosterPath(rosterId)}${participantsExtension}`;
+        return `${rosterPath(rosterId)}${PARTICIPANTS_EXTENSION}`;
     }
 
     export function huntPath(hunt: string | Hunt): string {
-        return `${apiRootPath}${huntsExtension}${getId(hunt)}/`;
+        return `${API_ROOT_PATH}${HUNTS_EXTENSION}${getId(hunt)}/`;
     }
 
     export function huntsPath(roster: string | Roster): string {
-        return `${rosterPath(getId(roster))}${huntsExtension}`;
+        return `${rosterPath(getId(roster))}${HUNTS_EXTENSION}`;
     }
 
     export function roundPath(hunt: string | Hunt, roundNumber: number): string {
@@ -51,7 +53,7 @@ namespace ApiPaths {
     }
 
     export function roundsPath(hunt: string | Hunt): string {
-        return `${huntPath(getId(hunt))}${roundsExtension}`;
+        return `${huntPath(getId(hunt))}${ROUNDS_EXTENSION}`;
     }
 
     export function matchPath(hunt: string | Hunt, matchNumber: number): string {
@@ -59,7 +61,7 @@ namespace ApiPaths {
     }
 
     export function matchesPath(hunt: string | Hunt): string {
-        return `${huntPath(getId(hunt))}${matchesExtension}`;
+        return `${huntPath(getId(hunt))}${MATCHES_EXTENSION}`;
     }
 
     const matchmakeExtension: string = 'matchmake/';
@@ -68,11 +70,11 @@ namespace ApiPaths {
     }
 
     export function licensePath(license: string | License): string {
-        return `${apiRootPath}${licensesExtension}${getId(license)}/`;
+        return `${API_ROOT_PATH}${LICENSES_EXTENSION}${getId(license)}/`;
     }
 
     export function licensesPath(hunt: string | Hunt): string {
-        return `${huntPath(getId(hunt))}${licensesExtension}`;
+        return `${huntPath(getId(hunt))}${LICENSES_EXTENSION}`;
     }
 }
 
