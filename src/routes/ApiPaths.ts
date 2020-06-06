@@ -1,8 +1,8 @@
-import Identifiable from '../models/Identifiable';
 import Hunt from '../models/Hunt';
 import Roster from '../models/Roster';
 import License from '../models/License';
 import User from '../models/User';
+import getId from '../util/identifiableHelper';
 
 namespace ApiPaths {
     export const CABLE_PATH: string = '/cable';
@@ -19,10 +19,6 @@ namespace ApiPaths {
     const ROUNDS_EXTENSION: string = 'rounds/';
     const MATCHES_EXTENSION: string = 'matches/';
     const LICENSES_EXTENSION: string = 'licenses/';
-
-    function getId<T extends Identifiable>(model: T | string): string {
-        return typeof model === 'string' ? model : model.id;
-    }
 
     export function userPath(user: string | User): string {
         return `${USERS_ROOT_PATH}${getId(user)}`;
