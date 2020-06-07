@@ -58,20 +58,17 @@ export default function MatchmakeForm(props: Props): JSX.Element {
     }
 
     function submitForm(): void {
-        const submission = Object.entries(matchmakingParams).reduce<Required<MatchAPI.MatchmakeParams>>(
-            (total, [property, value]) => {
-                switch (value) {
-                    case WITHIN_LABEL:
-                        total.within.push(property);
-                        break;
-                    case BETWEEN_LABEL:
-                        total.between.push(property);
-                        break;
-                }
-                return total;
-            },
-            { within: [], between: [] },
-        );
+        let submission: Required<MatchAPI.MatchmakeParams> = { within: [], between: [] };
+        for (let property in matchmakingParams) {
+            switch (matchmakingParams[property]) {
+                case WITHIN_LABEL:
+                    submission.within.push(property);
+                    break;
+                case BETWEEN_LABEL:
+                    submission.between.push(property);
+                    break;
+            }
+        }
         props.onSubmit?.(submission);
         resetForm();
     }
