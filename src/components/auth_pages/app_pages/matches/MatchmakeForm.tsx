@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MatchAPI from '../../../../api/matchAPI';
-import { Container, Card, Form, Button } from 'react-bootstrap';
+import { Container, Card, Form, Button, Row, CardColumns, Col } from 'react-bootstrap';
 
 export type Props = {
     participantProperties: string[];
@@ -77,10 +77,18 @@ export default function MatchmakeForm(props: Props): JSX.Element {
 
     return (
         <Container fluid>
-            {propertyCards}
-            <Button variant="success" onClick={() => submitForm()}>
-                Submit
-            </Button>
+            <Row>
+                <Col>
+                    <CardColumns>{propertyCards}</CardColumns>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <Button variant="success" onClick={() => submitForm()}>
+                        Submit
+                    </Button>
+                </Col>
+            </Row>
         </Container>
     );
 }
