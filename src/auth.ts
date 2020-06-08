@@ -61,7 +61,6 @@ namespace Auth {
     export async function logout(): Promise<boolean> {
         try {
             await ApiRequest.deleteItem(ApiPaths.USERS_LOGOUT_PATH, undefined);
-            console.log('Success');
             clearLogin();
             return true;
         } catch (_) {

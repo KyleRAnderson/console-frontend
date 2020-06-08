@@ -13,7 +13,6 @@ export default function HuntSubscriptionHolder(props: Props): JSX.Element | null
     const matchmakeComplete = useRef<MiniSignal>(new MiniSignal());
 
     function createSubscription(): ActionCable.Channel {
-        console.log('Creating subscription');
         return subscribe(props.hunt, {
             received() {
                 Notifications.createNotification({ message: 'Matchmaking complete!', type: 'success' });
