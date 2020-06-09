@@ -60,8 +60,17 @@ namespace Auth {
 
     export async function logout(): Promise<boolean> {
         try {
-            await ApiRequest.deleteItem(ApiPaths.USERS_LOGOUT_PATH, undefined);
+            await ApiRequest.deleteItem(ApiPaths.USERS_LOGOUT_PATH);
             clearLogin();
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+
+    export async function confirm(token: string): Promise<boolean> {
+        try {
+            await ApiRequest.getItem(ApiPaths.USERS_CONFIRMATION_PATH, { params: { confirmation_token: token } });
             return true;
         } catch (_) {
             return false;

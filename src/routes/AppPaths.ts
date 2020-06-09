@@ -31,5 +31,11 @@ namespace AppPaths {
     export function matchmakePath(hunt: Hunt | string): string {
         return `${huntPath(hunt)}${matchmakeExtension}`;
     }
+
+    export const confirmationTokenParam: string = 'confirmationToken';
+    const confirmationBasePath: string = '/confirmation/';
+    export function confirmationPath(token: string = `:${confirmationTokenParam}`): string {
+        return `${confirmationBasePath}${token}`;
+    }
 }
 export default AppPaths;

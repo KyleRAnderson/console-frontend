@@ -9,10 +9,13 @@ namespace ApiPaths {
 
     export const API_ROOT_PATH: string = '/api/v1/';
 
-    export const USERS_ROOT_PATH: string = API_ROOT_PATH + 'users/';
+    export const USERS_ROOT_PATH: string = API_ROOT_PATH + 'users/'; // TODO to be removed one day
+
     export const USERS_LOGIN_PATH: string = API_ROOT_PATH + 'login/';
     export const USERS_LOGOUT_PATH: string = API_ROOT_PATH + 'logout/';
     export const USERS_REGISTRATIONS_PATH: string = API_ROOT_PATH + 'signup/';
+    export const USERS_CONFIRMATION_PATH: string = API_ROOT_PATH + 'confirmation/';
+
     export const ROSTERS_PATH: string = API_ROOT_PATH + 'rosters/';
     const PARTICIPANTS_EXTENSION: string = 'participants/';
     const HUNTS_EXTENSION: string = 'hunts/';
