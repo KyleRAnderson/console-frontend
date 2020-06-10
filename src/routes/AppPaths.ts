@@ -37,5 +37,7 @@ namespace AppPaths {
     export function confirmationPath(token: string = `:${confirmationTokenParam}`): string {
         return `${confirmationBasePath}${token}`;
     }
+
+    export const resendConfirmationPath: string = '/resendConfirmation';
 }
 export default AppPaths;

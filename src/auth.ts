@@ -4,6 +4,14 @@ import * as MiniSignal from 'mini-signals';
 import User, { UserBase } from './models/User';
 
 namespace Auth {
+    export namespace PasswordValidation {
+        export const MAX_LENGTH = 128,
+            MIN_LENGTH = 6;
+        export const REGEX: RegExp = new RegExp(
+            `/\A[A-Za-z0-9. ! @ # $ % ^ & * ( ) _ - + = ]{${MIN_LENGTH},${MAX_LENGTH}}\z`,
+        );
+    }
+
     const emailKey: string = 'email';
     const idKey: string = 'id';
     const signedInKey: string = 'signedIn';
@@ -71,6 +79,15 @@ namespace Auth {
     export async function confirm(token: string): Promise<boolean> {
         try {
             await ApiRequest.getItem(ApiPaths.USERS_CONFIRMATION_PATH, { params: { confirmation_token: token } });
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+
+    export async function resendConfirmation(emailAddress: string): Promise<boolean> {
+        try {
+            await ApiRequest.postItem(ApiPaths.USERS_CONFIRMATION_PATH, { user: { email: emailAddress } });
             return true;
         } catch (_) {
             return false;
