@@ -7,9 +7,7 @@ namespace Auth {
     export namespace PasswordValidation {
         export const MAX_LENGTH = 128,
             MIN_LENGTH = 6;
-        export const REGEX: RegExp = new RegExp(
-            `/\A[A-Za-z0-9. ! @ # $ % ^ & * ( ) _ - + = ]{${MIN_LENGTH},${MAX_LENGTH}}\z`,
-        );
+        export const REGEX: RegExp = new RegExp(`^[A-Za-z0-9\.!@#$%\^&\*\(\)_\+\-=]{${MIN_LENGTH},${MAX_LENGTH}}$`);
     }
 
     const emailKey: string = 'email';
