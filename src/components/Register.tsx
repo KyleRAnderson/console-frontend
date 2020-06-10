@@ -1,114 +1,64 @@
-import React from 'react';
-import { Button, Form, Container } from 'react-bootstrap';
-import ApiPaths from '../routes/ApiPaths';
+import React, { useState } from 'react';
 import Notifications from '../notification';
-import ApiRequest from '../api/apiRequests';
-import { UserBase } from '../models/User';
+import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './user/AuthForm';
+import Auth from '../auth';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
+import AppPaths from '../routes/AppPaths';
 
-type UserPost = UserBase & {
-    password: string;
-    password_confirmation: string;
-};
-
-type State = UserPost & {
-    success: boolean;
-    submitted: boolean;
-};
-
-class Register extends React.Component<any, State> {
-    state: State = {
-        email: '',
-        password: '',
-        password_confirmation: '',
-        success: false,
-        submitted: false,
-    };
-
-    constructor(props: any) {
-        super(props);
-    }
-
-    componentDidMount() {}
-
-    render(): React.ReactElement {
-        return (
-            <div className="vw-100 vh-100 primary-color d-flex">
-                <Container className="Login justify-content-center primary-color col-md-5">
-                    <Form onSubmit={(event: React.FormEvent<HTMLElement>) => this.handleSubmit(event)}>
-                        <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Email"
-                                onChange={(e) => this.setEmail(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="formBasicPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Password"
-                                onChange={(e) => this.setPassword(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="formBasicPassword">
-                            <Form.Label>Confirm Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Confirm"
-                                onChange={(e) => this.setPasswordConfirmation(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit" className="custom-button">
-                            Create Account
-                        </Button>
-                    </Form>
-                </Container>
-            </div>
-        );
-    }
-
-    setEmail(email: string): void {
-        this.setState(Object.assign({}, this.state, { email: email }));
-    }
-
-    setPassword(password: string): void {
-        this.setState(Object.assign({}, this.state, { password: password }));
-    }
-
-    setPasswordConfirmation(password: string): void {
-        this.setState(Object.assign({}, this.state, { password_confirmation: password }));
-    }
-
-    // TODO this isn't used anywhere.
-    validateForm(): boolean {
-        return this.state.email.length > 0 && this.state.password.length > 0; // TODO should have regex validation on email, and query server for min password length
-    }
-
-    handleSubmit(event: React.FormEvent<HTMLElement>): void {
-        ApiRequest.postItem<{ user: UserPost }>(ApiPaths.USERS_REGISTRATIONS_PATH, {
-            user: {
-                email: this.state.email,
-                password: this.state.password,
-                password_confirmation: this.state.password_confirmation,
-            },
-        })
-            .then(() => {
-                this.setState({ ...this.state, success: true, submitted: true });
-                this.sentNotification(true);
-            })
-            .catch(() => {
-                this.setState(Object.assign({}, this.state, { success: false, submitted: true }));
-                this.sentNotification(false);
-            });
-        event.preventDefault();
-    }
-    sentNotification(succeeded: boolean) {
-        Notifications.createNotification({ message: `Registration ${succeeded ? 'Successful' : 'Unsuccessful'}` });
-    }
+enum SubmissionState {
+    PendingSubmission,
+    Submitting,
+    Failed,
+    Success,
 }
 
-export default Register;
+const EMAIL_KEY: Symbol = Symbol('email');
+const PASSWORD_KEY: Symbol = Symbol('password');
+const PASSWORD_CONFIRMATION_KEY: Symbol = Symbol('password confirmation');
+
+export default function Register(props: RouteComponentProps): JSX.Element {
+    const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.PendingSubmission);
+
+    function handleSubmit(data: AuthData): void {
+        let email = data.get(EMAIL_KEY);
+        let password = data.get(PASSWORD_KEY);
+        let passwordConfirmation = data.get(PASSWORD_CONFIRMATION_KEY);
+        if (email && password && passwordConfirmation) {
+            Auth.register(email, password, passwordConfirmation).then((success) => {
+                setSubmissionState(success ? SubmissionState.Success : SubmissionState.Failed);
+                if (success) {
+                    Notifications.createNotification({ type: 'success', message: 'Logged in' });
+                } else {
+                    Notifications.createNotification({ type: 'danger', message: 'Authentication failed' });
+                }
+            });
+        }
+    }
+
+    if (submissionState === SubmissionState.Success || Auth.isLoggedIn()) {
+        props.history.goBack();
+        return <Redirect to={props.history.location || AppPaths.app} />;
+    }
+
+    const fieldMappings: FieldMappings = new Map();
+    fieldMappings.set(EMAIL_KEY, emailField);
+    fieldMappings.set(PASSWORD_KEY, passwordField);
+    fieldMappings.set(PASSWORD_CONFIRMATION_KEY, {
+        type: 'password',
+        label: 'Password Confirmation',
+        errorMessage: 'Confirmation must match password',
+        validator: (value, data) => {
+            return value === data.get(PASSWORD_KEY);
+        },
+        validateWith: [PASSWORD_KEY],
+    });
+
+    return (
+        <AuthForm
+            buttonLabel="Login"
+            fieldMappings={fieldMappings}
+            disableSubmit={submissionState === SubmissionState.Submitting}
+            onSubmit={handleSubmit}
+        />
+    );
+}
