@@ -1,87 +1,52 @@
-import React from 'react';
-import { Button, Container, Form } from 'react-bootstrap';
+import React, { useState } from 'react';
 import Auth from '../auth';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import AppPaths from '../routes/AppPaths';
 import Notifications from '../notification';
+import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './user/AuthForm';
 
-type State = {
-    email: string;
-    password: string;
-    success: boolean;
-    submitted: boolean;
-};
+const EMAIL_KEY: Symbol = Symbol('email');
+const PASSWORD_KEY: Symbol = Symbol('password');
 
-class Login extends React.Component<RouteComponentProps<{}, any, { from: string }>, State> {
-    state: State = {
-        email: '',
-        password: '',
-        success: false,
-        submitted: false,
-    };
-
-    render() {
-        if ((this.state.submitted && this.state.success) || Auth.isLoggedIn()) {
-            return <Redirect to={this.props.location.state?.from || AppPaths.app} />;
-        }
-
-        return (
-            <div className="vw-100 vh-100 primary-color d-flex">
-                <Container className="Login justify-content-center primary-color col-md-5">
-                    <Form onSubmit={(event: React.FormEvent<HTMLElement>) => this.handleSubmit(event)}>
-                        <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Email"
-                                onChange={(e) => this.setEmail(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="formBasicPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Password"
-                                onChange={(e) => this.setPassword(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit" className="custom-button">
-                            Login
-                        </Button>
-                    </Form>
-                </Container>
-            </div>
-        );
-    }
-
-    setEmail(email: string) {
-        this.setState(Object.assign({}, this.state, { email: email }));
-    }
-
-    setPassword(password: string) {
-        this.setState(Object.assign({}, this.state, { password: password }));
-    }
-
-    validateForm(): boolean {
-        return this.state.email.length > 0 && this.state.password.length > 0; // TODO should have regex validation on email, and query server for min password length
-    }
-
-    handleSubmit(event: React.FormEvent<HTMLElement>) {
-        Auth.login(this.state.email, this.state.password).then((success) => {
-            this.setState({ ...this.state, submitted: true, success: success });
-            this.sendNotification(success);
-        });
-        event.preventDefault();
-    }
-
-    sendNotification(succeeded: boolean) {
-        Notifications.createNotification({
-            message: `Login ${succeeded ? 'Successful' : 'Unsuccessful'}`,
-            type: succeeded ? 'success' : 'danger',
-        });
-    }
+enum SubmissionState {
+    PendingSubmission,
+    Submitting,
+    Failed,
+    Success,
 }
 
-export default Login;
+export default function Login(props: RouteComponentProps<{}, any, { from: string }>): JSX.Element {
+    const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.PendingSubmission);
+
+    function handleSubmit(data: AuthData): void {
+        let email = data.get(EMAIL_KEY);
+        let password = data.get(PASSWORD_KEY);
+        if (email && password) {
+            Auth.login(email, password).then((success) => {
+                setSubmissionState(success ? SubmissionState.Success : SubmissionState.Failed);
+                if (success) {
+                    Notifications.createNotification({ type: 'success', message: 'Logged in' });
+                } else {
+                    Notifications.createNotification({ type: 'danger', message: 'Authentication failed' });
+                }
+            });
+        }
+    }
+
+    if (submissionState === SubmissionState.Success || Auth.isLoggedIn()) {
+        return <Redirect to={props.location.state?.from || AppPaths.app} />;
+    }
+
+    const fieldMappings: FieldMappings = new Map();
+    fieldMappings.set(EMAIL_KEY, emailField);
+    fieldMappings.set(PASSWORD_KEY, passwordField);
+
+    return (
+        <AuthForm
+            buttonLabel="Login"
+            fieldMappings={fieldMappings}
+            disableSubmit={submissionState === SubmissionState.Submitting}
+            onSubmit={handleSubmit}
+        />
+    );
+}
