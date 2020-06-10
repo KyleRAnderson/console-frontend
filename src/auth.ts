@@ -18,6 +18,12 @@ namespace Auth {
         user: UserBase & { password: string };
     };
 
+    type RegisterPost = {
+        user: UserBase & { password: string; password_confirmation: string };
+    };
+
+    type ConfirmationPost = { user: UserBase };
+
     const unauthenticatedSignal: MiniSignal = new MiniSignal();
 
     export function setOnAuthFailure(subscriber: Function): MiniSignal.MiniSignalBinding {
@@ -64,6 +70,19 @@ namespace Auth {
         }
     }
 
+    export async function register(email: string, password: string, passwordConfirmation: string): Promise<boolean> {
+        try {
+            await ApiRequest.postItem<RegisterPost>(
+                ApiPaths.USERS_LOGIN_PATH,
+                { user: { email: email, password: password, password_confirmation: passwordConfirmation } },
+                undefined,
+            );
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+
     export async function logout(): Promise<boolean> {
         try {
             await ApiRequest.deleteItem(ApiPaths.USERS_LOGOUT_PATH);
@@ -85,7 +104,9 @@ namespace Auth {
 
     export async function resendConfirmation(emailAddress: string): Promise<boolean> {
         try {
-            await ApiRequest.postItem(ApiPaths.USERS_CONFIRMATION_PATH, { user: { email: emailAddress } });
+            await ApiRequest.postItem<ConfirmationPost>(ApiPaths.USERS_CONFIRMATION_PATH, {
+                user: { email: emailAddress },
+            });
             return true;
         } catch (_) {
             return false;
