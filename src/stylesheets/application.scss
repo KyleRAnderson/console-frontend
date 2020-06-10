@@ -5,6 +5,12 @@
 $reindeer-red: red;
 $text-forefront: white;
 
+.error {
+    color: $reindeer-red;
+    font-size: 0.75em;
+    display: relative;
+}
+
 .my-4 {
     background-color: $text-forefront;
 }
