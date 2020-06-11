@@ -189,8 +189,10 @@ export default function AuthForm(props: Props): JSX.Element {
                             {props.buttonLabel}
                         </Button>
                     </Form>
-                    {props.children}
                 </Col>
+            </Row>
+            <Row className="justify-content-center py-3">
+                <Col md="5">{props.children}</Col>
             </Row>
         </Container>
     );
