@@ -26,6 +26,7 @@ type Props = {
     onSubmit?: (data: AuthData) => void;
     readonly buttonLabel: string;
     disableSubmit?: boolean;
+    children?: React.ReactNode;
 };
 
 // From https://emailregex.com/
@@ -188,6 +189,7 @@ export default function AuthForm(props: Props): JSX.Element {
                             {props.buttonLabel}
                         </Button>
                     </Form>
+                    {props.children}
                 </Col>
             </Row>
         </Container>
