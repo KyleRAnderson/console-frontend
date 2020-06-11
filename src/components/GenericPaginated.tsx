@@ -43,7 +43,7 @@ export default class GenericPaginated<Model> extends React.Component<Props<Model
         this.updateBinding?.detach();
     }
 
-    private loadData() {
+    private loadData(): void {
         this.props
             .getValues(this.state.currentPage)
             .then(([data, numPages]) => {
@@ -71,13 +71,16 @@ export default class GenericPaginated<Model> extends React.Component<Props<Model
                 <PaginationBar
                     numPages={this.state.numPages}
                     includeFirstLast
-                    onSetPage={(number) => this.setPage(number)}
+                    onSetPage={(pageNum) => this.setPage(pageNum)}
+                    currentPage={this.state.currentPage}
                 />
             </>
         );
     }
 
     setPage(pageNumber: number): void {
-        this.setState({ ...this.state, currentPage: pageNumber }, () => this.loadData());
+        if (this.state.currentPage !== pageNumber) {
+            this.setState({ ...this.state, currentPage: pageNumber }, () => this.loadData());
+        }
     }
 }
