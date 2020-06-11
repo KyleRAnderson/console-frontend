@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function PaginationBar(props: Props): JSX.Element {
-    const paginationFirstLast: [JSX.Element | null, JSX.Element | null] =
+    const paginationFirstLast: [React.ReactNode, React.ReactNode] =
         props.includeFirstLast && props.numPages > 0
             ? [
                   <Pagination.First onClick={() => props.onSetPage?.(1)} />,
@@ -16,7 +16,7 @@ export default function PaginationBar(props: Props): JSX.Element {
               ]
             : [null, null];
 
-    const paginationItems: JSX.Element[] = [];
+    const paginationItems: React.ReactNode = [];
 
     for (let pageNum: number = 1; pageNum <= props.numPages; pageNum++) {
         paginationItems.push(

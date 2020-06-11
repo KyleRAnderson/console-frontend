@@ -36,7 +36,7 @@ class UserList extends React.Component<any, State> {
         }
 
         const users = this.state.users;
-        const allUsersDisplay: JSX.Element[] = users.map((user: User) => {
+        const allUsersDisplay: React.ReactNode = users.map((user: User) => {
             return (
                 <tr key={user.id} className="">
                     <td>{user.email}</td>

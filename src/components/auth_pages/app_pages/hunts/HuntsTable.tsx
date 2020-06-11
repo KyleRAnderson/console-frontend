@@ -5,12 +5,12 @@ import GenericTable, { PropertyMapping } from '../../../GenericTable';
 
 export type HuntsTableProps = {
     hunts: Hunt[];
-    actionButtons?: (hunt: Hunt) => JSX.Element;
+    actionButtons?: (hunt: Hunt) => React.ReactNode;
 };
 
 export default function HuntsTable(props: HuntsTableProps): JSX.Element {
-    function buttonGroupForHunt(hunt: Hunt): JSX.Element | null {
-        let buttonGroup: JSX.Element | null = null;
+    function buttonGroupForHunt(hunt: Hunt): React.ReactNode {
+        let buttonGroup: React.ReactNode = null;
         if (props.actionButtons) {
             buttonGroup = <ButtonGroup aria-label="action-buttons">{props.actionButtons(hunt)}</ButtonGroup>;
         }

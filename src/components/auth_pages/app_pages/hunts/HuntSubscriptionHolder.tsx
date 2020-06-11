@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useRef } from 'react';
 import Hunt from '../../../../models/Hunt';
 import Notifications from '../../../../notification';
@@ -6,10 +7,10 @@ import { subscribe } from '../../../../channels/matchesChannel';
 
 type Props = {
     hunt: string | Hunt;
-    children?: (signal: MiniSignal) => JSX.Element | null;
+    children?: (signal: MiniSignal) => React.ReactNode;
 };
 
-export default function HuntSubscriptionHolder(props: Props): JSX.Element | null {
+export default function HuntSubscriptionHolder(props: Props): JSX.Element {
     const matchmakeComplete = useRef<MiniSignal>(new MiniSignal());
 
     function createSubscription(): ActionCable.Channel {
@@ -29,5 +30,5 @@ export default function HuntSubscriptionHolder(props: Props): JSX.Element | null
         };
     }, []);
 
-    return props.children?.(matchmakeComplete.current) || null;
+    return <>{props.children?.(matchmakeComplete.current)}</>;
 }

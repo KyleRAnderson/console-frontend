@@ -6,7 +6,7 @@ import PaginationBar from './PaginationBar';
 import * as MiniSignal from 'mini-signals';
 
 type Props<Model> = Partial<Pick<GenericTableProps<Model>, 'propertyMappings'>> & {
-    table?: (values: Model[]) => JSX.Element;
+    table?: (values: Model[]) => React.ReactNode;
     getValues: (currentPage: number, recordsPerPage?: number) => Promise<[Model[], number]>;
     updateSignal?: MiniSignal;
 };
@@ -56,7 +56,7 @@ export default class GenericPaginated<Model> extends React.Component<Props<Model
         if (!this.state.loaded) {
             return <Loading />;
         }
-        let dataTable: JSX.Element | undefined;
+        let dataTable: React.ReactNode;
         if (this.props.table) {
             dataTable = this.props.table(this.state.data);
         } else if (this.props.propertyMappings) {

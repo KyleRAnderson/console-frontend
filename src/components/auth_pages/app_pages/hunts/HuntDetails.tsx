@@ -49,7 +49,7 @@ export default function HuntDetails(props: Props): JSX.Element {
         return <Redirect to={props.history.location} />;
     }
 
-    function getNavigator(notificationSignal: MiniSignal): JSX.Element | null {
+    function getNavigator(notificationSignal: MiniSignal): React.ReactNode {
         return currentHunt ? (
             <HuntNavigator currentHunt={currentHunt} matchmakingCompleteSignal={notificationSignal} {...props} />
         ) : null;

@@ -5,21 +5,21 @@ import GenericTable, { PropertyMapping } from '../../../GenericTable';
 
 export type RosterTableProps = {
     rosters: Roster[];
-    actionButtons?: (roster: Roster) => JSX.Element;
+    actionButtons?: (roster: Roster) => React.ReactNode;
 };
 
 export default function rostersTable(props: RosterTableProps) {
     const rosters = props.rosters;
 
-    function buttonGroupForRoster(roster: Roster): JSX.Element | null {
-        let buttonGroup: JSX.Element | null = null;
+    function buttonGroupForRoster(roster: Roster): React.ReactNode {
+        let buttonGroup: React.ReactNode = null;
         if (props.actionButtons) {
             buttonGroup = <ButtonGroup aria-label="action-buttons">{props.actionButtons(roster)}</ButtonGroup>;
         }
         return <td key={roster.id}>{buttonGroup}</td>;
     }
 
-    function renderParticipantProperties(roster: Roster): JSX.Element {
+    function renderParticipantProperties(roster: Roster): React.ReactNode {
         return (
             <td key={`${roster.id}_properties`}>
                 {roster.participant_properties.map((property: string, index) => {

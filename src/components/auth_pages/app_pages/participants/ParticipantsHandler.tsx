@@ -13,11 +13,11 @@ type Props<T extends ParticipantBase> = {
     getParticipants: (currentPage: number, recordsPerPage?: number) => Promise<ParticipantPaginatedResponse<T>>;
     participantTable?: (
         tableProps: Pick<ParticipantsProps<T>, 'participantProperties' | 'participants'>,
-    ) => JSX.Element;
+    ) => React.ReactNode;
 };
 
 export default function ParticipantsHandler<T extends ParticipantBase>(props: Props<T>): JSX.Element {
-    function getTable(participants: T[]): JSX.Element {
+    function getTable(participants: T[]): React.ReactNode {
         return (
             props.participantTable?.({
                 participantProperties: props.participantProperties,
