@@ -24,6 +24,7 @@ export default function Register(props: RouteComponentProps): JSX.Element {
         let password = data.get(PASSWORD_KEY);
         let passwordConfirmation = data.get(PASSWORD_CONFIRMATION_KEY);
         if (email && password && passwordConfirmation) {
+            setSubmissionState(SubmissionState.Submitting);
             Auth.register(email, password, passwordConfirmation).then((success) => {
                 setSubmissionState(success ? SubmissionState.Success : SubmissionState.Failed);
                 if (success) {
