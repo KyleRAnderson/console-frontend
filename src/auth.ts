@@ -2,6 +2,7 @@ import ApiPaths from './routes/ApiPaths';
 import ApiRequest from './api/apiRequests';
 import * as MiniSignal from 'mini-signals';
 import User, { UserBase } from './models/User';
+import { AxiosResponse } from 'axios';
 
 namespace Auth {
     export namespace PasswordValidation {
@@ -60,7 +61,6 @@ namespace Auth {
                 { user: { email: email, password: password } },
                 undefined,
             );
-            success = true;
             email = response.data.email;
             userID = response.data.id;
             storeAuthentication(email, userID);
@@ -70,27 +70,36 @@ namespace Auth {
         }
     }
 
-    export async function register(email: string, password: string, passwordConfirmation: string): Promise<boolean> {
-        try {
-            await ApiRequest.postItem<RegisterPost>(
+    export function register(email: string, password: string, passwordConfirmation: string): Promise<boolean> {
+        return requestAwaiter(
+            ApiRequest.postItem<RegisterPost>(
                 ApiPaths.USERS_LOGIN_PATH,
                 { user: { email: email, password: password, password_confirmation: passwordConfirmation } },
                 undefined,
-            );
-            return true;
-        } catch (_) {
-            return false;
-        }
+            ),
+        );
     }
 
     export async function logout(): Promise<boolean> {
-        try {
-            await ApiRequest.deleteItem(ApiPaths.USERS_LOGOUT_PATH);
+        let success: boolean = await requestAwaiter(ApiRequest.deleteItem(ApiPaths.USERS_LOGOUT_PATH));
+        if (success) {
             clearLogin();
-            return true;
-        } catch (_) {
-            return false;
         }
+        return success;
+    }
+
+    export function confirm(token: string): Promise<boolean> {
+        return requestAwaiter(
+            ApiRequest.getItem(ApiPaths.USERS_CONFIRMATION_PATH, { params: { confirmation_token: token } }),
+        );
+    }
+
+    export function resendConfirmation(emailAddress: string): Promise<boolean> {
+        return requestAwaiter(
+            ApiRequest.postItem<ConfirmationPost>(ApiPaths.USERS_CONFIRMATION_PATH, {
+                user: { email: emailAddress },
+            }),
+        );
     }
 
     export async function confirm(token: string): Promise<boolean> {
@@ -102,11 +111,9 @@ namespace Auth {
         }
     }
 
-    export async function resendConfirmation(emailAddress: string): Promise<boolean> {
+    async function requestAwaiter(requestPromise: Promise<AxiosResponse<any>>): Promise<boolean> {
         try {
-            await ApiRequest.postItem<ConfirmationPost>(ApiPaths.USERS_CONFIRMATION_PATH, {
-                user: { email: emailAddress },
-            });
+            await requestPromise;
             return true;
         } catch (_) {
             return false;

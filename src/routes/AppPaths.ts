@@ -33,7 +33,7 @@ namespace AppPaths {
     }
 
     export const confirmationTokenParam: string = 'confirmationToken';
-    const confirmationBasePath: string = '/confirmation/';
+    export const confirmationBasePath: string = '/confirmation/';
     export function confirmationPath(token: string = `:${confirmationTokenParam}`): string {
         return `${confirmationBasePath}${token}`;
     }

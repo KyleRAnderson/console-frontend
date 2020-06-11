@@ -17,7 +17,7 @@ export default () => {
                 <Route exact path={AppPaths.root} component={Home} />
                 <Route path={AppPaths.usersRoot} component={UserList} />
                 <Route exact path={AppPaths.confirmationPath()} component={UserConfirmation} />
-                <Route exact path={AppPaths.resendConfirmationPath} component={ResendConfirmation} />
+                <Route exact path={AppPaths.confirmationBasePath} component={ResendConfirmation} />
                 <Route path={AppPaths.registerUrl} component={Register} />
                 <Route exact path={AppPaths.loginUrl} component={Login} />
                 <AuthRoute path={AppPaths.app} component={AppPage} />
