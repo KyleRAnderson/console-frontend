@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Notifications from '../notification';
-import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './user/AuthForm';
-import Auth from '../auth';
-import { RouteComponentProps, Redirect } from 'react-router-dom';
-import AppPaths from '../routes/AppPaths';
+import Notifications from '../../notification';
+import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './AuthForm';
+import Auth from '../../auth';
+import { RouteComponentProps, Redirect, Link } from 'react-router-dom';
+import AppPaths from '../../routes/AppPaths';
 
 enum SubmissionState {
     PendingSubmission,
@@ -28,9 +28,12 @@ export default function Register(props: RouteComponentProps): JSX.Element {
             Auth.register(email, password, passwordConfirmation).then((success) => {
                 setSubmissionState(success ? SubmissionState.Success : SubmissionState.Failed);
                 if (success) {
-                    Notifications.createNotification({ type: 'success', message: 'Logged in' });
+                    Notifications.createNotification({
+                        type: 'success',
+                        message: 'Account created, check your email.',
+                    });
                 } else {
-                    Notifications.createNotification({ type: 'danger', message: 'Authentication failed' });
+                    Notifications.createNotification({ type: 'danger', message: 'Registration failed' });
                 }
             });
         }
@@ -38,7 +41,7 @@ export default function Register(props: RouteComponentProps): JSX.Element {
 
     if (submissionState === SubmissionState.Success || Auth.isLoggedIn()) {
         props.history.goBack();
-        return <Redirect to={props.history.location || AppPaths.app} />;
+        return <Redirect to={AppPaths.loginUrl} />;
     }
 
     const fieldMappings: FieldMappings = new Map();
@@ -48,6 +51,7 @@ export default function Register(props: RouteComponentProps): JSX.Element {
         type: 'password',
         label: 'Password Confirmation',
         errorMessage: 'Confirmation must match password',
+        placeholder: 'Confirmation',
         validator: (value, data) => {
             return value === data.get(PASSWORD_KEY);
         },
@@ -56,10 +60,12 @@ export default function Register(props: RouteComponentProps): JSX.Element {
 
     return (
         <AuthForm
-            buttonLabel="Login"
+            buttonLabel="Register"
             fieldMappings={fieldMappings}
             disableSubmit={submissionState === SubmissionState.Submitting}
             onSubmit={handleSubmit}
-        />
+        >
+            <Link to={AppPaths.confirmationBasePath}>Resend Confirmation Email</Link>
+        </AuthForm>
     );
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Home from '../components/Home';
 import UserList from '../components/user/Users';
-import Register from '../components/Register';
+import Register from '../components/user/Register';
 import AppPaths from './AppPaths';
 import AuthRoute from '../components/auth_pages/AuthRoute';
 import Login from '../components/Login';

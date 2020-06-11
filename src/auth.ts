@@ -77,7 +77,7 @@ namespace Auth {
     export function register(email: string, password: string, passwordConfirmation: string): Promise<boolean> {
         return requestAwaiter(
             ApiRequest.postItem<RegisterPost>(
-                ApiPaths.USERS_LOGIN_PATH,
+                ApiPaths.USERS_REGISTRATIONS_PATH,
                 { user: { email: email, password: password, password_confirmation: passwordConfirmation } },
                 undefined,
             ),
