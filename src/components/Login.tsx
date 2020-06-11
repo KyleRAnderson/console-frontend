@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Auth from '../auth';
-import { RouteComponentProps, Redirect } from 'react-router-dom';
+import { RouteComponentProps, Redirect, Link } from 'react-router-dom';
 import AppPaths from '../routes/AppPaths';
 import Notifications from '../notification';
 import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './user/AuthForm';
@@ -42,11 +42,15 @@ export default function Login(props: RouteComponentProps<{}, any, { from: string
     fieldMappings.set(PASSWORD_KEY, passwordField);
 
     return (
-        <AuthForm
-            buttonLabel="Login"
-            fieldMappings={fieldMappings}
-            disableSubmit={submissionState === SubmissionState.Submitting}
-            onSubmit={handleSubmit}
-        />
+        <>
+            <AuthForm
+                buttonLabel="Login"
+                fieldMappings={fieldMappings}
+                disableSubmit={submissionState === SubmissionState.Submitting}
+                onSubmit={handleSubmit}
+            >
+                <Link to={AppPaths.resetPasswordBasePath}>Forgot password?</Link>
+            </AuthForm>
+        </>
     );
 }

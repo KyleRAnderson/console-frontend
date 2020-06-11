@@ -9,6 +9,8 @@ import Login from '../components/Login';
 import AppPage from '../components/auth_pages/app_pages/AppPage';
 import UserConfirmation from '../components/user/UserConfirmation';
 import ResendConfirmation from '../components/user/ResendConfirmation';
+import ResetPassword from '../components/user/ResetPassword';
+import SendResetPassword from '../components/user/SendResetPassword';
 
 export default () => {
     return (
@@ -18,6 +20,8 @@ export default () => {
                 <Route path={AppPaths.usersRoot} component={UserList} />
                 <Route exact path={AppPaths.confirmationPath()} component={UserConfirmation} />
                 <Route exact path={AppPaths.confirmationBasePath} component={ResendConfirmation} />
+                <Route exact path={AppPaths.resetPasswordBasePath} component={SendResetPassword} />
+                <Route exact path={AppPaths.resetPasswordPath()} component={ResetPassword} />
                 <Route path={AppPaths.registerUrl} component={Register} />
                 <Route exact path={AppPaths.loginUrl} component={Login} />
                 <AuthRoute path={AppPaths.app} component={AppPage} />

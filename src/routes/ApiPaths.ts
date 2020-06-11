@@ -15,6 +15,7 @@ namespace ApiPaths {
     export const USERS_LOGOUT_PATH: string = API_ROOT_PATH + 'logout/';
     export const USERS_REGISTRATIONS_PATH: string = API_ROOT_PATH + 'signup/';
     export const USERS_CONFIRMATION_PATH: string = API_ROOT_PATH + 'confirmation/';
+    export const USERS_PASSWORD_RESET_PATH: string = API_ROOT_PATH + 'password/';
 
     export const ROSTERS_PATH: string = API_ROOT_PATH + 'rosters/';
     const PARTICIPANTS_EXTENSION: string = 'participants/';

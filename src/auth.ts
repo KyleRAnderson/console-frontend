@@ -25,6 +25,10 @@ namespace Auth {
 
     type ConfirmationPost = { user: UserBase };
 
+    type ResetPasswordPatch = {
+        user: { password: string; password_confirmation: string; reset_password_token: string };
+    };
+
     const unauthenticatedSignal: MiniSignal = new MiniSignal();
 
     export function setOnAuthFailure(subscriber: Function): MiniSignal.MiniSignalBinding {
@@ -102,13 +106,26 @@ namespace Auth {
         );
     }
 
-    export async function confirm(token: string): Promise<boolean> {
-        try {
-            await ApiRequest.getItem(ApiPaths.USERS_CONFIRMATION_PATH, { params: { confirmation_token: token } });
-            return true;
-        } catch (_) {
-            return false;
-        }
+    export function resetPassword(
+        resetToken: string,
+        newPassword: string,
+        newPasswordConfirmation: string,
+    ): Promise<boolean> {
+        return requestAwaiter(
+            ApiRequest.updateItem<ResetPasswordPatch>(ApiPaths.USERS_PASSWORD_RESET_PATH, {
+                user: {
+                    reset_password_token: resetToken,
+                    password: newPassword,
+                    password_confirmation: newPasswordConfirmation,
+                },
+            }),
+        );
+    }
+
+    export function sendPasswordResetRequest(email: string): Promise<boolean> {
+        return requestAwaiter(
+            ApiRequest.postItem<ConfirmationPost>(ApiPaths.USERS_PASSWORD_RESET_PATH, { user: { email: email } }),
+        );
     }
 
     async function requestAwaiter(requestPromise: Promise<AxiosResponse<any>>): Promise<boolean> {

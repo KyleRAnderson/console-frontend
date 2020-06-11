@@ -38,6 +38,10 @@ namespace AppPaths {
         return `${confirmationBasePath}${token}`;
     }
 
-    export const resendConfirmationPath: string = '/resendConfirmation';
+    export const passwordResetTokenParam: string = 'resetToken';
+    export const resetPasswordBasePath: string = '/reset_password/';
+    export function resetPasswordPath(resetToken: string = `:${passwordResetTokenParam}`): string {
+        return `${resetPasswordBasePath}${resetToken}`;
+    }
 }
 export default AppPaths;
