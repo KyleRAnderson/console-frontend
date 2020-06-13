@@ -9,9 +9,9 @@ function AppPage(props: RouteComponentProps) {
     return (
         <>
             <Navbar className="primary-color" variant="dark">
-                <Navbar.Brand href={AppPaths.root}>Hunt Console</Navbar.Brand>
+                <Navbar.Brand href={AppPaths.ROOT}>Hunt Console</Navbar.Brand>
                 <Nav className="mr-auto" activeKey={props.location.pathname}>
-                    <Nav.Link href={AppPaths.rostersPath}>Rosters</Nav.Link>
+                    <Nav.Link href={AppPaths.ROSTERS_PATH}>Rosters</Nav.Link>
                 </Nav>
                 <Container className="justify-content-end">
                     <LogoutButton />

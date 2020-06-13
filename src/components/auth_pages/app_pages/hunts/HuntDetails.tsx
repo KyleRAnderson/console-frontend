@@ -29,8 +29,8 @@ export default function HuntDetails(props: Props): JSX.Element {
     useEffect(() => {
         const loadedHunt: HuntWithProperties | undefined = props.hunt;
         if (!loadedHunt) {
-            if (props.match.params[AppPaths.huntIdParam]) {
-                loadHunt(props.match.params[AppPaths.huntIdParam]);
+            if (props.match.params[AppPaths.HUNT_ID_PARAM]) {
+                loadHunt(props.match.params[AppPaths.HUNT_ID_PARAM]);
             } else {
                 setFailedToLoadHunt(true);
             }

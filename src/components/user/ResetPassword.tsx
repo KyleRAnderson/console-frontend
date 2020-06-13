@@ -19,7 +19,7 @@ const PASSWORD_CONFIRMATION_KEY = Symbol('password_confirmation');
 export default function ResetPassword(props: RouteComponentProps<{ [key: string]: string }>): JSX.Element {
     const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.Pending);
 
-    const resetToken: string = props.match.params[AppPaths.passwordResetTokenParam];
+    const resetToken: string = props.match.params[AppPaths.PASSWORD_RESET_TOKEN_PARAM];
 
     function onSubmit(data: AuthData): void {
         const newPassword = data.get(PASSWORD_KEY);
@@ -38,7 +38,7 @@ export default function ResetPassword(props: RouteComponentProps<{ [key: string]
     }
 
     if (submissionState === SubmissionState.SubmissionSuccess || isLoggedIn()) {
-        return <Redirect to={AppPaths.loginUrl} />;
+        return <Redirect to={AppPaths.LOGIN_PATH} />;
     }
 
     const fieldMappings: FieldMappings = new Map();

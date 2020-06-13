@@ -61,7 +61,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
     }
     const licensesAdapter: React.ReactNode = (
         <LicensesAdapter
-            huntId={props.match.params[AppPaths.huntIdParam]}
+            huntId={props.match.params[AppPaths.HUNT_ID_PARAM]}
             participantProperties={currentHunt.roster.participant_properties}
         />
     );

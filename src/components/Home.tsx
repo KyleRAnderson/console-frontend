@@ -11,11 +11,11 @@ export default function Home(): JSX.Element {
                     <h1 className="display-4">Reindeer Hunt Console</h1>
                     <p className="lead">For managing the Reindeer Hunt and similar competitions.</p>
                     <hr className="my-4 secondary-color" />
-                    <Button href={AppPaths.registerUrl} size="lg" className="custom-button" type="button">
+                    <Button href={AppPaths.REGISTER_PATH} size="lg" className="custom-button" type="button">
                         Get Started
                     </Button>
                     <br />
-                    <Link to={AppPaths.loginUrl}>or, Login</Link>
+                    <Link to={AppPaths.LOGIN_PATH}>or, Login</Link>
                 </div>
             </div>
         </div>

@@ -43,13 +43,13 @@ export default function UserDashboard(props: RouteComponentProps) {
                     }}
                 />
                 <Route
-                    path={AppPaths.rostersPath}
+                    path={AppPaths.ROSTERS_PATH}
                     render={(props) => {
                         return <RostersList {...props} onRosterSelect={(roster) => setNewCurrentRoster(roster)} />;
                     }}
                 />
-                <Route path={AppPaths.app}>
-                    <Redirect to={AppPaths.rostersPath} />
+                <Route path={AppPaths.APP_ROOT}>
+                    <Redirect to={AppPaths.ROSTERS_PATH} />
                 </Route>
             </Switch>
         </>

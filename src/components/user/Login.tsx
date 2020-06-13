@@ -35,7 +35,7 @@ export default function Login(props: RouteComponentProps<{}, never, { from: stri
     }
 
     if (submissionState === SubmissionState.Success || isLoggedIn()) {
-        return <Redirect to={props.location.state?.from || AppPaths.app} />;
+        return <Redirect to={props.location.state?.from || AppPaths.APP_ROOT} />;
     }
 
     const fieldMappings: FieldMappings = new Map();
@@ -50,7 +50,7 @@ export default function Login(props: RouteComponentProps<{}, never, { from: stri
                 disableSubmit={submissionState === SubmissionState.Submitting}
                 onSubmit={handleSubmit}
             >
-                <Link to={AppPaths.resetPasswordBasePath}>Forgot password?</Link>
+                <Link to={AppPaths.RESET_PASSWORD_BASE_PATH}>Forgot password?</Link>
             </AuthForm>
         </>
     );

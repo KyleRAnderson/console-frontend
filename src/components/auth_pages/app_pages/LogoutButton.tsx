@@ -22,5 +22,5 @@ export default function LogoutButton(): JSX.Element {
             Logout
         </Button>
     );
-    return loggedOut ? <Redirect to={AppPaths.root} push /> : <>{logoutButton}</>;
+    return loggedOut ? <Redirect to={AppPaths.ROOT} push /> : <>{logoutButton}</>;
 }

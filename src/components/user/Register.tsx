@@ -42,7 +42,7 @@ export default function Register(props: RouteComponentProps): JSX.Element {
 
     if (submissionState === SubmissionState.Success || isLoggedIn()) {
         props.history.goBack();
-        return <Redirect to={AppPaths.loginUrl} />;
+        return <Redirect to={AppPaths.LOGIN_PATH} />;
     }
 
     const fieldMappings: FieldMappings = new Map();
@@ -66,7 +66,7 @@ export default function Register(props: RouteComponentProps): JSX.Element {
             disableSubmit={submissionState === SubmissionState.Submitting}
             onSubmit={handleSubmit}
         >
-            <Link to={AppPaths.confirmationBasePath}>Resend Confirmation Email</Link>
+            <Link to={AppPaths.CONFIRMATION_BASE_PATH}>Resend Confirmation Email</Link>
         </AuthForm>
     );
 }

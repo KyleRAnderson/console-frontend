@@ -41,8 +41,8 @@ export default function RosterDashboard(props: Props): JSX.Element {
             potentialRoster = props.roster;
         }
         // Then check the URL param.
-        else if (props.match.params[AppPaths.rosterIdParam]) {
-            potentialRoster = props.match.params[AppPaths.rosterIdParam];
+        else if (props.match.params[AppPaths.ROSTER_ID_PARAM]) {
+            potentialRoster = props.match.params[AppPaths.ROSTER_ID_PARAM];
         }
 
         if (!potentialRoster) {

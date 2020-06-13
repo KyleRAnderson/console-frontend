@@ -15,7 +15,7 @@ export default function UserConfirmation(props: RouteComponentProps<{ [key: stri
     const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.Pending);
 
     function sendConfirmation(): void {
-        confirm(props.match.params[AppPaths.confirmationTokenParam]).then((success) => {
+        confirm(props.match.params[AppPaths.CONFIRMATION_TOKEN_PARAM]).then((success) => {
             setSubmissionState(success ? SubmissionState.ConfirmationSuccess : SubmissionState.FailedConfirmation);
         });
     }
@@ -28,14 +28,14 @@ export default function UserConfirmation(props: RouteComponentProps<{ [key: stri
     switch (submissionState) {
         case SubmissionState.ConfirmationSuccess:
             createNotification({ type: 'success', message: 'User Confirmed!' });
-            element = <Redirect to={AppPaths.loginUrl} />;
+            element = <Redirect to={AppPaths.LOGIN_PATH} />;
             break;
         case SubmissionState.FailedConfirmation:
             createNotification({
                 type: 'danger',
                 message: 'Failed to confirm user, token may have expired.',
             });
-            element = <Redirect to={AppPaths.root} />;
+            element = <Redirect to={AppPaths.ROOT} />;
             break;
         default:
             element = <Loading />;

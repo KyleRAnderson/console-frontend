@@ -38,7 +38,7 @@ function AuthRoute<T extends RouteProps>({ children, component, render, ...rest 
                         return null;
                     }
                 } else {
-                    return <Redirect to={{ pathname: AppPaths.loginUrl, state: { from: props.location } }} />;
+                    return <Redirect to={{ pathname: AppPaths.LOGIN_PATH, state: { from: props.location } }} />;
                 }
             }}
         />

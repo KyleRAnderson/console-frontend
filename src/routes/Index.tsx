@@ -16,14 +16,14 @@ export default function Index(): JSX.Element {
     return (
         <BrowserRouter>
             <Switch>
-                <Route exact path={AppPaths.root} component={Home} />
+                <Route exact path={AppPaths.ROOT} component={Home} />
                 <Route exact path={AppPaths.confirmationPath()} component={UserConfirmation} />
-                <Route exact path={AppPaths.confirmationBasePath} component={ResendConfirmation} />
-                <Route exact path={AppPaths.resetPasswordBasePath} component={SendResetPassword} />
+                <Route exact path={AppPaths.CONFIRMATION_BASE_PATH} component={ResendConfirmation} />
+                <Route exact path={AppPaths.RESET_PASSWORD_BASE_PATH} component={SendResetPassword} />
                 <Route exact path={AppPaths.resetPasswordPath()} component={ResetPassword} />
-                <Route exact path={AppPaths.registerUrl} component={Register} />
-                <Route exact path={AppPaths.loginUrl} component={Login} />
-                <AuthRoute path={AppPaths.app} component={AppPage} />
+                <Route exact path={AppPaths.REGISTER_PATH} component={Register} />
+                <Route exact path={AppPaths.LOGIN_PATH} component={Login} />
+                <AuthRoute path={AppPaths.APP_ROOT} component={AppPage} />
                 <Route path="*" component={NotFound} />
             </Switch>
         </BrowserRouter>
