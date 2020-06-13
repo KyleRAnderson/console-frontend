@@ -2,9 +2,9 @@ import React from 'react';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import GenericPaginated from '../../../GenericPaginated';
 import Match from '../../../../models/Match';
-import MatchAPI from '../../../../api/matchAPI';
 import { PropertyMapping } from '../../../GenericTable';
 import * as MiniSignal from 'mini-signals';
+import { getMatches } from '../../../../api/matchAPI';
 
 type Props = {
     hunt: HuntWithProperties;
@@ -12,8 +12,8 @@ type Props = {
 };
 
 export default function MatchesAdapter(props: Props): JSX.Element {
-    async function getMatches(page: number, matchesPerPage?: number): Promise<[Match[], number]> {
-        const { data } = await MatchAPI.getMatches(props.hunt, { page: page, per_page: matchesPerPage });
+    async function loadMatches(page: number, matchesPerPage?: number): Promise<[Match[], number]> {
+        const { data } = await getMatches(props.hunt, { page: page, per_page: matchesPerPage });
         return [data.matches, data.num_pages];
     }
 
@@ -27,7 +27,7 @@ export default function MatchesAdapter(props: Props): JSX.Element {
     return (
         <GenericPaginated
             updateSignal={props.matchmakingCompleteSignal}
-            getValues={getMatches}
+            getValues={loadMatches}
             propertyMappings={propertyMappings}
         />
     );

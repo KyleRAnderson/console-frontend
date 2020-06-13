@@ -1,6 +1,6 @@
 import React from 'react';
 import GenericTable, { GenericTableProps } from './GenericTable';
-import Notifications from '../notification';
+import { createNotification } from '../notification';
 import Loading from './Loading';
 import PaginationBar from './PaginationBar';
 import * as MiniSignal from 'mini-signals';
@@ -49,7 +49,7 @@ export default class GenericPaginated<Model> extends React.Component<Props<Model
             .then(([data, numPages]) => {
                 this.setState({ ...this.state, data: data, numPages: numPages, loaded: true });
             })
-            .catch(() => Notifications.createNotification({ message: 'Error loading data.', type: 'danger' }));
+            .catch(() => createNotification({ message: 'Error loading data.', type: 'danger' }));
     }
 
     render() {

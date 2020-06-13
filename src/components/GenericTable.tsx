@@ -19,7 +19,7 @@ export type GenericTableProps<T> = TableProps & {
 
 export default function GenericTable<T>(props: GenericTableProps<T>): JSX.Element {
     function valueEntry(value: T, converter: GenericTableProps<T>['propertyMappings']): React.ReactNode {
-        let elements: React.ReactNode = converter.map(([, adapter], i) => {
+        const elements: React.ReactNode = converter.map(([, adapter], i) => {
             let currentValue: T[PropertyOfType<T, React.ReactNode>] | React.ReactNode;
             if (typeof adapter === 'function') {
                 currentValue = adapter(value);
@@ -37,10 +37,10 @@ export default function GenericTable<T>(props: GenericTableProps<T>): JSX.Elemen
         return elements;
     }
 
-    let tableRows: React.ReactNode = props.values.map((value, i) => {
+    const tableRows: React.ReactNode = props.values.map((value, i) => {
         return <tr key={i}>{valueEntry(value, props.propertyMappings)}</tr>;
     });
-    let { propertyMappings, values, ...tableProps }: GenericTableProps<T> = props;
+    const { propertyMappings: _propertyMappings, values: _values, ...tableProps }: GenericTableProps<T> = props;
 
     let noData: React.ReactNode = null;
     if (props.values.length == 0) {

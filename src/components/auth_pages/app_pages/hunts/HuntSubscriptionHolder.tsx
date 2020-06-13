@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useRef } from 'react';
 import Hunt from '../../../../models/Hunt';
-import Notifications from '../../../../notification';
+import { createNotification } from '../../../../notification';
 import MiniSignal from 'mini-signals';
 import { subscribe } from '../../../../channels/matchesChannel';
 
@@ -16,14 +16,14 @@ export default function HuntSubscriptionHolder(props: Props): JSX.Element {
     function createSubscription(): ActionCable.Channel {
         return subscribe(props.hunt, {
             received() {
-                Notifications.createNotification({ message: 'Matchmaking complete!', type: 'success' });
+                createNotification({ message: 'Matchmaking complete!', type: 'success' });
                 matchmakeComplete.current.dispatch();
             },
         });
     }
 
     useEffect(() => {
-        let channel: ActionCable.Channel = createSubscription();
+        const channel: ActionCable.Channel = createSubscription();
 
         return () => {
             channel.unsubscribe();

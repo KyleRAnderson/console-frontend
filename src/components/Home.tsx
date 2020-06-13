@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import AppPaths from '../routes/AppPaths';
+import * as AppPaths from '../routes/AppPaths';
 import { Button } from 'react-bootstrap';
 
 export default function Home(): JSX.Element {

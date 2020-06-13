@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import AppPaths from '../../routes/AppPaths';
+import * as AppPaths from '../../routes/AppPaths';
 import Loading from '../Loading';
-import Notifications from '../../notification';
-import Auth from '../../auth';
+import { createNotification } from '../../notification';
+import { confirm } from '../../api/AuthAPI';
 
 enum SubmissionState {
     Pending,
@@ -15,7 +15,7 @@ export default function UserConfirmation(props: RouteComponentProps<{ [key: stri
     const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.Pending);
 
     function sendConfirmation(): void {
-        Auth.confirm(props.match.params[AppPaths.confirmationTokenParam]).then((success) => {
+        confirm(props.match.params[AppPaths.confirmationTokenParam]).then((success) => {
             setSubmissionState(success ? SubmissionState.ConfirmationSuccess : SubmissionState.FailedConfirmation);
         });
     }
@@ -24,14 +24,14 @@ export default function UserConfirmation(props: RouteComponentProps<{ [key: stri
         sendConfirmation();
     }, []);
 
-    let element: JSX.Element;
+    let element: React.ReactNode;
     switch (submissionState) {
         case SubmissionState.ConfirmationSuccess:
-            Notifications.createNotification({ type: 'success', message: 'User Confirmed!' });
+            createNotification({ type: 'success', message: 'User Confirmed!' });
             element = <Redirect to={AppPaths.loginUrl} />;
             break;
         case SubmissionState.FailedConfirmation:
-            Notifications.createNotification({
+            createNotification({
                 type: 'danger',
                 message: 'Failed to confirm user, token may have expired.',
             });
@@ -41,5 +41,5 @@ export default function UserConfirmation(props: RouteComponentProps<{ [key: stri
             element = <Loading />;
             break;
     }
-    return element;
+    return <>{element}</>;
 }

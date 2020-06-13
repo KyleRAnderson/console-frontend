@@ -1,10 +1,10 @@
 import Hunt from '../../../../models/Hunt';
 import React from 'react';
-import HuntAPI from '../../../../api/huntAPI';
-import Notifications from '../../../../notification';
+import { createNotification } from '../../../../notification';
 import HuntsTable from './HuntsTable';
 import { Button } from 'react-bootstrap';
 import CreateHunt from './CreateHunt';
+import { getHunts, HuntPost, createHunt, HuntErrorResponse, asHuntError, deleteHunt } from '../../../../api/huntAPI';
 
 type State = {
     hunts: Hunt[];
@@ -24,12 +24,12 @@ class HuntsList extends React.Component<HuntsProps, State> {
     }
 
     componentDidMount() {
-        HuntAPI.getHunts(this.props.rosterId)
+        getHunts(this.props.rosterId)
             .then((response) => {
                 this.setState({ ...this.state, hunts: response.data });
             })
             .catch(() => {
-                Notifications.createNotification({ message: 'Error loading hunts.', type: 'danger' });
+                createNotification({ message: 'Error loading hunts.', type: 'danger' });
             });
     }
 
@@ -58,34 +58,34 @@ class HuntsList extends React.Component<HuntsProps, State> {
         this.props.onHuntSelect?.(hunt);
     }
 
-    createHunt(hunt: HuntAPI.HuntPost): void {
-        HuntAPI.createHunt(this.props.rosterId, hunt)
+    createHunt(hunt: HuntPost): void {
+        createHunt(this.props.rosterId, hunt)
             .then(({ data }) => {
-                Notifications.createNotification({ message: 'Successfully created hunt.', type: 'success' });
+                createNotification({ message: 'Successfully created hunt.', type: 'success' });
                 this.setState({ ...this.state, hunts: [...this.state.hunts, data] });
             })
             .catch((error) => {
-                let errorCasted: HuntAPI.HuntErrorResponse | undefined = HuntAPI.asHuntError(error);
+                const errorCasted: HuntErrorResponse | undefined = asHuntError(error);
                 let title: string | undefined;
-                let errorMessage: string = 'Failed to create hunt';
+                let errorMessage = 'Failed to create hunt';
                 if (errorCasted && errorCasted.response && errorCasted.response.data.detail.hunt.length > 0) {
                     title = errorMessage;
                     errorMessage = errorCasted.response.data.detail.hunt.join('\n');
                 }
-                Notifications.createNotification({ title: title, message: errorMessage });
+                createNotification({ title: title, message: errorMessage });
             });
     }
 
     deleteHunt(hunt: Hunt): void {
-        HuntAPI.deleteHunt(hunt.id)
+        deleteHunt(hunt.id)
             .then(() => {
-                Notifications.createNotification({ message: 'Successfully deleted hunt', type: 'success' });
+                createNotification({ message: 'Successfully deleted hunt', type: 'success' });
                 const newHuntsList = [...this.state.hunts];
                 newHuntsList.splice(this.state.hunts.indexOf(hunt), 1);
                 this.setState({ ...this.state, hunts: newHuntsList });
             })
             .catch(() => {
-                Notifications.createNotification({ message: 'Failed to delete hunt.', type: 'danger' });
+                createNotification({ message: 'Failed to delete hunt.', type: 'danger' });
             });
     }
 }

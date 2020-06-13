@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import HuntAPI from '../../../../api/huntAPI';
 import { Form, Row, Col, Button, Container } from 'react-bootstrap';
+import { HuntPost } from '../../../../api/huntAPI';
 
 type CreateHuntProps = {
-    onSubmission?: (hunt: HuntAPI.HuntPost) => void;
+    onSubmission?: (hunt: HuntPost) => void;
 };
 
 export default function CreateHunt(props: CreateHuntProps): JSX.Element {

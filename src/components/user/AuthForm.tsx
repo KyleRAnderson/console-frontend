@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Container, Form, Button, Row, Col, FormControlProps } from 'react-bootstrap';
-import Auth from '../../auth';
+import { PASSWORD_REGEX, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from '../../auth';
 
-type AcceptedKey = string | Symbol;
+type AcceptedKey = string | symbol;
 /**
  * Returns true for valid, false otherwise.
  */
@@ -30,7 +30,7 @@ type Props = {
 };
 
 // From https://emailregex.com/
-export const EMAIL_REGEX: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+export const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export const emailField: FieldProperty = Object.freeze({
     label: 'Email',
@@ -42,19 +42,18 @@ export const emailField: FieldProperty = Object.freeze({
 
 export const passwordField: FieldProperty = Object.freeze({
     label: 'Password',
-    validator: Auth.PasswordValidation.REGEX,
+    validator: PASSWORD_REGEX,
     type: 'password',
-    errorMessage:
-        `Between ${Auth.PasswordValidation.MIN_LENGTH} and ` + `${Auth.PasswordValidation.MAX_LENGTH} characters.`,
+    errorMessage: `Between ${PASSWORD_MIN_LENGTH} and ` + `${PASSWORD_MAX_LENGTH} characters.`,
     placeholder: 'Password',
 });
 
 export default function AuthForm(props: Props): JSX.Element {
     let initialCredentials = new Map<AcceptedKey, string>();
     let initialErrors = new Map<AcceptedKey, boolean>();
-    let initialValidators: Map<AcceptedKey, [AcceptedKey, Validator][]> = new Map();
+    const initialValidators: Map<AcceptedKey, [AcceptedKey, Validator][]> = new Map();
 
-    for (let key of props.fieldMappings.keys()) {
+    for (const key of props.fieldMappings.keys()) {
         initialCredentials.set(key, '');
         // By default invalid until component mounts.
         initialErrors.set(key, true);
@@ -68,21 +67,6 @@ export default function AuthForm(props: Props): JSX.Element {
     // Essentially a map of the validators for each property.
     // Format: {keyToWatch: [[keyToUpdate, validator], [anotherKeyToUpdate, validator]], ...}
     const validators = useRef<ReadonlyMap<AcceptedKey, [AcceptedKey, Validator][]>>(initialValidators);
-
-    useEffect(() => {
-        initialCredentials = new Map<AcceptedKey, string>();
-        initialErrors = new Map<AcceptedKey, boolean>();
-        const initialValue: string = '';
-        for (let [key, mapping] of props.fieldMappings.entries()) {
-            initialCredentials.set(key, initialValue);
-            initialErrors.set(key, !isValid(props.fieldMappings.get(key)?.validator, initialValue));
-
-            addValidator(key, key, mapping.validator);
-            mapping.validateWith?.forEach((listenKey) => addValidator(listenKey, key, mapping.validator));
-        }
-        setCredentials(initialCredentials);
-        setFormErrors(initialErrors);
-    }, []);
 
     /**
      * Adds a validation listener for the listenKey to update the validity of the property at the updateKey.
@@ -142,19 +126,19 @@ export default function AuthForm(props: Props): JSX.Element {
     }
 
     function handleValueChanged(key: AcceptedKey, event: React.FormEvent<HTMLInputElement>): void {
-        let value: string = event.currentTarget.value;
-        let newCredentials = new Map(credentials).set(key, value);
+        const value: string = event.currentTarget.value;
+        const newCredentials = new Map(credentials).set(key, value);
         setCredentials(newCredentials);
 
-        let newFormErrors: Map<AcceptedKey, boolean> = new Map(formErrors);
-        let associatedValidators = validators.current.get(key);
+        const newFormErrors: Map<AcceptedKey, boolean> = new Map(formErrors);
+        const associatedValidators = validators.current.get(key);
         associatedValidators?.forEach(([updateKey, validator]) => {
             newFormErrors.set(updateKey, !isValid(validator, newCredentials.get(updateKey), newCredentials));
         });
         setFormErrors(newFormErrors);
     }
 
-    let formElements: JSX.Element[] = Array.from(props.fieldMappings, ([key, mapping]) => {
+    const formElements: React.ReactNode[] = Array.from(props.fieldMappings, ([key, mapping]) => {
         return (
             <Form.Group controlId={`form${key.toString()}`} key={key.toString()}>
                 <Form.Label>{mapping.label}</Form.Label>
@@ -173,6 +157,21 @@ export default function AuthForm(props: Props): JSX.Element {
             </Form.Group>
         );
     });
+
+    useEffect(() => {
+        initialCredentials = new Map<AcceptedKey, string>();
+        initialErrors = new Map<AcceptedKey, boolean>();
+        const initialValue = '';
+        for (const [key, mapping] of props.fieldMappings.entries()) {
+            initialCredentials.set(key, initialValue);
+            initialErrors.set(key, !isValid(props.fieldMappings.get(key)?.validator, initialValue));
+
+            addValidator(key, key, mapping.validator);
+            mapping.validateWith?.forEach((listenKey) => addValidator(listenKey, key, mapping.validator));
+        }
+        setCredentials(initialCredentials);
+        setFormErrors(initialErrors);
+    }, []);
 
     return (
         <Container fluid className="vw-100 vh-100  primary-color pt-3">

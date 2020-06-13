@@ -1,9 +1,9 @@
 import React from 'react';
 import ParticipantsHandler, { ParticipantPaginatedResponse } from '../participants/ParticipantsHandler';
-import LicenseAPI from '../../../../api/licenseAPI';
 import { ParticipantBase } from '../../../../models/Participant';
 import License from '../../../../models/License';
 import ParticipantsTable from '../participants/ParticipantsTable';
+import { getLicenses } from '../../../../api/licenseAPI';
 
 type Props = {
     huntId: string;
@@ -13,11 +13,11 @@ type Props = {
 type ParticipantWithEliminated = ParticipantBase & Pick<License, 'eliminated'>;
 
 export default function LicensesAdapter(props: Props) {
-    async function getLicenses(
+    async function loadLicenses(
         currentPage: number,
         recordsPerPage?: number,
     ): Promise<ParticipantPaginatedResponse<ParticipantWithEliminated>> {
-        const { data } = await LicenseAPI.getLicenses(props.huntId, { page: currentPage, per_page: recordsPerPage });
+        const { data } = await getLicenses(props.huntId, { page: currentPage, per_page: recordsPerPage });
         return {
             num_pages: data.num_pages,
             participants: data.licenses.map((license) => {
@@ -51,7 +51,7 @@ export default function LicensesAdapter(props: Props) {
 
     return (
         <ParticipantsHandler
-            getParticipants={getLicenses}
+            getParticipants={loadLicenses}
             participantProperties={props.participantProperties}
             participantTable={participantsTableGenerator}
         />

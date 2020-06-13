@@ -3,9 +3,11 @@ import Routes from '../routes/Index';
 import 'react-notifications-component/dist/theme.css';
 import ReactNotifications from 'react-notifications-component';
 
-export default () => (
-    <>
-        <ReactNotifications />
-        <Routes />
-    </>
-);
+export default function App(): JSX.Element {
+    return (
+        <>
+            <ReactNotifications />
+            <Routes />
+        </>
+    );
+}

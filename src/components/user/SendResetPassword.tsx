@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import AuthForm, { AuthData, FieldMappings, emailField } from './AuthForm';
-import Auth from '../../auth';
-import Notifications from '../../notification';
+import { createNotification } from '../../notification';
+import { sendPasswordResetRequest } from '../../api/AuthAPI';
 
-const EMAIL_KEY: Symbol = Symbol('email');
+const EMAIL_KEY = Symbol('email');
 export default function SendResetPassword(): JSX.Element {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     function onSubmit(data: AuthData): void {
-        let email = data.get(EMAIL_KEY);
+        const email = data.get(EMAIL_KEY);
         if (email) {
             setIsSubmitting(true);
-            Auth.sendPasswordResetRequest(email).then((success) => {
+            sendPasswordResetRequest(email).then((success) => {
                 setIsSubmitting(false);
                 if (success) {
-                    Notifications.createNotification({ type: 'success', message: 'Email sent' });
+                    createNotification({ type: 'success', message: 'Email sent' });
                 } else {
-                    Notifications.createNotification({ type: 'danger', message: 'Failed to send email' });
+                    createNotification({ type: 'danger', message: 'Failed to send email' });
                 }
             });
         }

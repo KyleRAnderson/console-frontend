@@ -1,8 +1,8 @@
 import React from 'react';
 import { Form, Col, Row, Button } from 'react-bootstrap';
-import Notifications from '../../../../notification';
-import RosterAPI from '../../../../api/rosterAPI';
+import { createNotification } from '../../../../notification';
 import Roster from '../../../../models/Roster';
+import { createRoster, RosterErrorResponse, asRosterError } from '../../../../api/rosterAPI';
 
 type State = {
     name: string;
@@ -72,13 +72,13 @@ export default class CreateRoster extends React.Component<Props, State> {
         this.setState({ ...CreateRoster.defaultState });
     }
 
-    notifySuccess(success: boolean = true, message: string = '') {
+    notifySuccess(success = true, message = '') {
         let title: string = success ? 'Roster Created' : 'Error Creating Roster';
         if (message.length === 0) {
             message = title;
             title = '';
         }
-        Notifications.createNotification({
+        createNotification({
             title: title,
             message: message,
             type: success ? 'success' : 'danger',
@@ -86,15 +86,15 @@ export default class CreateRoster extends React.Component<Props, State> {
     }
 
     makeRequest(rosterName: string, participant_properties: string[]) {
-        RosterAPI.createRoster({ name: rosterName, participant_properties: participant_properties })
+        createRoster({ name: rosterName, participant_properties: participant_properties })
             .then((response) => {
                 this.clearForm();
                 this.notifySuccess();
                 this.props.onSuccessfulCreate?.(response.data);
             })
             .catch((error) => {
-                let errorMessage: string = '';
-                let errorFormatted: RosterAPI.RosterErrorResponse | undefined = RosterAPI.asRosterError(error);
+                let errorMessage = '';
+                const errorFormatted: RosterErrorResponse | undefined = asRosterError(error);
                 if (errorFormatted) {
                     errorMessage = errorFormatted.response?.data.detail.roster.join('\n') || '';
                 }

@@ -1,17 +1,17 @@
 import React, { ReactNode } from 'react';
 import { Redirect } from 'react-router-dom';
 import User from '../../models/User';
-import AppPaths from '../../routes/AppPaths';
-import ApiPaths from '../../routes/ApiPaths';
+import * as AppPaths from '../../routes/AppPaths';
+import * as ApiPaths from '../../routes/ApiPaths';
 import { Table } from 'react-bootstrap';
-import ApiRequest from '../../api/apiRequests';
+import * as ApiRequest from '../../api/apiRequests';
 
 type State = {
     toHome: boolean;
     users: User[];
 };
 
-class UserList extends React.Component<any, State> {
+class UserList extends React.Component<unknown, State> {
     state = {
         toHome: false,
         users: Array<User>(),

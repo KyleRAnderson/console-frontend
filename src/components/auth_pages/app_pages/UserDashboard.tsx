@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Roster from '../../../models/Roster';
 import { Switch, Route, Redirect, RouteComponentProps } from 'react-router-dom';
-import AppPaths from '../../../routes/AppPaths';
+import * as AppPaths from '../../../routes/AppPaths';
 import HuntDetails from './hunts/HuntDetails';
 import { HuntWithProperties } from '../../../models/Hunt';
 import RostersList from './rosters/RostersList';

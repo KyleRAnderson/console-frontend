@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import AppPaths from '../../../../routes/AppPaths';
-import HuntAPI from '../../../../api/huntAPI';
-import Notifications from '../../../../notification';
+import * as AppPaths from '../../../../routes/AppPaths';
+import { createNotification } from '../../../../notification';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import Loading from '../../../Loading';
 import HuntNavigator from './HuntNavigator';
 import HuntSubscriptionHolder from './HuntSubscriptionHolder';
 import MiniSignal from 'mini-signals';
+import { getHunt } from '../../../../api/huntAPI';
 
 type Props = RouteComponentProps<{ [key: string]: string }> & {
     hunt?: HuntWithProperties;
@@ -18,16 +18,16 @@ export default function HuntDetails(props: Props): JSX.Element {
     const [failedToLoadHunt, setFailedToLoadHunt] = useState<boolean>(false);
 
     function loadHunt(huntId: string) {
-        HuntAPI.getHunt(huntId)
+        getHunt(huntId)
             .then(({ data }) => setCurrentHunt(data))
             .catch(() => {
-                Notifications.createNotification({ message: 'Failed to load hunt data.', type: 'danger' });
+                createNotification({ message: 'Failed to load hunt data.', type: 'danger' });
                 setFailedToLoadHunt(true);
             });
     }
 
     useEffect(() => {
-        let loadedHunt: HuntWithProperties | undefined = props.hunt;
+        const loadedHunt: HuntWithProperties | undefined = props.hunt;
         if (!loadedHunt) {
             if (props.match.params[AppPaths.huntIdParam]) {
                 loadHunt(props.match.params[AppPaths.huntIdParam]);
@@ -55,5 +55,5 @@ export default function HuntDetails(props: Props): JSX.Element {
         ) : null;
     }
 
-    return <HuntSubscriptionHolder hunt={currentHunt} children={getNavigator} />;
+    return <HuntSubscriptionHolder hunt={currentHunt}>{getNavigator}</HuntSubscriptionHolder>;
 }

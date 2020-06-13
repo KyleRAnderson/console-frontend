@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import Auth from '../auth';
+import { login } from '../../api/AuthAPI';
 import { RouteComponentProps, Redirect, Link } from 'react-router-dom';
-import AppPaths from '../routes/AppPaths';
-import Notifications from '../notification';
-import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './user/AuthForm';
+import * as AppPaths from '../../routes/AppPaths';
+import { isLoggedIn } from '../../auth';
+import { createNotification } from '../../notification';
+import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './AuthForm';
 
-const EMAIL_KEY: Symbol = Symbol('email');
-const PASSWORD_KEY: Symbol = Symbol('password');
+const EMAIL_KEY = Symbol('email');
+const PASSWORD_KEY = Symbol('password');
 
 enum SubmissionState {
     PendingSubmission,
@@ -15,25 +16,25 @@ enum SubmissionState {
     Success,
 }
 
-export default function Login(props: RouteComponentProps<{}, any, { from: string }>): JSX.Element {
+export default function Login(props: RouteComponentProps<{}, never, { from: string }>): JSX.Element {
     const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.PendingSubmission);
 
     function handleSubmit(data: AuthData): void {
-        let email = data.get(EMAIL_KEY);
-        let password = data.get(PASSWORD_KEY);
+        const email = data.get(EMAIL_KEY);
+        const password = data.get(PASSWORD_KEY);
         if (email && password) {
-            Auth.login(email, password).then((success) => {
+            login(email, password).then((success) => {
                 setSubmissionState(success ? SubmissionState.Success : SubmissionState.Failed);
                 if (success) {
-                    Notifications.createNotification({ type: 'success', message: 'Logged in' });
+                    createNotification({ type: 'success', message: 'Logged in' });
                 } else {
-                    Notifications.createNotification({ type: 'danger', message: 'Authentication failed' });
+                    createNotification({ type: 'danger', message: 'Authentication failed' });
                 }
             });
         }
     }
 
-    if (submissionState === SubmissionState.Success || Auth.isLoggedIn()) {
+    if (submissionState === SubmissionState.Success || isLoggedIn()) {
         return <Redirect to={props.location.state?.from || AppPaths.app} />;
     }
 

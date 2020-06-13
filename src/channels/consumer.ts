@@ -4,7 +4,7 @@
 
 import { createConsumer } from '@rails/actioncable';
 import { Cable } from 'actioncable';
-import ApiPaths from '../routes/ApiPaths';
+import * as ApiPaths from '../routes/ApiPaths';
 
 type AppCable = {
     cable: Cable;

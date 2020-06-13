@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import AppPaths from '../../../routes/AppPaths';
-import Auth from '../../../auth';
+import * as AppPaths from '../../../routes/AppPaths';
 import { Redirect } from 'react-router-dom';
+import { logout } from '../../../api/AuthAPI';
 
 export default function LogoutButton(): JSX.Element {
     const [loggedOut, setLoggedOut] = useState<boolean>(false);
 
     function logoutButtonClicked(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
         event.preventDefault();
-        Auth.logout().then(() => setLoggedOut(true));
+        logout().then(() => setLoggedOut(true));
     }
 
     const logoutButton: React.ReactNode = (

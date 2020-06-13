@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import MatchAPI from '../../../../api/matchAPI';
 import { Container, Card, Form, Button, Row, CardColumns, Col } from 'react-bootstrap';
+import { MatchmakeParams } from '../../../../api/matchAPI';
 
 export type Props = {
     participantProperties: string[];
-    onSubmit?: (matchmakeParams: Required<MatchAPI.MatchmakeParams>) => void;
+    onSubmit?: (matchmakeParams: Required<MatchmakeParams>) => void;
 };
 
 type PropertyTracker = {
     [property: string]: string;
 };
 
-const WITHIN_LABEL: string = 'Within';
-const BETWEEN_LABEL: string = 'Between';
-const NONE_LABEL: string = 'None';
+const WITHIN_LABEL = 'Within';
+const BETWEEN_LABEL = 'Between';
+const NONE_LABEL = 'None';
 
 export default function MatchmakeForm(props: Props): JSX.Element {
     const startingTracker: PropertyTracker = props.participantProperties.reduce<PropertyTracker>((total, property) => {
@@ -23,7 +23,7 @@ export default function MatchmakeForm(props: Props): JSX.Element {
     const [matchmakingParams, setMatchmakingParams] = useState<PropertyTracker>(startingTracker);
 
     function onClick(property: string, label: string): void {
-        let paramsCopy = { ...matchmakingParams };
+        const paramsCopy = { ...matchmakingParams };
         paramsCopy[property] = label;
         setMatchmakingParams(paramsCopy);
     }
@@ -58,8 +58,8 @@ export default function MatchmakeForm(props: Props): JSX.Element {
     }
 
     function submitForm(): void {
-        let submission: Required<MatchAPI.MatchmakeParams> = { within: [], between: [] };
-        for (let property in matchmakingParams) {
+        const submission: Required<MatchmakeParams> = { within: [], between: [] };
+        for (const property in matchmakingParams) {
             switch (matchmakingParams[property]) {
                 case WITHIN_LABEL:
                     submission.within.push(property);

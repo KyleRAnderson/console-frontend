@@ -2,9 +2,9 @@ import React from 'react';
 import Roster from '../../../../models/Roster';
 import RostersTable from './RostersTable';
 import CreateRoster from './CreateRoster';
-import RosterAPI from '../../../../api/rosterAPI';
-import Notifications from '../../../../notification';
+import { createNotification } from '../../../../notification';
 import { Button } from 'react-bootstrap';
+import { getRosters, deleteRoster } from '../../../../api/rosterAPI';
 
 type State = {
     rosters: Roster[];
@@ -21,12 +21,12 @@ export default class RostersList extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        RosterAPI.getRosters()
+        getRosters()
             .then((response) => {
                 this.setRosters(response.data);
             })
             .catch(() => {
-                Notifications.createNotification({
+                createNotification({
                     message: 'Failed to load rosters 😢',
                     type: 'danger',
                 });
@@ -60,14 +60,14 @@ export default class RostersList extends React.Component<Props, State> {
     }
 
     deleteRoster(roster: Roster): void {
-        RosterAPI.deleteRoster(roster.id)
+        deleteRoster(roster.id)
             .then(() => {
-                let rosters: Roster[] = this.state.rosters.filter((r) => r.id !== roster.id);
+                const rosters: Roster[] = this.state.rosters.filter((r) => r.id !== roster.id);
                 this.setState({ ...this.state, rosters: rosters });
-                Notifications.createNotification({ message: 'Roster deleted.', type: 'success' });
+                createNotification({ message: 'Roster deleted.', type: 'success' });
             })
             .catch(() => {
-                Notifications.createNotification({
+                createNotification({
                     message: 'Failed to delete roster.',
                     type: 'danger',
                 });
@@ -79,7 +79,7 @@ export default class RostersList extends React.Component<Props, State> {
     }
 
     onRosterCreated(roster: Roster): void {
-        let rosters: Roster[] = [...this.state.rosters];
+        const rosters: Roster[] = [...this.state.rosters];
         rosters.push(roster);
         this.setState({ ...this.state, rosters: rosters });
     }

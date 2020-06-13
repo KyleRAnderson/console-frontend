@@ -12,9 +12,17 @@ export type ParticipantsProps<T extends ParticipantBase> = {
     extraColumns?: [string, (participant: T) => string][];
 };
 
+function titleCase(word: string): string {
+    const splitWord: string[] = word.trim().split(/\s+/);
+    const newWord: string[] = splitWord.map((current) => {
+        return current[0].toUpperCase() + current.substring(1);
+    });
+    return newWord.join(' ');
+}
+
 export default function ParticipantsTable<T extends ParticipantBase>(props: ParticipantsProps<T>): JSX.Element {
-    let participant_properties_ordered: string[] = props.participantProperties.sort();
-    let propertyMappings: PropertyMapping<T>[] = [
+    const participant_properties_ordered: string[] = props.participantProperties.sort();
+    const propertyMappings: PropertyMapping<T>[] = [
         ['First', 'first'] as PropertyMapping<T>,
         ['Last', 'last'] as PropertyMapping<T>,
         ...participant_properties_ordered.map(
@@ -27,12 +35,4 @@ export default function ParticipantsTable<T extends ParticipantBase>(props: Part
         propertyMappings.push(...props.extraColumns);
     }
     return <GenericTable striped responsive propertyMappings={propertyMappings} values={props.participants} />;
-}
-
-function titleCase(word: string): string {
-    let splitWord: string[] = word.trim().split(/\s+/);
-    let newWord: string[] = splitWord.map((current) => {
-        return current[0].toUpperCase() + current.substring(1);
-    });
-    return newWord.join(' ');
 }

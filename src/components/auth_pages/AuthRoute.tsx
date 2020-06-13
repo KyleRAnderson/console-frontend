@@ -2,20 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
-import AppPaths from '../../routes/AppPaths';
-import Auth from '../../auth';
-import Notifications from '../../notification';
+import * as AppPaths from '../../routes/AppPaths';
+import { createNotification } from '../../notification';
+import { isLoggedIn, setOnAuthFailure } from '../../auth';
 
 function AuthRoute<T extends RouteProps>({ children, component, render, ...rest }: T): JSX.Element {
-    const [authenticated, setAuthenticated] = useState(Auth.isLoggedIn());
+    const [authenticated, setAuthenticated] = useState(isLoggedIn());
 
     function onAuthFailure(): void {
-        Notifications.createNotification({ message: 'Session has Expired', type: 'warning' });
-        setAuthenticated(Auth.isLoggedIn());
+        createNotification({ message: 'Session has Expired', type: 'warning' });
+        setAuthenticated(isLoggedIn());
     }
 
     useEffect(() => {
-        const authFailureSubscription = Auth.setOnAuthFailure(onAuthFailure);
+        const authFailureSubscription = setOnAuthFailure(onAuthFailure);
 
         return function cleanup() {
             authFailureSubscription.detach();

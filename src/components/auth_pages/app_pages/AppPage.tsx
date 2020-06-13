@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import AppPaths from '../../../routes/AppPaths';
+import * as AppPaths from '../../../routes/AppPaths';
 import UserDashboard from './UserDashboard';
 import LogoutButton from './LogoutButton';
 

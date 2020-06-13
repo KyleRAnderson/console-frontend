@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import HuntsList from '../hunts/HuntsList';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import Roster from '../../../../models/Roster';
-import AppPaths from '../../../../routes/AppPaths';
-import RosterAPI from '../../../../api/rosterAPI';
+import * as AppPaths from '../../../../routes/AppPaths';
 import ParticipantAdapter from '../participants/ParticipantAdapter';
 import Hunt, { HuntWithProperties } from '../../../../models/Hunt';
 import Loading from '../../../Loading';
+import { getRoster } from '../../../../api/rosterAPI';
 
 type Props = RouteComponentProps<{ [key: string]: string }> & {
     roster?: Roster | string;
@@ -18,7 +18,7 @@ export default function RosterDashboard(props: Props): JSX.Element {
     const [failedToLoadRoster, setFailedToLoadRoster] = useState<boolean>(false);
 
     function loadRoster(rosterId: string): void {
-        RosterAPI.getRoster(rosterId)
+        getRoster(rosterId)
             .then((response) => {
                 setRoster(response.data);
             })

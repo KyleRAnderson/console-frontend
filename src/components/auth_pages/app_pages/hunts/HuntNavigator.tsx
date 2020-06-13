@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps, Switch, Route, Redirect } from 'react-router-dom';
 import { HuntWithProperties } from '../../../../models/Hunt';
-import AppPaths from '../../../../routes/AppPaths';
+import * as AppPaths from '../../../../routes/AppPaths';
 import LicensesAdapter from '../licenses/LicensesAdapter';
 import HuntNav, { ActiveTab } from './HuntNav';
 import MatchesAdapter from '../matches/MatchesAdapter';
@@ -17,20 +17,6 @@ export default function HuntNavigator(props: Props): JSX.Element {
     const currentHunt = props.currentHunt;
     const matchmakeCompleteSignal = props.matchmakingCompleteSignal;
 
-    function goTo(tab: ActiveTab): void {
-        switch (tab) {
-            case ActiveTab.Licenses:
-                goToHunt();
-                break;
-            case ActiveTab.Matches:
-                goToMatches();
-                break;
-            case ActiveTab.Matchmake:
-                goToMatchmake();
-                break;
-        }
-    }
-
     const licensesPath: string = AppPaths.huntPath(currentHunt);
     const matchesPath: string = AppPaths.matchesPath(currentHunt);
     const matchmakePath: string = AppPaths.matchmakePath(currentHunt);
@@ -45,6 +31,20 @@ export default function HuntNavigator(props: Props): JSX.Element {
 
     function goToMatchmake(): void {
         props.history.push(matchmakePath);
+    }
+
+    function goTo(tab: ActiveTab): void {
+        switch (tab) {
+            case ActiveTab.Licenses:
+                goToHunt();
+                break;
+            case ActiveTab.Matches:
+                goToMatches();
+                break;
+            case ActiveTab.Matchmake:
+                goToMatchmake();
+                break;
+        }
     }
 
     let activeTab: ActiveTab = ActiveTab.None;
