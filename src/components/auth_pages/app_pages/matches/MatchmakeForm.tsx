@@ -28,8 +28,8 @@ export default function MatchmakeForm(props: Props): JSX.Element {
         setMatchmakingParams(paramsCopy);
     }
 
-    function generatePropertyCard(property: string): JSX.Element {
-        function generateRadioCheck(label: string): JSX.Element {
+    function generatePropertyCard(property: string): React.ReactNode {
+        function generateRadioCheck(label: string): React.ReactNode {
             return (
                 <Form.Check
                     name={`${property}_checkboxes`}
@@ -73,7 +73,7 @@ export default function MatchmakeForm(props: Props): JSX.Element {
         resetForm();
     }
 
-    const propertyCards: JSX.Element[] = props.participantProperties.map(generatePropertyCard);
+    const propertyCards: React.ReactNode = props.participantProperties.map(generatePropertyCard);
 
     return (
         <Container fluid>

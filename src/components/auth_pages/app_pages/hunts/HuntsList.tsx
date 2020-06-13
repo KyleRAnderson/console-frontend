@@ -34,7 +34,7 @@ class HuntsList extends React.Component<HuntsProps, State> {
     }
 
     render() {
-        const actionButtons: (hunt: Hunt) => JSX.Element = (hunt) => {
+        const actionButtons: (hunt: Hunt) => React.ReactNode = (hunt) => {
             return (
                 <>
                     <Button type="button" variant="outline-primary" onClick={() => this.goToHunt(hunt)}>

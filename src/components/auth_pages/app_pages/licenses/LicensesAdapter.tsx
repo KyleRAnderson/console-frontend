@@ -39,7 +39,7 @@ export default function LicensesAdapter(props: Props) {
     }: {
         participantProperties: string[];
         participants: ParticipantWithEliminated[];
-    }): JSX.Element {
+    }): React.ReactNode {
         return (
             <ParticipantsTable
                 participantProperties={participantProperties}

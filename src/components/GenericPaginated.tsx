@@ -6,7 +6,7 @@ import PaginationBar from './PaginationBar';
 import * as MiniSignal from 'mini-signals';
 
 type Props<Model> = Partial<Pick<GenericTableProps<Model>, 'propertyMappings'>> & {
-    table?: (values: Model[]) => JSX.Element;
+    table?: (values: Model[]) => React.ReactNode;
     getValues: (currentPage: number, recordsPerPage?: number) => Promise<[Model[], number]>;
     updateSignal?: MiniSignal;
 };
@@ -43,7 +43,7 @@ export default class GenericPaginated<Model> extends React.Component<Props<Model
         this.updateBinding?.detach();
     }
 
-    private loadData() {
+    private loadData(): void {
         this.props
             .getValues(this.state.currentPage)
             .then(([data, numPages]) => {
@@ -56,7 +56,7 @@ export default class GenericPaginated<Model> extends React.Component<Props<Model
         if (!this.state.loaded) {
             return <Loading />;
         }
-        let dataTable: JSX.Element | undefined;
+        let dataTable: React.ReactNode;
         if (this.props.table) {
             dataTable = this.props.table(this.state.data);
         } else if (this.props.propertyMappings) {
@@ -71,13 +71,16 @@ export default class GenericPaginated<Model> extends React.Component<Props<Model
                 <PaginationBar
                     numPages={this.state.numPages}
                     includeFirstLast
-                    onSetPage={(number) => this.setPage(number)}
+                    onSetPage={(pageNum) => this.setPage(pageNum)}
+                    currentPage={this.state.currentPage}
                 />
             </>
         );
     }
 
     setPage(pageNumber: number): void {
-        this.setState({ ...this.state, currentPage: pageNumber }, () => this.loadData());
+        if (this.state.currentPage !== pageNumber) {
+            this.setState({ ...this.state, currentPage: pageNumber }, () => this.loadData());
+        }
     }
 }

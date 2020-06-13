@@ -37,8 +37,8 @@ export default class RostersList extends React.Component<Props, State> {
         this.setState({ ...this.state, rosters: rosters });
     }
 
-    render(): JSX.Element {
-        const actionButtons: (roster: Roster) => JSX.Element = (roster) => {
+    render() {
+        const actionButtons: (roster: Roster) => React.ReactNode = (roster) => {
             return (
                 <>
                     <Button variant="outline-primary" type="button" onClick={() => this.setRosterToView(roster)}>

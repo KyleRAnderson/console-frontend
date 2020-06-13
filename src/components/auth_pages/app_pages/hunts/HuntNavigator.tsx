@@ -59,7 +59,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
             activeTab = ActiveTab.Matchmake;
             break;
     }
-    const licensesAdapter: JSX.Element = (
+    const licensesAdapter: React.ReactNode = (
         <LicensesAdapter
             huntId={props.match.params[AppPaths.huntIdParam]}
             participantProperties={currentHunt.roster.participant_properties}

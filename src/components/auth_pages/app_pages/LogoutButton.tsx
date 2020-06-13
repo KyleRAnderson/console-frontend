@@ -12,7 +12,7 @@ export default function LogoutButton(): JSX.Element {
         Auth.logout().then(() => setLoggedOut(true));
     }
 
-    const logoutButton: JSX.Element = (
+    const logoutButton: React.ReactNode = (
         <Button
             className="custom-button"
             size="sm"
@@ -22,5 +22,5 @@ export default function LogoutButton(): JSX.Element {
             Logout
         </Button>
     );
-    return loggedOut ? <Redirect to={AppPaths.root} push /> : logoutButton;
+    return loggedOut ? <Redirect to={AppPaths.root} push /> : <>{logoutButton}</>;
 }

@@ -6,9 +6,7 @@ import AppPaths from '../../routes/AppPaths';
 import Auth from '../../auth';
 import Notifications from '../../notification';
 
-export class AuthRoute extends Route {}
-
-function authRoute<T extends RouteProps>({ children, component, render, ...rest }: T): JSX.Element {
+function AuthRoute<T extends RouteProps>({ children, component, render, ...rest }: T): JSX.Element {
     const [authenticated, setAuthenticated] = useState(Auth.isLoggedIn());
 
     function onAuthFailure(): void {
@@ -47,4 +45,4 @@ function authRoute<T extends RouteProps>({ children, component, render, ...rest 
     );
 }
 
-export default authRoute;
+export default AuthRoute;
