@@ -2,7 +2,6 @@ import Roster from '../models/Roster';
 import Hunt from '../models/Hunt';
 
 export const root = '/';
-export const usersRoot = '/users';
 export const loginUrl = '/login';
 export const registerUrl = '/register';
 export const app = '/app';

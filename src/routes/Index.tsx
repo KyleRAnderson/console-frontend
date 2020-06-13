@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Home from '../components/Home';
-import UserList from '../components/user/Users';
 import Register from '../components/user/Register';
 import * as AppPaths from './AppPaths';
 import AuthRoute from '../components/auth_pages/AuthRoute';
@@ -17,7 +16,6 @@ export default function Index(): JSX.Element {
         <BrowserRouter>
             <Switch>
                 <Route exact path={AppPaths.root} component={Home} />
-                <Route path={AppPaths.usersRoot} component={UserList} />
                 <Route exact path={AppPaths.confirmationPath()} component={UserConfirmation} />
                 <Route exact path={AppPaths.confirmationBasePath} component={ResendConfirmation} />
                 <Route exact path={AppPaths.resetPasswordBasePath} component={SendResetPassword} />

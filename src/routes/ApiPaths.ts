@@ -1,14 +1,11 @@
 import Hunt from '../models/Hunt';
 import Roster from '../models/Roster';
 import License from '../models/License';
-import User from '../models/User';
 import getId from '../util/identifiableHelper';
 
 export const CABLE_PATH = '/cable';
 
 export const API_ROOT_PATH = '/api/v1/';
-
-export const USERS_ROOT_PATH: string = API_ROOT_PATH + 'users/'; // TODO to be removed one day
 
 export const USERS_LOGIN_PATH: string = API_ROOT_PATH + 'login/';
 export const USERS_LOGOUT_PATH: string = API_ROOT_PATH + 'logout/';
@@ -22,10 +19,6 @@ const HUNTS_EXTENSION = 'hunts/';
 const ROUNDS_EXTENSION = 'rounds/';
 const MATCHES_EXTENSION = 'matches/';
 const LICENSES_EXTENSION = 'licenses/';
-
-export function userPath(user: string | User): string {
-    return `${USERS_ROOT_PATH}${getId(user)}`;
-}
 
 export function rosterPath(rosterId: string): string {
     return `${ROSTERS_PATH}${rosterId}/`;
