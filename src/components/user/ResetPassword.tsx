@@ -3,7 +3,7 @@ import AuthForm, { FieldMappings, passwordField, AuthData } from './AuthForm';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { createNotification } from '../../notification';
 import * as AppPaths from '../../routes/AppPaths';
-import { resetPassword } from '../../api/AuthAPI';
+import { resetPassword } from '../../api/authAPI';
 import { isLoggedIn } from '../../auth';
 
 enum SubmissionState {

@@ -3,7 +3,7 @@ import { RouteComponentProps, Redirect } from 'react-router-dom';
 import * as AppPaths from '../../routes/AppPaths';
 import Loading from '../Loading';
 import { createNotification } from '../../notification';
-import { confirm } from '../../api/AuthAPI';
+import { confirm } from '../../api/authAPI';
 
 enum SubmissionState {
     Pending,

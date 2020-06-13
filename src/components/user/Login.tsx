@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { login } from '../../api/AuthAPI';
+import { login } from '../../api/authAPI';
 import { RouteComponentProps, Redirect, Link } from 'react-router-dom';
 import * as AppPaths from '../../routes/AppPaths';
 import { isLoggedIn } from '../../auth';

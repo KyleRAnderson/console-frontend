@@ -3,7 +3,7 @@ import { createNotification } from '../../notification';
 import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './AuthForm';
 import { RouteComponentProps, Redirect, Link } from 'react-router-dom';
 import * as AppPaths from '../../routes/AppPaths';
-import { register } from '../../api/AuthAPI';
+import { register } from '../../api/authAPI';
 import { isLoggedIn } from '../../auth';
 
 enum SubmissionState {
