@@ -10,6 +10,7 @@ import UserConfirmation from '../components/user/UserConfirmation';
 import ResendConfirmation from '../components/user/ResendConfirmation';
 import ResetPassword from '../components/user/ResetPassword';
 import SendResetPassword from '../components/user/SendResetPassword';
+import NotFound from './NotFound';
 
 export default function Index(): JSX.Element {
     return (
@@ -20,9 +21,10 @@ export default function Index(): JSX.Element {
                 <Route exact path={AppPaths.confirmationBasePath} component={ResendConfirmation} />
                 <Route exact path={AppPaths.resetPasswordBasePath} component={SendResetPassword} />
                 <Route exact path={AppPaths.resetPasswordPath()} component={ResetPassword} />
-                <Route path={AppPaths.registerUrl} component={Register} />
+                <Route exact path={AppPaths.registerUrl} component={Register} />
                 <Route exact path={AppPaths.loginUrl} component={Login} />
                 <AuthRoute path={AppPaths.app} component={AppPage} />
+                <Route path="*" component={NotFound} />
             </Switch>
         </BrowserRouter>
     );
