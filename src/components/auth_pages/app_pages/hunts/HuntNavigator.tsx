@@ -8,7 +8,7 @@ import MatchesAdapter from '../matches/MatchesAdapter';
 import Matchmake from '../matches/Matchmake';
 import * as MiniSignal from 'mini-signals';
 
-type Props = RouteComponentProps<{ [key: string]: string }> & {
+type Props = RouteComponentProps<{ [AppPaths.HUNT_ID_PARAM]: string }> & {
     currentHunt: HuntWithProperties;
     matchmakingCompleteSignal?: MiniSignal;
 };

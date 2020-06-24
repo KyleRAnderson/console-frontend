@@ -11,7 +11,9 @@ enum SubmissionState {
     ConfirmationSuccess,
 }
 
-export default function UserConfirmation(props: RouteComponentProps<{ [key: string]: string }>): JSX.Element {
+export default function UserConfirmation(
+    props: RouteComponentProps<{ [AppPaths.CONFIRMATION_TOKEN_PARAM]: string }>,
+): JSX.Element {
     const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.Pending);
 
     function sendConfirmation(): void {

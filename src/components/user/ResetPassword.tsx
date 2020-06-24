@@ -16,7 +16,9 @@ enum SubmissionState {
 const PASSWORD_KEY = Symbol('password');
 const PASSWORD_CONFIRMATION_KEY = Symbol('password_confirmation');
 
-export default function ResetPassword(props: RouteComponentProps<{ [key: string]: string }>): JSX.Element {
+export default function ResetPassword(
+    props: RouteComponentProps<{ [AppPaths.PASSWORD_RESET_TOKEN_PARAM]: string }>,
+): JSX.Element {
     const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.Pending);
 
     const resetToken: string = props.match.params[AppPaths.PASSWORD_RESET_TOKEN_PARAM];

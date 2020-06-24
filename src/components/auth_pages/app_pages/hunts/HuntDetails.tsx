@@ -9,7 +9,7 @@ import HuntSubscriptionHolder from './HuntSubscriptionHolder';
 import MiniSignal from 'mini-signals';
 import { getHunt } from '../../../../api/huntAPI';
 
-type Props = RouteComponentProps<{ [key: string]: string }> & {
+type Props = RouteComponentProps<{ [AppPaths.HUNT_ID_PARAM]: string }> & {
     hunt?: HuntWithProperties;
 };
 

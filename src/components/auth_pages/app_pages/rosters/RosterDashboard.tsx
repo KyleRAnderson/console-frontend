@@ -8,7 +8,7 @@ import Hunt, { HuntWithProperties } from '../../../../models/Hunt';
 import Loading from '../../../Loading';
 import { getRoster } from '../../../../api/rosterAPI';
 
-type Props = RouteComponentProps<{ [key: string]: string }> & {
+type Props = RouteComponentProps<{ [AppPaths.ROSTER_ID_PARAM]: string }> & {
     roster?: Roster | string;
     onSelectHunt?: (hunt: HuntWithProperties) => void;
 };
