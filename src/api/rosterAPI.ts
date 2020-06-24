@@ -27,3 +27,8 @@ export function deleteRoster(rosterId: string): Promise<AxiosResponse> {
 export function createRoster(roster: RosterPost): Promise<AxiosResponse<Roster>> {
     return ApiRequest.postItem<RosterPost, Roster>(ApiPaths.ROSTERS_PATH, roster);
 }
+
+export function updateRoster(roster: Roster): Promise<AxiosResponse<Roster>> {
+    const post: RosterPost = { name: roster.name, participant_properties: roster.participant_properties };
+    return ApiRequest.updateItem(ApiPaths.rosterPath(roster), post);
+}
