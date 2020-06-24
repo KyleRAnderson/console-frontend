@@ -5,6 +5,10 @@ import Loading from './Loading';
 import PaginationBar from './PaginationBar';
 import * as MiniSignal from 'mini-signals';
 
+/**
+ * getValues: A function accepting the current page and records to display per page,
+ * returning a promise to a tuple of an array of the records followed by the number of pages.
+ */
 type Props<Model> = Partial<Pick<GenericTableProps<Model>, 'propertyMappings'>> & {
     table?: (values: Model[]) => React.ReactNode;
     getValues: (currentPage: number, recordsPerPage?: number) => Promise<[Model[], number]>;
@@ -65,15 +69,20 @@ export default class GenericPaginated<Model> extends React.Component<Props<Model
             console.error('Either table or propertyMappings needs to be provided to GenericPaginated!');
         }
 
-        return (
-            <>
-                {dataTable}
+        const paginationBar: React.ReactNode =
+            this.state.numPages > 1 ? (
                 <PaginationBar
                     numPages={this.state.numPages}
                     includeFirstLast
                     onSetPage={(pageNum) => this.setPage(pageNum)}
                     currentPage={this.state.currentPage}
                 />
+            ) : null;
+
+        return (
+            <>
+                {dataTable}
+                {paginationBar}
             </>
         );
     }
