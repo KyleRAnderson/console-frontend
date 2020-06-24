@@ -3,9 +3,11 @@ import * as ApiPaths from '../routes/ApiPaths';
 import Participant, { ParticipantBase } from '../models/Participant';
 import { AxiosResponse } from 'axios';
 import PartialBy from '../util/partialBy';
-import { ParticipantPaginatedResponse } from '../components/auth_pages/app_pages/participants/ParticipantsHandler';
 
 export type ParticipantPost = PartialBy<ParticipantBase, 'extras'>;
+export type ParticipantPaginatedResponse<U extends ParticipantBase> = PaginatedResponse & {
+    participants: U[];
+};
 /**
  * The properties that are orderable on the server end for the participant.
  */

@@ -1,12 +1,8 @@
 import React from 'react';
 import ParticipantsTable, { ParticipantsProps } from './ParticipantsTable';
 import { ParticipantBase } from '../../../../models/Participant';
-import PaginatedResponse from '../../../../models/PaginatedResponse';
 import GenericPaginated from '../../../GenericPaginated';
-
-export type ParticipantPaginatedResponse<U extends ParticipantBase> = PaginatedResponse & {
-    participants: U[];
-};
+import { ParticipantPaginatedResponse } from '../../../../api/participantAPI';
 
 type Props<T extends ParticipantBase> = {
     participantProperties: string[];
