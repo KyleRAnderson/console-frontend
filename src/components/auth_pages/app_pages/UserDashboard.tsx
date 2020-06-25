@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Roster from '../../../models/Roster';
 import { Switch, Route, Redirect, RouteComponentProps } from 'react-router-dom';
 import * as AppPaths from '../../../routes/AppPaths';
 import HuntDetails from './hunts/HuntDetails';
 import { HuntWithProperties } from '../../../models/Hunt';
 import RostersList from './rosters/RostersList';
-import RosterDashboard from './rosters/RosterDashboard';
 import PermissionsAdapter from './permissions/PermissionsAdapter';
+import { Nav } from 'react-bootstrap';
+import RosterContext from './rosters/RosterContext';
 
-export default function UserDashboard(props: RouteComponentProps) {
+/**
+ * setMenuItem: A function to call to set a menu item for this user's dashboard,
+ * so that it displays on top.
+ */
+type Props = RouteComponentProps & {
+    setMenuItem?: (item: React.ReactNode) => void;
+};
+
+export default function UserDashboard(props: Props) {
     const [currentRoster, setCurrentRoster] = useState<Roster | undefined>(undefined);
     const [currentHunt, setCurrentHunt] = useState<HuntWithProperties | undefined>(undefined);
 
     function setNewCurrentRoster(roster: Roster): void {
         setCurrentRoster(roster);
+    }
+
+    function showRoster(roster: Roster): void {
+        setNewCurrentRoster(roster);
         props.history.push(AppPaths.rosterPath(roster));
     }
 
@@ -21,6 +34,17 @@ export default function UserDashboard(props: RouteComponentProps) {
         setCurrentHunt(hunt);
         props.history.push(AppPaths.huntPath(hunt));
     }
+
+    useEffect(() => {
+        if (currentRoster) {
+            props.setMenuItem?.(
+                <>
+                    <Nav.Link href={AppPaths.rosterPath(currentRoster)}>{currentRoster.name}</Nav.Link>
+                    <Nav.Link href={AppPaths.permissionsPath(currentRoster)}>Permissions</Nav.Link>
+                </>,
+            );
+        }
+    }, [currentRoster]);
 
     return (
         <>
@@ -30,10 +54,13 @@ export default function UserDashboard(props: RouteComponentProps) {
                     path={AppPaths.rosterPath()}
                     render={(props) => {
                         return (
-                            <RosterDashboard
+                            <RosterContext
                                 {...props}
-                                onSelectHunt={(hunt) => setNewCurrentHunt(hunt)}
+                                dashboardProps={{
+                                    onSelectHunt: (hunt) => setNewCurrentHunt(hunt),
+                                }}
                                 roster={currentRoster}
+                                onLoadRoster={setNewCurrentRoster}
                             />
                         );
                     }}
@@ -47,7 +74,7 @@ export default function UserDashboard(props: RouteComponentProps) {
                 <Route
                     path={AppPaths.ROSTERS_PATH}
                     render={(props) => {
-                        return <RostersList {...props} onRosterSelect={(roster) => setNewCurrentRoster(roster)} />;
+                        return <RostersList {...props} onRosterSelect={(roster) => showRoster(roster)} />;
                     }}
                 />
                 <Route path={AppPaths.APP_ROOT}>

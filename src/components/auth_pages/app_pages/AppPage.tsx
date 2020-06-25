@@ -1,23 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Navbar, Nav, Container } from 'react-bootstrap';
-import * as AppPaths from '../../../routes/AppPaths';
 import UserDashboard from './UserDashboard';
-import LogoutButton from './LogoutButton';
+import UserNavbar from './UserNavbar';
 
 function AppPage(props: RouteComponentProps) {
+    const [extraNavItems, setExtraNavItems] = useState<React.ReactNode>([]);
+
     return (
         <>
-            <Navbar className="primary-color" variant="dark">
-                <Navbar.Brand href={AppPaths.ROOT}>Hunt Console</Navbar.Brand>
-                <Nav className="mr-auto" activeKey={props.location.pathname}>
-                    <Nav.Link href={AppPaths.ROSTERS_PATH}>Rosters</Nav.Link>
-                </Nav>
-                <Container className="justify-content-end">
-                    <LogoutButton />
-                </Container>
-            </Navbar>
-            <UserDashboard {...props} />
+            <UserNavbar {...props}>{extraNavItems}</UserNavbar>
+            <UserDashboard {...props} setMenuItem={setExtraNavItems} />
         </>
     );
 }

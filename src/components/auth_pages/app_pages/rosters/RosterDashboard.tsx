@@ -1,71 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import HuntsList from '../hunts/HuntsList';
-import { RouteComponentProps, Redirect } from 'react-router-dom';
 import Roster from '../../../../models/Roster';
-import * as AppPaths from '../../../../routes/AppPaths';
 import ParticipantAdapter from '../participants/ParticipantAdapter';
 import Hunt, { HuntWithProperties } from '../../../../models/Hunt';
-import Loading from '../../../Loading';
-import { getRoster } from '../../../../api/rosterAPI';
 
-type Props = RouteComponentProps<{ [AppPaths.ROSTER_ID_PARAM]: string }> & {
-    roster?: Roster | string;
+export type Props = {
+    roster: Roster;
     onSelectHunt?: (hunt: HuntWithProperties) => void;
 };
 
 export default function RosterDashboard(props: Props): JSX.Element {
-    const [roster, setRoster] = useState<Roster | undefined>(undefined);
-    const [failedToLoadRoster, setFailedToLoadRoster] = useState<boolean>(false);
-
-    function loadRoster(rosterId: string): void {
-        getRoster(rosterId)
-            .then((response) => {
-                setRoster(response.data);
-            })
-            .catch(() => {
-                setFailedToLoadRoster(true);
-            });
-    }
-
     function selectHunt(hunt: Hunt): void {
-        if (roster) {
-            props.onSelectHunt?.({ ...hunt, roster: { participant_properties: roster.participant_properties } });
-        }
-    }
-
-    useEffect(() => {
-        let potentialRoster: Roster | string | undefined;
-
-        // Check the roster prop, as first priority.
-        if (props.roster) {
-            potentialRoster = props.roster;
-        }
-        // Then check the URL param.
-        else if (props.match.params[AppPaths.ROSTER_ID_PARAM]) {
-            potentialRoster = props.match.params[AppPaths.ROSTER_ID_PARAM];
-        }
-
-        if (!potentialRoster) {
-            setFailedToLoadRoster(true);
-        } else if (typeof potentialRoster === 'string') {
-            loadRoster(potentialRoster);
-        } else {
-            setRoster(potentialRoster);
-        }
-    }, []);
-
-    if (!roster) {
-        return <Loading />;
-    }
-    if (failedToLoadRoster) {
-        props.history.goBack();
-        return <Redirect to={props.history.location} />;
+        props.onSelectHunt?.({ ...hunt, roster: { participant_properties: props.roster.participant_properties } });
     }
 
     return (
         <>
-            <HuntsList rosterId={roster.id} onHuntSelect={(hunt) => selectHunt(hunt)} />
-            <ParticipantAdapter roster={roster} />
+            <HuntsList rosterId={props.roster.id} onHuntSelect={(hunt) => selectHunt(hunt)} />
+            <ParticipantAdapter roster={props.roster} />
         </>
     );
 }
