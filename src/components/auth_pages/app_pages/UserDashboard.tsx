@@ -6,6 +6,7 @@ import HuntDetails from './hunts/HuntDetails';
 import { HuntWithProperties } from '../../../models/Hunt';
 import RostersList from './rosters/RostersList';
 import RosterDashboard from './rosters/RosterDashboard';
+import PermissionsAdapter from './permissions/PermissionsAdapter';
 
 export default function UserDashboard(props: RouteComponentProps) {
     const [currentRoster, setCurrentRoster] = useState<Roster | undefined>(undefined);
@@ -24,6 +25,7 @@ export default function UserDashboard(props: RouteComponentProps) {
     return (
         <>
             <Switch>
+                <Route path={AppPaths.permissionsPath()} component={PermissionsAdapter} />
                 <Route
                     path={AppPaths.rosterPath()}
                     render={(props) => {

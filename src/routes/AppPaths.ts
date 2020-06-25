@@ -14,7 +14,19 @@ export function rosterPath(roster: Roster | string = `:${ROSTER_ID_PARAM}`): str
     return `${ROSTERS_PATH}${rosterId}/`;
 }
 
-export const HUNT_ID_PARAM = 'huntId';
+export const PERMISSION_ID_PARAM = 'permissionId' as const;
+export const PERMISSIONS_EXTENSION = 'permissions/';
+/**
+ * Gets the app path for the permissions for the given roster.
+ * @param roster The roster for which the permissions should be fetched. If not set,
+ * then gets the generic AppPath with the param for the roster.
+ * @return The string path for the permissions for the given roster.
+ */
+export function permissionsPath(roster?: string | Roster): string {
+    return `${rosterPath(roster)}${PERMISSIONS_EXTENSION}`;
+}
+
+export const HUNT_ID_PARAM = 'huntId' as const;
 const HUNTS_EXTENSION = '/hunts/';
 export function huntPath(hunt: Hunt | string = `:${HUNT_ID_PARAM}`): string {
     const huntId: string = typeof hunt == 'string' ? hunt : hunt.id;

@@ -2,6 +2,8 @@ import Hunt from '../models/Hunt';
 import Roster from '../models/Roster';
 import License from '../models/License';
 import getId from '../util/identifiableHelper';
+import Participant from '../models/Participant';
+import Permission from '../models/Permission';
 
 export const CABLE_PATH = '/cable';
 
@@ -20,16 +22,16 @@ const ROUNDS_EXTENSION = 'rounds/';
 const MATCHES_EXTENSION = 'matches/';
 const LICENSES_EXTENSION = 'licenses/';
 
-export function rosterPath(rosterId: string): string {
-    return `${ROSTERS_PATH}${rosterId}/`;
+export function rosterPath(roster: string | Roster): string {
+    return `${ROSTERS_PATH}${getId(roster)}/`;
 }
 
-export function participantPath(participantId: string): string {
-    return `${API_ROOT_PATH}${PARTICIPANTS_EXTENSION}${participantId}/`;
+export function participantPath(participant: string | Participant): string {
+    return `${API_ROOT_PATH}${PARTICIPANTS_EXTENSION}${getId(participant)}/`;
 }
 
-export function participantsPath(rosterId: string): string {
-    return `${rosterPath(rosterId)}${PARTICIPANTS_EXTENSION}`;
+export function participantsPath(roster: string | Roster): string {
+    return `${rosterPath(roster)}${PARTICIPANTS_EXTENSION}`;
 }
 
 export function huntPath(hunt: string | Hunt): string {
@@ -66,4 +68,13 @@ export function licensePath(license: string | License): string {
 
 export function licensesPath(hunt: string | Hunt): string {
     return `${huntPath(getId(hunt))}${LICENSES_EXTENSION}`;
+}
+
+const PERMISSION_EXTENSION = 'permissions/';
+export function permissionsPath(roster: string | Roster): string {
+    return `${rosterPath(roster)}${PERMISSION_EXTENSION}`;
+}
+
+export function permissionPath(permission: string | Permission): string {
+    return `${API_ROOT_PATH}${PERMISSION_EXTENSION}${getId(permission)}`;
 }
