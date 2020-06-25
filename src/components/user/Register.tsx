@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createNotification } from '../../notification';
 import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './AuthForm';
-import { RouteComponentProps, Redirect, Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import * as AppPaths from '../../routes/AppPaths';
 import { isLoggedIn } from '../../auth';
 import { register } from '../../api/authAPI';
@@ -17,7 +17,7 @@ const EMAIL_KEY = Symbol('email');
 const PASSWORD_KEY = Symbol('password');
 const PASSWORD_CONFIRMATION_KEY = Symbol('password confirmation');
 
-export default function Register(props: RouteComponentProps): JSX.Element {
+export default function Register(): JSX.Element {
     const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.PendingSubmission);
 
     function handleSubmit(data: AuthData): void {
@@ -41,7 +41,6 @@ export default function Register(props: RouteComponentProps): JSX.Element {
     }
 
     if (submissionState === SubmissionState.Success || isLoggedIn()) {
-        props.history.goBack();
         return <Redirect to={AppPaths.LOGIN_PATH} />;
     }
 
