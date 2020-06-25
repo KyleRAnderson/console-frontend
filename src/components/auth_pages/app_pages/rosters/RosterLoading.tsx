@@ -1,4 +1,4 @@
-import { RouteComponentProps, Redirect } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 
 import React, { useState, useEffect } from 'react';
 import Roster from '../../../../models/Roster';
@@ -29,7 +29,7 @@ export default function RosterLoading(props: Props): JSX.Element {
 
     if (failedToLoadRoster) {
         props.history.goBack();
-        return <Redirect to={props.history.location} />;
+        return <></>;
     }
 
     return <Loading />;

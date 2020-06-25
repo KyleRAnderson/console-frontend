@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RouteComponentProps, Redirect } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import * as AppPaths from '../../../../routes/AppPaths';
 import { createNotification } from '../../../../notification';
 import { HuntWithProperties } from '../../../../models/Hunt';
@@ -46,7 +46,7 @@ export default function HuntDetails(props: Props): JSX.Element {
     }
     if (failedToLoadHunt) {
         props.history.goBack();
-        return <Redirect to={props.history.location} />;
+        return <></>;
     }
 
     function getNavigator(notificationSignal: MiniSignal): React.ReactNode {
