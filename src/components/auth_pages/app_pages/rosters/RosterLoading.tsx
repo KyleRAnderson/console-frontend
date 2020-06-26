@@ -1,10 +1,11 @@
 import { RouteComponentProps } from 'react-router-dom';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Roster from '../../../../models/Roster';
-import Loading from '../../../Loading';
 import { ROSTER_ID_PARAM } from '../../../../routes/AppPaths';
 import { getRoster } from '../../../../api/rosterAPI';
+import GenericLoader from '../../../generics/GenericLoader';
+import { AxiosResponse } from 'axios';
 
 export type Props = RouteComponentProps<{ [ROSTER_ID_PARAM]: string }> & {
     onLoad: (roster: Roster) => void;
@@ -13,24 +14,16 @@ export type Props = RouteComponentProps<{ [ROSTER_ID_PARAM]: string }> & {
 export default function RosterLoading(props: Props): JSX.Element {
     const [failedToLoadRoster, setFailedToLoadRoster] = useState<boolean>(false);
 
-    function loadRoster(rosterId: string): void {
-        getRoster(rosterId)
-            .then((response) => {
-                props.onLoad(response.data);
-            })
-            .catch(() => {
-                setFailedToLoadRoster(true);
-            });
-    }
-
-    useEffect(() => {
-        loadRoster(props.match.params[ROSTER_ID_PARAM]);
-    }, []);
-
     if (failedToLoadRoster) {
         props.history.goBack();
         return <></>;
     }
 
-    return <Loading />;
+    return (
+        <GenericLoader<AxiosResponse<Roster>>
+            loadFunction={() => getRoster(props.match.params[ROSTER_ID_PARAM])}
+            onLoaded={({ data: roster }) => props.onLoad(roster)}
+            onError={() => setFailedToLoadRoster(true)}
+        />
+    );
 }
