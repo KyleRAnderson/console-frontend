@@ -1,8 +1,8 @@
 import React from 'react';
 import GenericTable, { GenericTableProps } from './GenericTable';
-import { createNotification } from '../notification';
-import Loading from './Loading';
-import PaginationBar from './PaginationBar';
+import { createNotification } from '../../notification';
+import Loading from '../Loading';
+import PaginationBar from '../PaginationBar';
 import * as MiniSignal from 'mini-signals';
 
 /**

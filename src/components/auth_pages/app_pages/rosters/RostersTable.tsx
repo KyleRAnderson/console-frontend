@@ -1,7 +1,7 @@
 import React from 'react';
 import Roster from '../../../../models/Roster';
 import { ButtonGroup } from 'react-bootstrap';
-import GenericTable, { PropertyMapping } from '../../../GenericTable';
+import GenericTable, { PropertyMapping } from '../../../generics/GenericTable';
 
 export type RosterTableProps = {
     rosters: Roster[];

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ParticipantBase } from '../../../../models/Participant';
-import GenericTable, { PropertyMapping } from '../../../GenericTable';
+import GenericTable, { PropertyMapping } from '../../../generics/GenericTable';
 
 export type ParticipantsProps<T extends ParticipantBase> = {
     participants: T[];

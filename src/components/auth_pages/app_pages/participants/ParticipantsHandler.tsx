@@ -1,7 +1,7 @@
 import React from 'react';
 import ParticipantsTable, { ParticipantsProps } from './ParticipantsTable';
 import { ParticipantBase } from '../../../../models/Participant';
-import GenericPaginated from '../../../GenericPaginated';
+import GenericPaginated from '../../../generics/GenericPaginated';
 import { ParticipantPaginatedResponse } from '../../../../api/participantAPI';
 
 type Props<T extends ParticipantBase> = {

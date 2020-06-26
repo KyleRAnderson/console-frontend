@@ -1,7 +1,7 @@
 import Hunt from '../../../../models/Hunt';
 import { ButtonGroup } from 'react-bootstrap';
 import React from 'react';
-import GenericTable, { PropertyMapping } from '../../../GenericTable';
+import GenericTable, { PropertyMapping } from '../../../generics/GenericTable';
 
 export type HuntsTableProps = {
     hunts: Hunt[];

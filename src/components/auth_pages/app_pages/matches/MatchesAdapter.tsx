@@ -1,8 +1,8 @@
 import React from 'react';
 import { HuntWithProperties } from '../../../../models/Hunt';
-import GenericPaginated from '../../../GenericPaginated';
+import GenericPaginated from '../../../generics/GenericPaginated';
 import Match from '../../../../models/Match';
-import { PropertyMapping } from '../../../GenericTable';
+import { PropertyMapping } from '../../../generics/GenericTable';
 import * as MiniSignal from 'mini-signals';
 import { getMatches } from '../../../../api/matchAPI';
 
