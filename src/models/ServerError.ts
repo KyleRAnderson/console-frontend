@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { AxiosError } from 'axios';
+
 type ServerError = {
     status: string;
     title: string;
@@ -7,11 +9,11 @@ type ServerError = {
 };
 
 function isServerError(error: ServerError | any): boolean {
-    return 'status' in error && 'title' in error && 'detail' in error;
+    return error && 'status' in error && 'title' in error && 'detail' in error;
 }
 
-function asServerError(error: ServerError | any): ServerError | undefined {
-    return isServerError(error) ? (error as ServerError) : undefined;
+function asServerError(error: AxiosError<ServerError> | any): ServerError | undefined {
+    return isServerError(error.response?.data) ? (error.response?.data as ServerError) : undefined;
 }
 
 function toSentenceArray(error: ServerError['detail']): string[] {

@@ -71,13 +71,10 @@ async function extractError<T>(request: Promise<AxiosResponse<T>>): Promise<T> {
         const response = await request;
         return response.data;
     } catch (err) {
-        const axiosError: AxiosError = err as AxiosError;
-        if (axiosError && 'response' in axiosError) {
-            throw asServerError(axiosError.response?.data);
-        } else {
-            console.error(err);
-            throw undefined;
+        if (!Axios.isCancel(err)) {
+            throw err;
         }
+        throw undefined;
     }
 }
 

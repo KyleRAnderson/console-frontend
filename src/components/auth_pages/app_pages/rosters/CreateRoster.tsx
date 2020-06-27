@@ -3,7 +3,7 @@ import { Form, Col, Row, Button } from 'react-bootstrap';
 import { createNotification } from '../../../../notification';
 import Roster from '../../../../models/Roster';
 import { createRoster } from '../../../../api/rosterAPI';
-import ServerError, { formatForPrint } from '../../../../models/ServerError';
+import ServerError, { formatForPrint, asServerError } from '../../../../models/ServerError';
 
 type State = {
     name: string;
@@ -95,8 +95,8 @@ export default class CreateRoster extends React.Component<Props, State> {
             })
             .catch((error) => {
                 let errorMessage = '';
-                if (error) {
-                    const properError: ServerError = error as ServerError;
+                const properError: ServerError | undefined = asServerError(error);
+                if (properError) {
                     errorMessage = formatForPrint(properError.detail);
                 }
                 this.notifySuccess(false, errorMessage);

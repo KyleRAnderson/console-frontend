@@ -1,6 +1,5 @@
 import React from 'react';
 import { createNotification } from '../../notification';
-import Loading from '../Loading';
 import PaginationBar from '../PaginationBar';
 import * as MiniSignal from 'mini-signals';
 import BlockLoader from './BlockLoader';
@@ -12,6 +11,8 @@ import BlockLoader from './BlockLoader';
 export type Props<Model> = {
     /** A function called when this component has loaded the records. */
     updateValues: (values: Model[]) => void;
+    /** Function to be called when there is an error loading the data. */
+    onError?: (reason: unknown) => void;
     /** The table (or other element) to be used to display the records that this component loads. */
     table: React.ReactNode;
     /** A function that fetches the paginated values by current page and the number of records per page. */
@@ -53,8 +54,12 @@ export default class PaginatedLoader<Model> extends React.Component<Props<Model>
         this.setState({ ...this.state, numPages: numPages, loaded: true });
     }
 
-    private onError(): void {
-        createNotification({ message: 'Error loading data.', type: 'danger' });
+    private onError(reason: unknown): void {
+        if (!this.props.onError) {
+            createNotification({ message: 'Error loading data.', type: 'danger' });
+        } else {
+            this.props.onError(reason);
+        }
     }
 
     render() {
@@ -73,7 +78,7 @@ export default class PaginatedLoader<Model> extends React.Component<Props<Model>
                 isLoaded={this.state.loaded}
                 loadFunction={() => this.props.getValues(this.state.currentPage)}
                 onLoaded={(data) => this.onLoaded(data)}
-                onError={() => this.onError()}
+                onError={(reason) => this.onError(reason)}
             >
                 {this.props.table}
                 {paginationBar}

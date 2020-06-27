@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import CreateHunt from './CreateHunt';
 import { getHunts, HuntPost, createHunt, deleteHunt } from '../../../../api/huntAPI';
 import BlockLoader from '../../../generics/BlockLoader';
-import ServerError, { formatForPrint } from '../../../../models/ServerError';
+import ServerError, { formatForPrint, asServerError } from '../../../../models/ServerError';
 
 type State = {
     hunts: Hunt[];
@@ -73,8 +73,8 @@ class HuntsList extends React.Component<HuntsProps, State> {
             .catch((error) => {
                 let title: string | undefined;
                 let errorMessage = 'Failed to create hunt';
-                if (error) {
-                    const errorCasted: ServerError = error as ServerError;
+                const errorCasted: ServerError | undefined = asServerError(error);
+                if (errorCasted) {
                     title = errorMessage;
                     errorMessage = formatForPrint(errorCasted.detail);
                 }
