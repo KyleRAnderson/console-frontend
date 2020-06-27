@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios';
 import License, { LicenseBase } from '../models/License';
 import * as ApiRequest from './apiRequests';
 import * as ApiPaths from '../routes/ApiPaths';
@@ -16,23 +15,20 @@ type LicensePaginatedResponse = {
  * @param huntId The hunt ID of the licenses to be fetching
  * @param params The page and records per page parameters.
  */
-export function getLicenses(
-    huntId: string,
-    params: ApiRequest.PaginationParams,
-): Promise<AxiosResponse<LicensePaginatedResponse>> {
+export function getLicenses(huntId: string, params: ApiRequest.PaginationParams): Promise<LicensePaginatedResponse> {
     return ApiRequest.getItem<LicensePaginatedResponse>(ApiPaths.licensesPath(huntId), {
         params: params,
     });
 }
 
-export function getLicense(licenseId: string): Promise<AxiosResponse<License>> {
+export function getLicense(licenseId: string): Promise<License> {
     return ApiRequest.getItem<License>(ApiPaths.licensePath(licenseId));
 }
 
-export function deleteLicense(licenseId: string): Promise<AxiosResponse> {
+export function deleteLicense(licenseId: string): Promise<void> {
     return ApiRequest.deleteItem(ApiPaths.licensePath(licenseId));
 }
 
-export function createLicense(huntId: string, license: LicensePost): Promise<AxiosResponse<License>> {
+export function createLicense(huntId: string, license: LicensePost): Promise<License> {
     return ApiRequest.postItem<LicensePost, License>(ApiPaths.licensesPath(huntId), license);
 }

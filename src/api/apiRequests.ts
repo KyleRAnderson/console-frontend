@@ -1,5 +1,6 @@
 import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import * as MiniSignal from 'mini-signals';
+import { asServerError } from '../models/ServerError';
 
 export type PaginationParams = {
     page: number;
@@ -65,32 +66,43 @@ function setupErrorSubscriber<T>(request: Promise<AxiosResponse<T>>): Promise<Ax
     return request;
 }
 
-export function getItem<T>(path: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return setupErrorSubscriber(
+async function extractError<T>(request: Promise<AxiosResponse<T>>): Promise<T> {
+    try {
+        const response = await request;
+        return response.data;
+    } catch (err) {
+        const axiosError: AxiosError = err as AxiosError;
+        if (axiosError && 'response' in axiosError) {
+            throw asServerError(axiosError.response?.data);
+        } else {
+            console.error(err);
+            throw undefined;
+        }
+    }
+}
+
+function setupPromise<T>(promise: Promise<AxiosResponse<T>>): Promise<T> {
+    return extractError(setupErrorSubscriber(promise));
+}
+
+export function getItem<T>(path: string, config?: AxiosRequestConfig): Promise<T> {
+    return setupPromise(
         Axios.get<T>(path, { headers: getRequestHeaders(), ...config }),
     );
 }
 
-export function postItem<T, U = unknown>(
-    path: string,
-    item: T,
-    config?: AxiosRequestConfig,
-): Promise<AxiosResponse<U>> {
-    return setupErrorSubscriber(
+export function postItem<T, U = void>(path: string, item: T, config?: AxiosRequestConfig): Promise<U> {
+    return setupPromise(
         Axios.post<U>(path, item, { headers: getRequestHeaders(), ...config }),
     );
 }
 
-export function deleteItem<T = unknown>(path: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return setupErrorSubscriber(
+export function deleteItem<T = void>(path: string, config?: AxiosRequestConfig): Promise<T> {
+    return setupPromise(
         Axios.delete<T>(path, { headers: getRequestHeaders(), ...config }),
     );
 }
 
-export function updateItem<T = unknown, U = unknown>(
-    path: string,
-    item: T,
-    config?: AxiosRequestConfig,
-): Promise<AxiosResponse<U>> {
-    return setupErrorSubscriber(Axios.patch(path, item, { headers: getRequestHeaders(), ...config }));
+export function updateItem<T = unknown, U = void>(path: string, item: T, config?: AxiosRequestConfig): Promise<U> {
+    return setupPromise(Axios.patch(path, item, { headers: getRequestHeaders(), ...config }));
 }

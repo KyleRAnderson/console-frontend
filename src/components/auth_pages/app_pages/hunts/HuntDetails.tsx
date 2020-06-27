@@ -19,7 +19,7 @@ export default function HuntDetails(props: Props): JSX.Element {
 
     function loadHunt(huntId: string) {
         getHunt(huntId)
-            .then(({ data }) => setCurrentHunt(data))
+            .then(setCurrentHunt)
             .catch(() => {
                 createNotification({ message: 'Failed to load hunt data.', type: 'danger' });
                 setFailedToLoadHunt(true);

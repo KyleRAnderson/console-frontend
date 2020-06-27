@@ -4,7 +4,7 @@ import { createNotification } from '../../../../notification';
 import HuntsTable from './HuntsTable';
 import { Button } from 'react-bootstrap';
 import CreateHunt from './CreateHunt';
-import { getHunts, HuntPost, createHunt, HuntErrorResponse, asHuntError, deleteHunt } from '../../../../api/huntAPI';
+import { getHunts, HuntPost, createHunt, deleteHunt } from '../../../../api/huntAPI';
 
 type State = {
     hunts: Hunt[];
@@ -60,17 +60,17 @@ class HuntsList extends React.Component<HuntsProps, State> {
 
     createHunt(hunt: HuntPost): void {
         createHunt(this.props.rosterId, hunt)
-            .then(({ data }) => {
+            .then((hunts) => {
                 createNotification({ message: 'Successfully created hunt.', type: 'success' });
-                this.setState({ ...this.state, hunts: [...this.state.hunts, data] });
+                this.setState({ ...this.state, hunts: [...this.state.hunts, hunts] });
             })
             .catch((error) => {
-                const errorCasted: HuntErrorResponse | undefined = asHuntError(error);
                 let title: string | undefined;
                 let errorMessage = 'Failed to create hunt';
-                if (errorCasted && errorCasted.response && errorCasted.response.data.detail.hunt.length > 0) {
+                if (error) {
+                    const errorCasted: ServerError = error as ServerError;
                     title = errorMessage;
-                    errorMessage = errorCasted.response.data.detail.hunt.join('\n');
+                    errorMessage = formatForPrint(errorCasted.detail);
                 }
                 createNotification({ title: title, message: errorMessage });
             });

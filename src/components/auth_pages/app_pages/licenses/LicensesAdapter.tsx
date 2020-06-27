@@ -1,9 +1,10 @@
 import React from 'react';
-import ParticipantsHandler, { ParticipantPaginatedResponse } from '../participants/ParticipantsHandler';
+import ParticipantsHandler from '../participants/ParticipantsHandler';
 import { ParticipantBase } from '../../../../models/Participant';
 import License from '../../../../models/License';
 import ParticipantsTable from '../participants/ParticipantsTable';
 import { getLicenses } from '../../../../api/licenseAPI';
+import { ParticipantPaginatedResponse } from '../../../../api/participantAPI';
 
 type Props = {
     huntId: string;
@@ -17,7 +18,7 @@ export default function LicensesAdapter(props: Props) {
         currentPage: number,
         recordsPerPage?: number,
     ): Promise<ParticipantPaginatedResponse<ParticipantWithEliminated>> {
-        const { data } = await getLicenses(props.huntId, { page: currentPage, per_page: recordsPerPage });
+        const data = await getLicenses(props.huntId, { page: currentPage, per_page: recordsPerPage });
         return {
             num_pages: data.num_pages,
             participants: data.licenses.map((license) => {

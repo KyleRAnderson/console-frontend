@@ -13,7 +13,7 @@ type Props = {
 
 export default function MatchesAdapter(props: Props): JSX.Element {
     async function loadMatches(page: number, matchesPerPage?: number): Promise<[Match[], number]> {
-        const { data } = await getMatches(props.hunt, { page: page, per_page: matchesPerPage });
+        const data = await getMatches(props.hunt, { page: page, per_page: matchesPerPage });
         return [data.matches, data.num_pages];
     }
 

@@ -22,8 +22,8 @@ export default class RostersList extends React.Component<Props, State> {
 
     componentDidMount() {
         getRosters()
-            .then((response) => {
-                this.setRosters(response.data);
+            .then((rosters) => {
+                this.setRosters(rosters);
             })
             .catch(() => {
                 createNotification({

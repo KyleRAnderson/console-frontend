@@ -2,7 +2,8 @@ import React from 'react';
 import { Form, Col, Row, Button } from 'react-bootstrap';
 import { createNotification } from '../../../../notification';
 import Roster from '../../../../models/Roster';
-import { createRoster, RosterErrorResponse, asRosterError } from '../../../../api/rosterAPI';
+import { createRoster } from '../../../../api/rosterAPI';
+import ServerError, { formatForPrint } from '../../../../models/ServerError';
 
 type State = {
     name: string;
@@ -87,16 +88,16 @@ export default class CreateRoster extends React.Component<Props, State> {
 
     makeRequest(rosterName: string, participant_properties: string[]) {
         createRoster({ name: rosterName, participant_properties: participant_properties })
-            .then((response) => {
+            .then((roster) => {
                 this.clearForm();
                 this.notifySuccess();
-                this.props.onSuccessfulCreate?.(response.data);
+                this.props.onSuccessfulCreate?.(roster);
             })
             .catch((error) => {
                 let errorMessage = '';
-                const errorFormatted: RosterErrorResponse | undefined = asRosterError(error);
-                if (errorFormatted) {
-                    errorMessage = errorFormatted.response?.data.detail.roster.join('\n') || '';
+                if (error) {
+                    const properError: ServerError = error as ServerError;
+                    errorMessage = formatForPrint(properError.detail);
                 }
                 this.notifySuccess(false, errorMessage);
                 this.props.onFailureToCreate?.();

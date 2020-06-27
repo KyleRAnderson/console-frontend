@@ -1,6 +1,5 @@
 import User, { UserBase } from '../models/User';
 import * as ApiRequest from './apiRequests';
-import { AxiosResponse } from 'axios';
 import * as ApiPaths from '../routes/ApiPaths';
 import { storeAuthentication, clearLogin } from '../auth';
 
@@ -17,7 +16,7 @@ type ResetPasswordPatch = {
     user: { password: string; password_confirmation: string; reset_password_token: string };
 };
 
-async function requestAwaiter(requestPromise: Promise<AxiosResponse<unknown>>): Promise<boolean> {
+async function requestAwaiter(requestPromise: Promise<unknown>): Promise<boolean> {
     try {
         await requestPromise;
         return true;
@@ -31,13 +30,13 @@ export async function login(email: string, password: string): Promise<boolean> {
     let success = false;
 
     try {
-        const response = await ApiRequest.postItem<LoginPost, User>(
+        const user = await ApiRequest.postItem<LoginPost, User>(
             ApiPaths.USERS_LOGIN_PATH,
             { user: { email: email, password: password } },
             undefined,
         );
-        email = response.data.email;
-        userID = response.data.id;
+        email = user.email;
+        userID = user.id;
         storeAuthentication(email, userID);
         success = true;
     } finally {

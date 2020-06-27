@@ -3,24 +3,23 @@ import Match, { MatchBase } from '../models/Match';
 import * as ApiRequest from './apiRequests';
 import * as ApiPaths from '../routes/ApiPaths';
 import Hunt from '../models/Hunt';
-import { AxiosResponse } from 'axios';
 type PaginatedMatches = PaginatedResponse & {
     matches: Match[];
 };
 
-export function getMatches(hunt: Hunt | string, pageParams: ApiRequest.PaginationParams) {
+export function getMatches(hunt: Hunt | string, pageParams: ApiRequest.PaginationParams): Promise<PaginatedMatches> {
     return ApiRequest.getItem<PaginatedMatches>(ApiPaths.matchesPath(hunt), { params: pageParams });
 }
 
-export function getMatch(hunt: Hunt | string, matchNumber: number): Promise<AxiosResponse<Match>> {
+export function getMatch(hunt: Hunt | string, matchNumber: number): Promise<Match> {
     return ApiRequest.getItem<Match>(ApiPaths.matchPath(hunt, matchNumber));
 }
 
-export function deleteMatch(hunt: Hunt | string, matchNumber: number): Promise<AxiosResponse> {
+export function deleteMatch(hunt: Hunt | string, matchNumber: number): Promise<void> {
     return ApiRequest.deleteItem(ApiPaths.matchPath(hunt, matchNumber));
 }
 
-export function postMatch(hunt: Hunt | string, match: MatchBase): Promise<AxiosResponse<Match>> {
+export function postMatch(hunt: Hunt | string, match: MatchBase): Promise<Match> {
     return ApiRequest.postItem<MatchBase, Match>(ApiPaths.matchesPath(hunt), match);
 }
 
@@ -33,7 +32,7 @@ type RootMatchmakeParams = {
     matchmake: MatchmakeParams;
 };
 
-export function matchmake(hunt: Hunt | string, params: MatchmakeParams): Promise<AxiosResponse> {
+export function matchmake(hunt: Hunt | string, params: MatchmakeParams): Promise<void> {
     return ApiRequest.postItem<RootMatchmakeParams>(ApiPaths.matchmakePath(hunt), {
         matchmake: params,
     });

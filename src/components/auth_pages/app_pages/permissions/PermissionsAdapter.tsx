@@ -11,13 +11,10 @@ type Props = RouteComponentProps<{ [ROSTER_ID_PARAM]: string }>;
 
 export default function PermissionsAdapter(props: Props): JSX.Element {
     async function getValues(currentPage: number, recordsPerPage?: number): Promise<[Permission[], number]> {
-        const { data: response }: { data: PermissionPaginatedResponse } = await getPermissions(
-            props.match.params[ROSTER_ID_PARAM],
-            {
-                page: currentPage,
-                per_page: recordsPerPage,
-            },
-        );
+        const response: PermissionPaginatedResponse = await getPermissions(props.match.params[ROSTER_ID_PARAM], {
+            page: currentPage,
+            per_page: recordsPerPage,
+        });
         return [response.permissions, response.num_pages];
     }
 
