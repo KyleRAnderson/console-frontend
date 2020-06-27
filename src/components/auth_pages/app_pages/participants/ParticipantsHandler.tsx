@@ -1,8 +1,8 @@
-import React from 'react';
-import ParticipantsTable, { ParticipantsProps } from './ParticipantsTable';
-import { ParticipantBase } from '../../../../models/Participant';
-import GenericPaginated from '../../../generics/GenericPaginated';
+import React, { useState } from 'react';
 import { ParticipantPaginatedResponse } from '../../../../api/participantAPI';
+import { ParticipantBase } from '../../../../models/Participant';
+import PaginatedLoader from '../../../generics/PaginatedLoader';
+import ParticipantsTable, { ParticipantsProps } from './ParticipantsTable';
 
 type Props<T extends ParticipantBase> = {
     participantProperties: string[];
@@ -13,19 +13,17 @@ type Props<T extends ParticipantBase> = {
 };
 
 export default function ParticipantsHandler<T extends ParticipantBase>(props: Props<T>): JSX.Element {
-    function getTable(participants: T[]): React.ReactNode {
-        return (
-            props.participantTable?.({
-                participantProperties: props.participantProperties,
-                participants: participants,
-            }) || <ParticipantsTable participantProperties={props.participantProperties} participants={participants} />
-        );
-    }
+    const [participants, setParticipants] = useState<T[]>([]);
+
+    const table: React.ReactNode = props.participantTable?.({
+        participantProperties: props.participantProperties,
+        participants: participants,
+    }) || <ParticipantsTable participantProperties={props.participantProperties} participants={participants} />;
 
     async function getParticipants(page: number, participantsPerPage?: number): Promise<[T[], number]> {
         const response = await props.getParticipants(page, participantsPerPage);
         return [response.participants, response.num_pages];
     }
 
-    return <GenericPaginated<T> getValues={getParticipants} table={getTable} />;
+    return <PaginatedLoader<T> getValues={getParticipants} updateValues={setParticipants} table={table} />;
 }

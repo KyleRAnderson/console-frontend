@@ -5,6 +5,8 @@ import HuntsTable from './HuntsTable';
 import { Button } from 'react-bootstrap';
 import CreateHunt from './CreateHunt';
 import { getHunts, HuntPost, createHunt, deleteHunt } from '../../../../api/huntAPI';
+import BlockLoader from '../../../generics/BlockLoader';
+import ServerError, { formatForPrint } from '../../../../models/ServerError';
 
 type State = {
     hunts: Hunt[];
@@ -23,16 +25,6 @@ class HuntsList extends React.Component<HuntsProps, State> {
         };
     }
 
-    componentDidMount() {
-        getHunts(this.props.rosterId)
-            .then((response) => {
-                this.setState({ ...this.state, hunts: response.data });
-            })
-            .catch(() => {
-                createNotification({ message: 'Error loading hunts.', type: 'danger' });
-            });
-    }
-
     render() {
         const actionButtons: (hunt: Hunt) => React.ReactNode = (hunt) => {
             return (
@@ -48,12 +40,26 @@ class HuntsList extends React.Component<HuntsProps, State> {
         };
 
         return (
-            <>
+            <BlockLoader<Hunt[]>
+                loadFunction={() => getHunts(this.props.rosterId)}
+                onLoaded={(hunts) => this.setHunts(hunts)}
+                onError={() => this.onError()}
+                isLoaded={this.state.hunts.length > 0}
+            >
                 <HuntsTable hunts={this.state.hunts} actionButtons={actionButtons} />
                 <CreateHunt onSubmission={(hunt) => this.createHunt(hunt)} />
-            </>
+            </BlockLoader>
         );
     }
+
+    setHunts(hunts: Hunt[]): void {
+        this.setState({ ...this.state, hunts: hunts });
+    }
+
+    onError(): void {
+        createNotification({ message: 'Error loading hunts.', type: 'danger' });
+    }
+
     goToHunt(hunt: Hunt) {
         this.props.onHuntSelect?.(hunt);
     }
