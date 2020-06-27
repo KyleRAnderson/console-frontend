@@ -22,8 +22,8 @@ export function getPermission(permissionId: string): Promise<Permission> {
     return ApiRequest.getItem<Permission>(ApiPaths.permissionPath(permissionId));
 }
 
-export function deletePermission(permissionId: string): Promise<void> {
-    return ApiRequest.deleteItem(ApiPaths.permissionPath(permissionId));
+export function deletePermission(permission: string | Permission): Promise<void> {
+    return ApiRequest.deleteItem(ApiPaths.permissionPath(permission));
 }
 
 export function createPermission(roster: string | Roster, permission: PermissionPost): Promise<Permission> {
