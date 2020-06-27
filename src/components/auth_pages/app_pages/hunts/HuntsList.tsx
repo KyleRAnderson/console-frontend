@@ -10,6 +10,7 @@ import ServerError, { formatForPrint, asServerError } from '../../../../models/S
 
 type State = {
     hunts: Hunt[];
+    loaded: boolean;
 };
 
 type HuntsProps = {
@@ -22,6 +23,7 @@ class HuntsList extends React.Component<HuntsProps, State> {
         super(props);
         this.state = {
             hunts: [],
+            loaded: false,
         };
     }
 
@@ -44,7 +46,7 @@ class HuntsList extends React.Component<HuntsProps, State> {
                 loadFunction={() => getHunts(this.props.rosterId)}
                 onLoaded={(hunts) => this.setHunts(hunts)}
                 onError={() => this.onError()}
-                isLoaded={this.state.hunts.length > 0}
+                isLoaded={this.state.loaded}
             >
                 <HuntsTable hunts={this.state.hunts} actionButtons={actionButtons} />
                 <CreateHunt onSubmission={(hunt) => this.createHunt(hunt)} />
@@ -53,7 +55,7 @@ class HuntsList extends React.Component<HuntsProps, State> {
     }
 
     setHunts(hunts: Hunt[]): void {
-        this.setState({ ...this.state, hunts: hunts });
+        this.setState({ ...this.state, hunts: hunts, loaded: true });
     }
 
     onError(): void {
