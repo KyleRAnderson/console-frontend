@@ -5,9 +5,9 @@ import * as AppPaths from '../../../routes/AppPaths';
 import HuntDetails from './hunts/HuntDetails';
 import { HuntWithProperties } from '../../../models/Hunt';
 import RostersList from './rosters/RostersList';
-import PermissionsAdapter from './permissions/PermissionsAdapter';
 import { Nav } from 'react-bootstrap';
 import RosterContext from './rosters/RosterContext';
+import PermissionsPage from './permissions/PermissionsPage';
 
 /**
  * setMenuItem: A function to call to set a menu item for this user's dashboard,
@@ -49,7 +49,7 @@ export default function UserDashboard(props: Props) {
     return (
         <>
             <Switch>
-                <Route path={AppPaths.permissionsPath()} component={PermissionsAdapter} />
+                <Route path={AppPaths.permissionsPath()} component={PermissionsPage} />
                 <Route
                     path={AppPaths.rosterPath()}
                     render={(props) => {
