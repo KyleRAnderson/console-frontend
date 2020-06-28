@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNotification } from '../../notification';
 import PaginationBar from '../PaginationBar';
-import * as MiniSignal from 'mini-signals';
+import MiniSignal from 'mini-signals';
 import BlockLoader from './BlockLoader';
 
 /**

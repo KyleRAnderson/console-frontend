@@ -3,7 +3,7 @@ import { HuntWithProperties } from '../../../../models/Hunt';
 import GenericPaginated from '../../../generics/GenericPaginated';
 import Match from '../../../../models/Match';
 import { PropertyMapping } from '../../../generics/GenericTable';
-import * as MiniSignal from 'mini-signals';
+import MiniSignal from 'mini-signals';
 import { getMatches } from '../../../../api/matchAPI';
 
 type Props = {

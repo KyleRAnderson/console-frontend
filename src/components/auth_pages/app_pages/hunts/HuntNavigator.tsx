@@ -6,7 +6,7 @@ import LicensesAdapter from '../licenses/LicensesAdapter';
 import HuntNav, { ActiveTab } from './HuntNav';
 import MatchesAdapter from '../matches/MatchesAdapter';
 import Matchmake from '../matches/Matchmake';
-import * as MiniSignal from 'mini-signals';
+import MiniSignal from 'mini-signals';
 
 type Props = RouteComponentProps<{ [AppPaths.HUNT_ID_PARAM]: string }> & {
     currentHunt: HuntWithProperties;
