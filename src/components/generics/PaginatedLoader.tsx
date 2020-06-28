@@ -39,6 +39,8 @@ export default class PaginatedLoader<Model> extends React.Component<Props<Model>
             numPages: 1,
             loaded: false,
         };
+        this.onLoaded = this.onLoaded.bind(this);
+        this.onError = this.onError.bind(this);
     }
 
     componentDidMount() {
@@ -77,8 +79,8 @@ export default class PaginatedLoader<Model> extends React.Component<Props<Model>
             <BlockLoader<[Model[], number]>
                 isLoaded={this.state.loaded}
                 loadFunction={() => this.props.getValues(this.state.currentPage)}
-                onLoaded={(data) => this.onLoaded(data)}
-                onError={(reason) => this.onError(reason)}
+                onLoaded={this.onLoaded}
+                onError={this.onError}
             >
                 {this.props.table}
                 {paginationBar}
