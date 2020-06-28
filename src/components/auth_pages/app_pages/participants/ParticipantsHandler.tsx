@@ -3,13 +3,15 @@ import { ParticipantPaginatedResponse } from '../../../../api/participantAPI';
 import { ParticipantBase } from '../../../../models/Participant';
 import PaginatedLoader from '../../../generics/PaginatedLoader';
 import ParticipantsTable, { ParticipantsProps } from './ParticipantsTable';
+import MiniSignal from 'mini-signals';
 
-type Props<T extends ParticipantBase> = {
+export type Props<T extends ParticipantBase> = {
     participantProperties: string[];
     getParticipants: (currentPage: number, recordsPerPage?: number) => Promise<ParticipantPaginatedResponse<T>>;
     participantTable?: (
         tableProps: Pick<ParticipantsProps<T>, 'participantProperties' | 'participants'>,
     ) => React.ReactNode;
+    updateSignal?: MiniSignal;
 };
 
 export default function ParticipantsHandler<T extends ParticipantBase>(props: Props<T>): JSX.Element {
@@ -25,5 +27,12 @@ export default function ParticipantsHandler<T extends ParticipantBase>(props: Pr
         return [response.participants, response.num_pages];
     }
 
-    return <PaginatedLoader<T> getValues={getParticipants} updateValues={setParticipants} table={table} />;
+    return (
+        <PaginatedLoader<T>
+            getValues={getParticipants}
+            updateValues={setParticipants}
+            table={table}
+            updateSignal={props.updateSignal}
+        />
+    );
 }

@@ -10,6 +10,7 @@ import { Modal, Button, Col } from 'react-bootstrap';
 
 export type Props = {
     roster: Roster | string;
+    onSuccess?: () => void;
 };
 
 export default function ParticipantsUploader(props: Props): JSX.Element {
@@ -25,9 +26,10 @@ export default function ParticipantsUploader(props: Props): JSX.Element {
     }
 
     function handleSuccess(): void {
-        createNotification({ type: 'success', message: 'Participants Uploading...' });
+        createNotification({ type: 'success', message: 'Participants Uploaded' });
         setShowModal(false);
         setErrorData(undefined);
+        props.onSuccess?.();
     }
 
     function handleError(error: unknown): void {
