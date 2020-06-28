@@ -17,6 +17,7 @@ export const USERS_PASSWORD_RESET_PATH: string = API_ROOT_PATH + 'password/';
 
 export const ROSTERS_PATH: string = API_ROOT_PATH + 'rosters/';
 const PARTICIPANTS_EXTENSION = 'participants/';
+const PARTICIPANT_UPLOAD_EXTENSION = 'upload/';
 const HUNTS_EXTENSION = 'hunts/';
 const ROUNDS_EXTENSION = 'rounds/';
 const MATCHES_EXTENSION = 'matches/';
@@ -32,6 +33,10 @@ export function participantPath(participant: string | Participant): string {
 
 export function participantsPath(roster: string | Roster): string {
     return `${rosterPath(roster)}${PARTICIPANTS_EXTENSION}`;
+}
+
+export function participantsUploadPath(roster: string | Roster): string {
+    return `${participantsPath(roster)}${PARTICIPANT_UPLOAD_EXTENSION}`;
 }
 
 export function huntPath(hunt: string | Hunt): string {
