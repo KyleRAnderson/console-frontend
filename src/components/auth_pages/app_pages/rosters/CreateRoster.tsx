@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Col, Row, Button } from 'react-bootstrap';
+import { Form, Col, Row, Button, Container } from 'react-bootstrap';
 import { createNotification } from '../../../../notification';
 import Roster from '../../../../models/Roster';
 import { createRoster } from '../../../../api/rosterAPI';
@@ -22,30 +22,32 @@ export default class CreateRoster extends React.Component<Props, State> {
 
     render() {
         return (
-            <Form onSubmit={(event: React.FormEvent<HTMLFormElement>) => this.submitForm(event)}>
-                <Row>
-                    <Col md="3">
-                        <Form.Control
-                            required
-                            placeholder="Roster Name"
-                            onChange={(change) => this.updateRosterName(change.target.value)}
-                            value={this.state.name}
-                        />
-                    </Col>
-                    <Col>
-                        <Form.Control
-                            placeholder="Participant Properties (comma-separated)"
-                            onChange={(change) => this.updateParticipantProperties(change.target.value)}
-                            value={this.state.participant_properties}
-                        />
-                    </Col>
-                    <Col md="3">
-                        <Button variant="primary" type="submit">
-                            Create Roster
-                        </Button>
-                    </Col>
-                </Row>
-            </Form>
+            <Container fluid>
+                <Form onSubmit={(event: React.FormEvent<HTMLFormElement>) => this.submitForm(event)}>
+                    <Row>
+                        <Col md="3">
+                            <Form.Control
+                                required
+                                placeholder="Roster Name"
+                                onChange={(change) => this.updateRosterName(change.target.value)}
+                                value={this.state.name}
+                            />
+                        </Col>
+                        <Col>
+                            <Form.Control
+                                placeholder="Participant Properties (comma-separated)"
+                                onChange={(change) => this.updateParticipantProperties(change.target.value)}
+                                value={this.state.participant_properties}
+                            />
+                        </Col>
+                        <Col md="3">
+                            <Button variant="primary" type="submit">
+                                Create Roster
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form>
+            </Container>
         );
     }
     submitForm(event: React.FormEvent<HTMLFormElement>): void {
