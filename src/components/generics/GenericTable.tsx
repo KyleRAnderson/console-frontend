@@ -67,7 +67,13 @@ export default function GenericTable<T>(props: GenericTableProps<T>): JSX.Elemen
                 <thead className="thead-dark">
                     <tr>
                         {props.propertyMappings.map((mapping, i) => {
-                            return typeof mapping[0] !== 'object' ? <th key={i}>{mapping[0]}</th> : mapping[0];
+                            return typeof mapping[0] !== 'object' ? (
+                                <th className="text-capitalize" key={i}>
+                                    {mapping[0]}
+                                </th>
+                            ) : (
+                                mapping[0]
+                            );
                         })}
                     </tr>
                 </thead>
