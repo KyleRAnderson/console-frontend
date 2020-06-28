@@ -70,6 +70,7 @@ export default class PaginatedLoader<Model> extends React.Component<Props<Model>
                 <PaginationBar
                     numPages={this.state.numPages}
                     includeFirstLast
+                    includeNextPrevious
                     onSetPage={(pageNum) => this.setPage(pageNum)}
                     currentPage={this.state.currentPage}
                 />
