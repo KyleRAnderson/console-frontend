@@ -1,6 +1,5 @@
 import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import * as MiniSignal from 'mini-signals';
-import { asServerError } from '../models/ServerError';
 
 export type PaginationParams = {
     page: number;
