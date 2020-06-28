@@ -1,7 +1,7 @@
 import React from 'react';
 import HuntsList from '../hunts/HuntsList';
 import Roster from '../../../../models/Roster';
-import ParticipantAdapter from '../participants/ParticipantAdapter';
+import ParticipantsView from '../participants/ParticipantsView';
 import Hunt, { HuntWithProperties } from '../../../../models/Hunt';
 
 export type Props = {
@@ -17,7 +17,7 @@ export default function RosterDashboard(props: Props): JSX.Element {
     return (
         <>
             <HuntsList rosterId={props.roster.id} onHuntSelect={(hunt) => selectHunt(hunt)} />
-            <ParticipantAdapter roster={props.roster} />
+            <ParticipantsView roster={props.roster} />
         </>
     );
 }

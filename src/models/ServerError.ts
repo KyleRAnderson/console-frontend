@@ -29,4 +29,4 @@ function formatForPrint(error: ServerError['detail']): string {
 }
 
 export default ServerError;
-export { isServerError, asServerError, formatForPrint };
+export { isServerError, asServerError, formatForPrint, toSentenceArray };
