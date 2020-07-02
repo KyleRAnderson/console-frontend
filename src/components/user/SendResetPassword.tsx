@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AuthForm, { AuthData, FieldMappings, emailField } from './AuthForm';
 import { createNotification } from '../../notification';
-import { sendPasswordResetRequest } from '../../api/authAPI';
+import { sendPasswordResetRequest } from '../../api/AuthAPI';
 
 const EMAIL_KEY = Symbol('email');
 export default function SendResetPassword(): JSX.Element {

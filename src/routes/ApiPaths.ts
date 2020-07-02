@@ -64,7 +64,7 @@ export function matchPath(hunt: string | Hunt, matchNumber: number): string {
 }
 const matchmakeExtension = 'matchmake/';
 export function matchmakePath(hunt: string | Hunt): string {
-    return `${huntPath(hunt)}${matchmakeExtension}`;
+    return `${matchesPath(hunt)}${matchmakeExtension}`;
 }
 
 export function licensePath(license: string | License): string {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import * as AppPaths from '../../../routes/AppPaths';
 import { Redirect } from 'react-router-dom';
-import { logout } from '../../../api/authAPI';
+import { logout } from '../../../api/AuthAPI';
 
 export default function LogoutButton(): JSX.Element {
     const [loggedOut, setLoggedOut] = useState<boolean>(false);
