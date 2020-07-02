@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AuthForm, { FieldMappings, emailField, AuthData } from './AuthForm';
 import { createNotification } from '../../notification';
-import { resendConfirmation } from '../../api/authAPI';
+import { resendConfirmation } from '../../api/AuthAPI';
 
 const EMAIL_KEY = Symbol('email');
 

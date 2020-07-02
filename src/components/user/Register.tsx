@@ -4,7 +4,7 @@ import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './
 import { Redirect, Link } from 'react-router-dom';
 import * as AppPaths from '../../routes/AppPaths';
 import { isLoggedIn } from '../../auth';
-import { register } from '../../api/authAPI';
+import { register } from '../../api/AuthAPI';
 
 enum SubmissionState {
     PendingSubmission,
