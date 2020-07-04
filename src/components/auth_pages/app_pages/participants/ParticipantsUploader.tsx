@@ -68,7 +68,9 @@ export default function ParticipantsUploader(props: Props): JSX.Element {
 
     const modal: React.ReactNode = errorData && (
         <Modal size="lg" show={showModal} onHide={hideErrors}>
-            <Modal.Header closeButton>Upload Errors</Modal.Header>
+            <Modal.Header closeButton>
+                <Modal.Title>Upload Errors</Modal.Title>
+            </Modal.Header>
             <Modal.Body>
                 <ParticipantErrors errors={errorData} />
             </Modal.Body>
