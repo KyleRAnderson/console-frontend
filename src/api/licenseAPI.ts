@@ -2,6 +2,7 @@ import License, { LicenseBase } from '../models/License';
 import * as ApiRequest from './apiRequests';
 import * as ApiPaths from '../routes/ApiPaths';
 import PartialBy from '../util/partialBy';
+import Hunt from '../models/Hunt';
 
 export type LicensePost = PartialBy<Omit<LicenseBase, 'participant'>, 'eliminated'> & { participant_id: string };
 
@@ -21,8 +22,16 @@ export function getLicenses(huntId: string, params: ApiRequest.PaginationParams)
     });
 }
 
-export function getLicense(licenseId: string): Promise<License> {
-    return ApiRequest.getItem<License>(ApiPaths.licensePath(licenseId));
+export function getLicense(license: string | License): Promise<License> {
+    return ApiRequest.getItem<License>(ApiPaths.licensePath(license));
+}
+
+export function deleteLicense(license: string | License): Promise<void> {
+    return ApiRequest.deleteItem(ApiPaths.licensePath(license));
+}
+
+export function createLicense(hunt: string | Hunt, license: LicensePost): Promise<License> {
+    return ApiRequest.postItem<LicensePost, License>(ApiPaths.licensesPath(hunt), license);
 }
 
 export function deleteLicense(licenseId: string): Promise<void> {
