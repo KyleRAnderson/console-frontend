@@ -5,7 +5,6 @@ import * as AppPaths from '../../../../routes/AppPaths';
 import LicensesAdapter from '../licenses/LicensesAdapter';
 import HuntNav, { ActiveTab } from './HuntNav';
 import MatchesAdapter from '../matches/MatchesAdapter';
-import Matchmake from '../matches/Matchmake';
 import MiniSignal from 'mini-signals';
 
 type Props = RouteComponentProps<{ [AppPaths.HUNT_ID_PARAM]: string }> & {
@@ -19,7 +18,6 @@ export default function HuntNavigator(props: Props): JSX.Element {
 
     const licensesPath: string = AppPaths.huntPath(currentHunt);
     const matchesPath: string = AppPaths.matchesPath(currentHunt);
-    const matchmakePath: string = AppPaths.matchmakePath(currentHunt);
 
     function goToHunt(): void {
         props.history.push(licensesPath);
@@ -27,10 +25,6 @@ export default function HuntNavigator(props: Props): JSX.Element {
 
     function goToMatches(): void {
         props.history.push(matchesPath);
-    }
-
-    function goToMatchmake(): void {
-        props.history.push(matchmakePath);
     }
 
     function goTo(tab: ActiveTab): void {
@@ -41,13 +35,10 @@ export default function HuntNavigator(props: Props): JSX.Element {
             case ActiveTab.Matches:
                 goToMatches();
                 break;
-            case ActiveTab.Matchmake:
-                goToMatchmake();
-                break;
         }
     }
 
-    let activeTab: ActiveTab = ActiveTab.None;
+    let activeTab: ActiveTab;
     switch (props.location.pathname) {
         case matchesPath:
             activeTab = ActiveTab.Matches;
@@ -55,8 +46,8 @@ export default function HuntNavigator(props: Props): JSX.Element {
         case licensesPath:
             activeTab = ActiveTab.Licenses;
             break;
-        case matchmakePath:
-            activeTab = ActiveTab.Matchmake;
+        default:
+            activeTab = ActiveTab.None;
             break;
     }
     const licensesAdapter: React.ReactNode = (
@@ -68,7 +59,9 @@ export default function HuntNavigator(props: Props): JSX.Element {
 
     return (
         <>
-            <HuntNav activeTab={activeTab} goTo={goTo} />
+            <Container fluid className="py-1">
+                <HuntNav activeTab={activeTab} goTo={goTo} />
+            </Container>
             <Switch>
                 <Route
                     exact
