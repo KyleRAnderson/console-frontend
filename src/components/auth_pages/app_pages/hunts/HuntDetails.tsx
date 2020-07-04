@@ -1,52 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import * as AppPaths from '../../../../routes/AppPaths';
 import { createNotification } from '../../../../notification';
 import { HuntWithProperties } from '../../../../models/Hunt';
-import Loading from '../../../Loading';
 import HuntNavigator from './HuntNavigator';
 import HuntSubscriptionHolder from './HuntSubscriptionHolder';
 import MiniSignal from 'mini-signals';
 import { getHunt } from '../../../../api/huntAPI';
+import BlockLoader from '../../../generics/BlockLoader';
 
 type Props = RouteComponentProps<{ [AppPaths.HUNT_ID_PARAM]: string }> & {
     hunt?: HuntWithProperties;
 };
 
 export default function HuntDetails(props: Props): JSX.Element {
-    const [currentHunt, setCurrentHunt] = useState<HuntWithProperties | undefined>(undefined);
-    const [failedToLoadHunt, setFailedToLoadHunt] = useState<boolean>(false);
+    const [currentHunt, setCurrentHunt] = useState<HuntWithProperties | undefined>(props.hunt);
 
-    function loadHunt(huntId: string) {
-        getHunt(huntId)
-            .then(setCurrentHunt)
-            .catch(() => {
-                createNotification({ message: 'Failed to load hunt data.', type: 'danger' });
-                setFailedToLoadHunt(true);
-            });
+    function loadHunt(): Promise<HuntWithProperties> {
+        return getHunt(props.match.params[AppPaths.HUNT_ID_PARAM]);
     }
 
-    useEffect(() => {
-        const loadedHunt: HuntWithProperties | undefined = props.hunt;
-        if (!loadedHunt) {
-            if (props.match.params[AppPaths.HUNT_ID_PARAM]) {
-                loadHunt(props.match.params[AppPaths.HUNT_ID_PARAM]);
-            } else {
-                setFailedToLoadHunt(true);
-            }
-        }
-
-        if (loadedHunt) {
-            setCurrentHunt(loadedHunt);
-        }
-    }, []);
-
-    if (!currentHunt) {
-        return <Loading />;
-    }
-    if (failedToLoadHunt) {
+    function onError(): void {
+        createNotification({ message: 'Failed to load hunt data.', type: 'danger' });
         props.history.goBack();
-        return <></>;
     }
 
     function getNavigator(notificationSignal: MiniSignal): React.ReactNode {
@@ -55,5 +31,14 @@ export default function HuntDetails(props: Props): JSX.Element {
         ) : null;
     }
 
-    return <HuntSubscriptionHolder hunt={currentHunt}>{getNavigator}</HuntSubscriptionHolder>;
+    return (
+        <BlockLoader<HuntWithProperties>
+            onError={onError}
+            isLoaded={!!currentHunt}
+            loadFunction={loadHunt}
+            onLoaded={setCurrentHunt}
+        >
+            <HuntSubscriptionHolder hunt={currentHunt as HuntWithProperties}>{getNavigator}</HuntSubscriptionHolder>
+        </BlockLoader>
+    );
 }
