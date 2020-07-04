@@ -39,9 +39,8 @@ export function matchesPath(hunt?: Hunt | string): string {
 }
 
 export const MATCHMAKE_EXTENSION = 'matchmake/';
-export function matchmakePath(hunt: Hunt | string): string {
-    return `${huntPath(hunt)}${MATCHMAKE_EXTENSION}`;
-}
+export const NEW_MATCH_EXTENSION = 'new_match/';
+export const NEXT_ROUND_EXTENSION = 'next_round/';
 
 export const CONFIRMATION_TOKEN_PARAM = 'confirmationToken' as const;
 export const CONFIRMATION_BASE_PATH = '/confirmation/';

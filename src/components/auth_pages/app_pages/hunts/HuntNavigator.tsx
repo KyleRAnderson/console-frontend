@@ -6,6 +6,8 @@ import LicensesAdapter from '../licenses/LicensesAdapter';
 import HuntNav, { ActiveTab } from './HuntNav';
 import MatchesAdapter from '../matches/MatchesAdapter';
 import MiniSignal from 'mini-signals';
+import HuntActions, { ACTION_ROUTES } from './HuntActions';
+import { Container } from 'react-bootstrap';
 
 type Props = RouteComponentProps<{ [AppPaths.HUNT_ID_PARAM]: string }> & {
     currentHunt: HuntWithProperties;
@@ -57,34 +59,39 @@ export default function HuntNavigator(props: Props): JSX.Element {
         />
     );
 
+    const possibleRouteExtensions = `(${Object.values(ACTION_ROUTES).join('|')})?`;
+
     return (
         <>
             <Container fluid className="py-1">
                 <HuntNav activeTab={activeTab} goTo={goTo} />
             </Container>
+            <Container fluid className="py-1">
+                <Route>
+                    <HuntActions {...props} currentHunt={currentHunt} />
+                </Route>
+            </Container>
             <Switch>
                 <Route
                     exact
-                    path={matchesPath}
+                    path={`${matchesPath}${possibleRouteExtensions}`}
                     render={(props) => {
                         return (
-                            <MatchesAdapter
-                                matchmakingCompleteSignal={matchmakeCompleteSignal}
-                                hunt={currentHunt}
-                                {...props}
-                            />
+                            <>
+                                <MatchesAdapter
+                                    matchmakingCompleteSignal={matchmakeCompleteSignal}
+                                    hunt={currentHunt}
+                                    {...props}
+                                />
+                            </>
                         );
                     }}
                 />
-                <Route
-                    exact
-                    path={matchmakePath}
-                    render={() => {
-                        return <Matchmake hunt={currentHunt} />;
-                    }}
-                />
+                <Route exact path={`${licensesPath}${possibleRouteExtensions}`}>
+                    {licensesAdapter}
+                </Route>
                 <Route>
-                    {props.match.isExact ? licensesAdapter : <Redirect to={AppPaths.huntPath(currentHunt)} />}
+                    <Redirect to={AppPaths.huntPath(currentHunt)} />
                 </Route>
             </Switch>
         </>

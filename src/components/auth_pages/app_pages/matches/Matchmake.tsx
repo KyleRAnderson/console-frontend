@@ -4,7 +4,7 @@ import MatchmakeForm from './MatchmakeForm';
 import { createNotification } from '../../../../notification';
 import { matchmake, MatchmakeParams } from '../../../../api/matchAPI';
 
-type Props = {
+export type Props = {
     hunt: HuntWithProperties;
     // Called after a request to matchmake has been submitted.
     onMatchmake?: (matchmakeParams: MatchmakeParams) => void;
