@@ -32,5 +32,5 @@ export function createPermission(roster: string | Roster, permission: Permission
 
 export function updatePermission(permission: Permission): Promise<Permission> {
     const post: PermissionPatch = { level: permission.level };
-    return ApiRequest.updateItem(ApiPaths.permissionPath(permission), post);
+    return ApiRequest.patchItem(ApiPaths.permissionPath(permission), post);
 }

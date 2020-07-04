@@ -87,7 +87,7 @@ export function getItem<T>(path: string, config?: AxiosRequestConfig): Promise<T
     );
 }
 
-export function postItem<T, U = void>(path: string, item: T, config?: AxiosRequestConfig): Promise<U> {
+export function postItem<T, U = void>(path: string, item?: T, config?: AxiosRequestConfig): Promise<U> {
     return setupPromise(
         Axios.post<U>(path, item, { headers: getRequestHeaders(), ...config }),
     );
@@ -99,6 +99,6 @@ export function deleteItem<T = void>(path: string, config?: AxiosRequestConfig):
     );
 }
 
-export function updateItem<T = unknown, U = void>(path: string, item: T, config?: AxiosRequestConfig): Promise<U> {
+export function patchItem<T = unknown, U = void>(path: string, item?: T, config?: AxiosRequestConfig): Promise<U> {
     return setupPromise(Axios.patch(path, item, { headers: getRequestHeaders(), ...config }));
 }

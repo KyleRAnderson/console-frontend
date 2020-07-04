@@ -82,7 +82,7 @@ export function resetPassword(
     newPasswordConfirmation: string,
 ): Promise<boolean> {
     return requestAwaiter(
-        ApiRequest.updateItem<ResetPasswordPatch>(ApiPaths.USERS_PASSWORD_RESET_PATH, {
+        ApiRequest.patchItem<ResetPasswordPatch>(ApiPaths.USERS_PASSWORD_RESET_PATH, {
             user: {
                 reset_password_token: resetToken,
                 password: newPassword,

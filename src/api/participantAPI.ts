@@ -40,7 +40,7 @@ export function deleteParticipant(participantId: string): Promise<void> {
 }
 
 export function updateParticipant(participantId: string, participant: ParticipantPost): Promise<Participant> {
-    return ApiRequest.updateItem<ParticipantPost, Participant>(ApiPaths.participantPath(participantId), participant);
+    return ApiRequest.patchItem<ParticipantPost, Participant>(ApiPaths.participantPath(participantId), participant);
 }
 
 export function uploadParticipants(roster: Roster | string, formData: FormData): Promise<void> {

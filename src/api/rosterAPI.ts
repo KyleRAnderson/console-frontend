@@ -23,5 +23,5 @@ export function createRoster(roster: RosterPost): Promise<Roster> {
 
 export function updateRoster(roster: Roster): Promise<Roster> {
     const post: RosterPost = { name: roster.name, participant_properties: roster.participant_properties };
-    return ApiRequest.updateItem(ApiPaths.rosterPath(roster), post);
+    return ApiRequest.patchItem(ApiPaths.rosterPath(roster), post);
 }

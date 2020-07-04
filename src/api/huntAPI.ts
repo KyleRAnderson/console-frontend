@@ -21,5 +21,5 @@ export function createHunt(rosterId: string, hunt: HuntPost): Promise<Hunt> {
 }
 
 export function updateHunt(huntId: string, hunt: HuntPost): Promise<Hunt> {
-    return ApiRequest.updateItem<HuntPost, Hunt>(ApiPaths.huntPath(huntId), hunt);
+    return ApiRequest.patchItem<HuntPost, Hunt>(ApiPaths.huntPath(huntId), hunt);
 }
