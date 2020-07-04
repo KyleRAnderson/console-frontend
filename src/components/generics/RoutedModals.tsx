@@ -1,5 +1,4 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import BooleanRoute from './BooleanRoute';
 
@@ -26,29 +25,29 @@ export default function RoutedModals(props: Props): JSX.Element {
         modalFooter?: React.ReactNode,
     ): React.ReactNode {
         return (
-            <BooleanRoute key={index} pathExtension={pathExtension}>
-                {(show) => {
-                    return (
-                        <Modal size="lg" show={show} onHide={props.onHide}>
-                            {modalTitle && (
-                                <Modal.Header closeButton>
-                                    <Modal.Title>{modalTitle}</Modal.Title>
-                                </Modal.Header>
-                            )}
-                            <Modal.Body>{node}</Modal.Body>
-                            {modalFooter && <Modal.Footer>{modalFooter}</Modal.Footer>}
-                        </Modal>
-                    );
-                }}
-            </BooleanRoute>
+            node && (
+                <BooleanRoute key={index} pathExtension={pathExtension}>
+                    {(show) => {
+                        return (
+                            <Modal size="lg" show={show} onHide={props.onHide}>
+                                {modalTitle && (
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>{modalTitle}</Modal.Title>
+                                    </Modal.Header>
+                                )}
+                                <Modal.Body>{node}</Modal.Body>
+                                {modalFooter && <Modal.Footer>{modalFooter}</Modal.Footer>}
+                            </Modal>
+                        );
+                    }}
+                </BooleanRoute>
+            )
         );
     }
 
-    return (
-        <Switch>
-            {props.routeMap.map(({ route, elementInModal, modalTitle: modalHeader, modalFooter }, i) => {
-                return route && routedModalFor(route, elementInModal, i, modalHeader, modalFooter);
-            })}
-        </Switch>
-    );
+    const routes = props.routeMap.map(({ route, elementInModal, modalTitle: modalHeader, modalFooter }, i) => {
+        return route && routedModalFor(route, elementInModal, i, modalHeader, modalFooter);
+    });
+
+    return <>{routes}</>;
 }
