@@ -34,10 +34,10 @@ export function createLicense(hunt: string | Hunt, license: LicensePost): Promis
     return ApiRequest.postItem<LicensePost, License>(ApiPaths.licensesPath(hunt), license);
 }
 
-export function deleteLicense(licenseId: string): Promise<void> {
-    return ApiRequest.deleteItem(ApiPaths.licensePath(licenseId));
+export function eliminateAll(hunt: string | Hunt): Promise<void> {
+    return ApiRequest.patchItem(ApiPaths.eliminateAllPath(hunt));
 }
 
-export function createLicense(huntId: string, license: LicensePost): Promise<License> {
-    return ApiRequest.postItem<LicensePost, License>(ApiPaths.licensesPath(huntId), license);
+export function eliminateHalf(hunt: string | Hunt): Promise<void> {
+    return ApiRequest.patchItem(ApiPaths.eliminateHalfPath(hunt));
 }

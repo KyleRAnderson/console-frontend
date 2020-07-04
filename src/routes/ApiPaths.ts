@@ -72,7 +72,17 @@ export function licensePath(license: string | License): string {
 }
 
 export function licensesPath(hunt: string | Hunt): string {
-    return `${huntPath(getId(hunt))}${LICENSES_EXTENSION}`;
+    return `${huntPath(hunt)}${LICENSES_EXTENSION}`;
+}
+
+export const ELIMINATE_ALL_EXTENSION = 'eliminate_all/';
+export function eliminateAllPath(hunt: string | Hunt): string {
+    return `${licensesPath(hunt)}${ELIMINATE_ALL_EXTENSION}`;
+}
+
+export const ELIMINATE_HALF_EXTENSION = 'eliminate_half/';
+export function eliminateHalfPath(hunt: string | Hunt): string {
+    return `${licensesPath(hunt)}${ELIMINATE_HALF_EXTENSION}`;
 }
 
 const PERMISSION_EXTENSION = 'permissions/';
