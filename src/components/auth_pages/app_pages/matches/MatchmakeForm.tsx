@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Card, Form, Button, Row, CardColumns, Col } from 'react-bootstrap';
+import { Card, Form, Button, Row, CardColumns, Col } from 'react-bootstrap';
 import { MatchmakeParams } from '../../../../api/matchAPI';
 
 export type Props = {
@@ -76,7 +76,7 @@ export default function MatchmakeForm(props: Props): JSX.Element {
     const propertyCards: React.ReactNode = props.participantProperties.map(generatePropertyCard);
 
     return (
-        <Container fluid>
+        <>
             <Row>
                 <Col>
                     <CardColumns>{propertyCards}</CardColumns>
@@ -89,6 +89,6 @@ export default function MatchmakeForm(props: Props): JSX.Element {
                     </Button>
                 </Col>
             </Row>
-        </Container>
+        </>
     );
 }

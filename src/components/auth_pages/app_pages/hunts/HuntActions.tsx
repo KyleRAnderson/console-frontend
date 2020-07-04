@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import Matchmake from '../matches/Matchmake';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
+import { Container } from 'react-bootstrap';
 
 type Props = RouteComponentProps & {
     currentHunt: HuntWithProperties;
@@ -49,7 +50,11 @@ export default function HuntActions(props: Props): JSX.Element {
 
     const routeMap: RouteSwitcherProps['routeMap'] = [
         {
-            elementInModal: <Matchmake hunt={props.currentHunt} onMatchmake={hideModals} />,
+            elementInModal: (
+                <Container fluid>
+                    <Matchmake hunt={props.currentHunt} onMatchmake={hideModals} />
+                </Container>
+            ),
             route: ACTION_ROUTES.matchmake,
             modalTitle: 'Matchmake',
         },
