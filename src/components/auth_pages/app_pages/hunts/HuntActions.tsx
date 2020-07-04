@@ -9,6 +9,8 @@ import { Container } from 'react-bootstrap';
 
 type Props = RouteComponentProps & {
     currentHunt: HuntWithProperties;
+    /** Function to be called if this component changes something and hunt data may need to be reloaded. */
+    onChanged?: () => void;
 };
 
 export const ACTION_ROUTES = {
@@ -46,6 +48,11 @@ export default function HuntActions(props: Props): JSX.Element {
         if (!isShowingModal(path)) {
             props.history.push(`${pathWithoutModals()}${path}`);
         }
+    }
+
+    function dispatchAndHide(): void {
+        props.onChanged?.();
+        hideModals();
     }
 
     const routeMap: RouteSwitcherProps['routeMap'] = [

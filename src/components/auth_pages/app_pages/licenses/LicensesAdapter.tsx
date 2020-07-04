@@ -1,12 +1,12 @@
 import React from 'react';
-import ParticipantsHandler from '../participants/ParticipantsHandler';
+import ParticipantsHandler, { Props as HandlerProps } from '../participants/ParticipantsHandler';
 import { ParticipantBase } from '../../../../models/Participant';
 import License from '../../../../models/License';
 import ParticipantsTable from '../participants/ParticipantsTable';
 import { getLicenses } from '../../../../api/licenseAPI';
 import { ParticipantPaginatedResponse } from '../../../../api/participantAPI';
 
-type Props = {
+type Props = Pick<HandlerProps<ParticipantWithEliminated>, 'updateSignal'> & {
     huntId: string;
     participantProperties: string[];
 };
@@ -55,6 +55,7 @@ export default function LicensesAdapter(props: Props) {
             getParticipants={loadLicenses}
             participantProperties={props.participantProperties}
             participantTable={participantsTableGenerator}
+            updateSignal={props.updateSignal}
         />
     );
 }

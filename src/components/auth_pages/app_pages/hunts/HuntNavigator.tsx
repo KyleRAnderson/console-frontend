@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { RouteComponentProps, Switch, Route, Redirect } from 'react-router-dom';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
@@ -15,11 +15,14 @@ type Props = RouteComponentProps<{ [AppPaths.HUNT_ID_PARAM]: string }> & {
 };
 
 export default function HuntNavigator(props: Props): JSX.Element {
+    const updateSignal = useRef<MiniSignal>(new MiniSignal());
     const currentHunt = props.currentHunt;
-    const matchmakeCompleteSignal = props.matchmakingCompleteSignal;
 
     const licensesPath: string = AppPaths.huntPath(currentHunt);
     const matchesPath: string = AppPaths.matchesPath(currentHunt);
+
+    // Relay through the matchmaking complete signal.
+    props.matchmakingCompleteSignal?.add(() => updateSignal.current.dispatch());
 
     function goToHunt(): void {
         props.history.push(licensesPath);
@@ -56,11 +59,11 @@ export default function HuntNavigator(props: Props): JSX.Element {
         <LicensesAdapter
             huntId={props.match.params[AppPaths.HUNT_ID_PARAM]}
             participantProperties={currentHunt.roster.participant_properties}
+            updateSignal={updateSignal.current}
         />
     );
 
     const possibleRouteExtensions = `(${Object.values(ACTION_ROUTES).join('|')})?`;
-
     return (
         <>
             <Container fluid className="py-1">
@@ -68,7 +71,11 @@ export default function HuntNavigator(props: Props): JSX.Element {
             </Container>
             <Container fluid className="py-1">
                 <Route>
-                    <HuntActions {...props} currentHunt={currentHunt} />
+                    <HuntActions
+                        onChanged={() => updateSignal.current.dispatch()}
+                        {...props}
+                        currentHunt={currentHunt}
+                    />
                 </Route>
             </Container>
             <Switch>
@@ -78,11 +85,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
                     render={(props) => {
                         return (
                             <>
-                                <MatchesAdapter
-                                    matchmakingCompleteSignal={matchmakeCompleteSignal}
-                                    hunt={currentHunt}
-                                    {...props}
-                                />
+                                <MatchesAdapter updateSignal={updateSignal.current} hunt={currentHunt} {...props} />
                             </>
                         );
                     }}

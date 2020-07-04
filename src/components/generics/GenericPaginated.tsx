@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import GenericTable, { GenericTableProps } from './GenericTable';
 import PaginatedLoader, { Props as LoaderProps } from './PaginatedLoader';
 
-type Props<Model> = Pick<GenericTableProps<Model>, 'propertyMappings'> &
+export type Props<Model> = Pick<GenericTableProps<Model>, 'propertyMappings'> &
     Pick<LoaderProps<Model>, 'getValues' | 'updateSignal'>;
 
 /**
