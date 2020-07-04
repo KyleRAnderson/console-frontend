@@ -6,6 +6,7 @@ import Matchmake from '../matches/Matchmake';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
 import { Container } from 'react-bootstrap';
+import NextRound from '../rounds/NextRound';
 
 type Props = RouteComponentProps & {
     currentHunt: HuntWithProperties;
@@ -71,7 +72,11 @@ export default function HuntActions(props: Props): JSX.Element {
             modalTitle: 'New Match',
         },
         {
-            elementInModal: null,
+            elementInModal: (
+                <Container fluid>
+                    <NextRound hunt={props.currentHunt} onUpdated={dispatchAndHide} />
+                </Container>
+            ),
             route: ACTION_ROUTES.nextRound,
             modalTitle: 'Next Round',
         },
