@@ -5,13 +5,7 @@ import { createNotification } from '../../notification';
 import * as AppPaths from '../../routes/AppPaths';
 import { resetPassword } from '../../api/AuthAPI';
 import { isLoggedIn } from '../../auth';
-
-enum SubmissionState {
-    Pending,
-    Submitting,
-    SubmissionSuccess,
-    SubmissionFailed,
-}
+import SubmissionState from './SubmissionState';
 
 const PASSWORD_KEY = Symbol('password');
 const PASSWORD_CONFIRMATION_KEY = Symbol('password_confirmation');
