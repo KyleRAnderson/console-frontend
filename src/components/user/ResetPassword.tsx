@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AuthForm, { FieldMappings, passwordField, AuthData } from './AuthForm';
+import AuthPage, { FieldMappings, passwordField, AuthData } from './AuthPage';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { createNotification } from '../../notification';
 import * as AppPaths from '../../routes/AppPaths';
@@ -57,7 +57,7 @@ export default function ResetPassword(
     });
 
     return (
-        <AuthForm
+        <AuthPage
             buttonLabel="Set Password"
             fieldMappings={fieldMappings}
             disableSubmit={submissionState === SubmissionState.Submitting}

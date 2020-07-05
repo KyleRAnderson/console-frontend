@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createNotification } from '../../notification';
-import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './AuthForm';
+import AuthPage, { AuthData, FieldMappings, emailField, passwordField } from './AuthPage';
 import { Redirect, Link } from 'react-router-dom';
 import * as AppPaths from '../../routes/AppPaths';
 import { isLoggedIn } from '../../auth';
@@ -59,13 +59,13 @@ export default function Register(): JSX.Element {
     });
 
     return (
-        <AuthForm
+        <AuthPage
             buttonLabel="Register"
             fieldMappings={fieldMappings}
             disableSubmit={submissionState === SubmissionState.Submitting}
             onSubmit={handleSubmit}
         >
             <Link to={AppPaths.CONFIRMATION_BASE_PATH}>Resend Confirmation Email</Link>
-        </AuthForm>
+        </AuthPage>
     );
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Container, Form, Button, Row, Col, FormControlProps } from 'react-bootstrap';
+import { Form, Button, Row, Col, FormControlProps } from 'react-bootstrap';
 import { PASSWORD_REGEX, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from '../../auth';
 
 type AcceptedKey = string | symbol;
@@ -20,7 +20,7 @@ export type AuthData = Map<AcceptedKey, string>;
 
 export type FieldMappings = Map<AcceptedKey, FieldProperty>;
 
-type Props = {
+export type Props = {
     // Using a map here because it preserves insertion order.
     fieldMappings: FieldMappings;
     onSubmit?: (data: AuthData) => void;
@@ -174,7 +174,7 @@ export default function AuthForm(props: Props): JSX.Element {
     }, []);
 
     return (
-        <Container fluid className="vw-100 vh-100  primary-color pt-3">
+        <>
             <Row className="justify-content-center">
                 <Col md="5">
                     <Form onSubmit={(event: React.FormEvent<HTMLElement>) => handleSubmit(event)} noValidate>
@@ -193,6 +193,6 @@ export default function AuthForm(props: Props): JSX.Element {
             <Row className="justify-content-center py-3">
                 <Col md="5">{props.children}</Col>
             </Row>
-        </Container>
+        </>
     );
 }

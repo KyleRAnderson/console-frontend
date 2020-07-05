@@ -4,7 +4,7 @@ import { RouteComponentProps, Redirect, Link } from 'react-router-dom';
 import * as AppPaths from '../../routes/AppPaths';
 import { isLoggedIn } from '../../auth';
 import { createNotification } from '../../notification';
-import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './AuthForm';
+import AuthPage, { AuthData, FieldMappings, emailField, passwordField } from './AuthPage';
 
 const EMAIL_KEY = Symbol('email');
 const PASSWORD_KEY = Symbol('password');
@@ -44,14 +44,14 @@ export default function Login(props: RouteComponentProps<{}, never, { from: stri
 
     return (
         <>
-            <AuthForm
+            <AuthPage
                 buttonLabel="Login"
                 fieldMappings={fieldMappings}
                 disableSubmit={submissionState === SubmissionState.Submitting}
                 onSubmit={handleSubmit}
             >
                 <Link to={AppPaths.RESET_PASSWORD_BASE_PATH}>Forgot password?</Link>
-            </AuthForm>
+            </AuthPage>
         </>
     );
 }
