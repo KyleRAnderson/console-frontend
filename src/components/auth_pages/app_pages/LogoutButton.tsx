@@ -14,9 +14,10 @@ export default function LogoutButton(): JSX.Element {
 
     const logoutButton: React.ReactNode = (
         <Button
-            className="custom-button"
+            variant="link"
             size="sm"
             type="button"
+            className="danger-link"
             onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => logoutButtonClicked(event)}
         >
             Logout

@@ -1,43 +1,48 @@
 import React, { useState } from 'react';
-import AuthPage, { FieldMappings, passwordField, AuthData } from './AuthPage';
-import { RouteComponentProps, Redirect } from 'react-router-dom';
+import { FieldMappings, passwordField, AuthData } from './AuthForm';
 import { createNotification } from '../../notification';
-import * as AppPaths from '../../routes/AppPaths';
-import { resetPassword } from '../../api/AuthAPI';
-import { isLoggedIn } from '../../auth';
+import { updatePassword } from '../../api/AuthAPI';
 import SubmissionState from './SubmissionState';
+import AuthPage from './AuthPage';
+import { LOGIN_PATH } from '../../routes/AppPaths';
+import { Redirect } from 'react-router-dom';
 
+const OLD_PASSWORD_KEY = Symbol('old_password');
 const PASSWORD_KEY = Symbol('password');
 const PASSWORD_CONFIRMATION_KEY = Symbol('password_confirmation');
 
-export default function ResetPassword(
-    props: RouteComponentProps<{ [AppPaths.PASSWORD_RESET_TOKEN_PARAM]: string }>,
-): JSX.Element {
+export type Props = {
+    /** Function to be called when the form is submitted. */
+    onSubmit?: () => void;
+};
+
+export default function UpdatePassword(props: Props): JSX.Element {
     const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.Pending);
 
-    const resetToken: string = props.match.params[AppPaths.PASSWORD_RESET_TOKEN_PARAM];
-
     function onSubmit(data: AuthData): void {
+        const oldPassword = data.get(OLD_PASSWORD_KEY);
         const newPassword = data.get(PASSWORD_KEY);
         const passwordConfirmation = data.get(PASSWORD_CONFIRMATION_KEY);
-        if (newPassword && passwordConfirmation) {
+        if (oldPassword && newPassword && passwordConfirmation) {
             setSubmissionState(SubmissionState.Submitting);
-            resetPassword(resetToken, newPassword, passwordConfirmation).then((success) => {
+            updatePassword(oldPassword, newPassword, passwordConfirmation).then((success) => {
                 setSubmissionState(success ? SubmissionState.SubmissionSuccess : SubmissionState.SubmissionFailed);
                 if (success) {
                     createNotification({ type: 'success', message: 'Password set' });
                 } else {
-                    createNotification({ type: 'danger', message: 'Error resetting password' });
+                    createNotification({ type: 'danger', message: 'Error setting password' });
                 }
+                props.onSubmit?.();
             });
         }
     }
 
-    if (submissionState === SubmissionState.SubmissionSuccess || isLoggedIn()) {
-        return <Redirect to={AppPaths.LOGIN_PATH} />;
+    if (submissionState === SubmissionState.SubmissionSuccess) {
+        return <Redirect to={LOGIN_PATH} push />;
     }
 
     const fieldMappings: FieldMappings = new Map();
+    fieldMappings.set(OLD_PASSWORD_KEY, passwordField);
     fieldMappings.set(PASSWORD_KEY, passwordField);
     fieldMappings.set(PASSWORD_CONFIRMATION_KEY, {
         label: 'Confirm Password',

@@ -4,21 +4,16 @@ import * as AppPaths from '../../routes/AppPaths';
 import Loading from '../Loading';
 import { createNotification } from '../../notification';
 import { confirm } from '../../api/AuthAPI';
-
-enum SubmissionState {
-    Pending,
-    FailedConfirmation,
-    ConfirmationSuccess,
-}
+import SubmissionState from './SubmissionState';
 
 export default function UserConfirmation(
     props: RouteComponentProps<{ [AppPaths.CONFIRMATION_TOKEN_PARAM]: string }>,
 ): JSX.Element {
-    const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.Pending);
+    const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.Submitting);
 
     function sendConfirmation(): void {
         confirm(props.match.params[AppPaths.CONFIRMATION_TOKEN_PARAM]).then((success) => {
-            setSubmissionState(success ? SubmissionState.ConfirmationSuccess : SubmissionState.FailedConfirmation);
+            setSubmissionState(success ? SubmissionState.SubmissionSuccess : SubmissionState.SubmissionFailed);
         });
     }
 
@@ -28,11 +23,11 @@ export default function UserConfirmation(
 
     let element: React.ReactNode;
     switch (submissionState) {
-        case SubmissionState.ConfirmationSuccess:
+        case SubmissionState.SubmissionSuccess:
             createNotification({ type: 'success', message: 'User Confirmed!' });
             element = <Redirect to={AppPaths.LOGIN_PATH} />;
             break;
-        case SubmissionState.FailedConfirmation:
+        case SubmissionState.SubmissionFailed:
             createNotification({
                 type: 'danger',
                 message: 'Failed to confirm user, token may have expired.',

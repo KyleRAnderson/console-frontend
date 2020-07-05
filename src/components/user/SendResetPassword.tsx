@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AuthForm, { AuthData, FieldMappings, emailField } from './AuthForm';
+import AuthPage, { AuthData, FieldMappings, emailField } from './AuthPage';
 import { createNotification } from '../../notification';
 import { sendPasswordResetRequest } from '../../api/AuthAPI';
 
@@ -26,7 +26,7 @@ export default function SendResetPassword(): JSX.Element {
     fieldMappings.set(EMAIL_KEY, emailField);
 
     return (
-        <AuthForm
+        <AuthPage
             buttonLabel="Reset Password"
             fieldMappings={fieldMappings}
             disableSubmit={isSubmitting}

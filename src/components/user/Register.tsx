@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
 import { createNotification } from '../../notification';
-import AuthForm, { AuthData, FieldMappings, emailField, passwordField } from './AuthForm';
+import AuthPage, { AuthData, FieldMappings, emailField, passwordField } from './AuthPage';
 import { Redirect, Link } from 'react-router-dom';
 import * as AppPaths from '../../routes/AppPaths';
 import { isLoggedIn } from '../../auth';
 import { register } from '../../api/AuthAPI';
-
-enum SubmissionState {
-    PendingSubmission,
-    Submitting,
-    Failed,
-    Success,
-}
+import SubmissionState from './SubmissionState';
 
 const EMAIL_KEY = Symbol('email');
 const PASSWORD_KEY = Symbol('password');
 const PASSWORD_CONFIRMATION_KEY = Symbol('password confirmation');
 
 export default function Register(): JSX.Element {
-    const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.PendingSubmission);
+    const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.Pending);
 
     function handleSubmit(data: AuthData): void {
         const email = data.get(EMAIL_KEY);
@@ -27,7 +21,7 @@ export default function Register(): JSX.Element {
         if (email && password && passwordConfirmation) {
             setSubmissionState(SubmissionState.Submitting);
             register(email, password, passwordConfirmation).then((success) => {
-                setSubmissionState(success ? SubmissionState.Success : SubmissionState.Failed);
+                setSubmissionState(success ? SubmissionState.SubmissionSuccess : SubmissionState.SubmissionFailed);
                 if (success) {
                     createNotification({
                         type: 'success',
@@ -40,7 +34,7 @@ export default function Register(): JSX.Element {
         }
     }
 
-    if (submissionState === SubmissionState.Success || isLoggedIn()) {
+    if (submissionState === SubmissionState.SubmissionSuccess || isLoggedIn()) {
         return <Redirect to={AppPaths.LOGIN_PATH} />;
     }
 
@@ -59,13 +53,13 @@ export default function Register(): JSX.Element {
     });
 
     return (
-        <AuthForm
+        <AuthPage
             buttonLabel="Register"
             fieldMappings={fieldMappings}
             disableSubmit={submissionState === SubmissionState.Submitting}
             onSubmit={handleSubmit}
         >
             <Link to={AppPaths.CONFIRMATION_BASE_PATH}>Resend Confirmation Email</Link>
-        </AuthForm>
+        </AuthPage>
     );
 }

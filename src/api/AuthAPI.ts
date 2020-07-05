@@ -6,14 +6,15 @@ import { storeAuthentication, clearLogin } from '../auth';
 type LoginPost = {
     user: UserBase & { password: string };
 };
-
 type RegisterPost = {
     user: UserBase & { password: string; password_confirmation: string };
 };
-
 type ConfirmationPost = { user: UserBase };
 type ResetPasswordPatch = {
     user: { password: string; password_confirmation: string; reset_password_token: string };
+};
+type UpdatePasswordPatch = {
+    user: { current_password: string; password: string; password_confirmation: string };
 };
 
 async function requestAwaiter(requestPromise: Promise<unknown>): Promise<boolean> {
@@ -85,6 +86,22 @@ export function resetPassword(
         ApiRequest.patchItem<ResetPasswordPatch>(ApiPaths.USERS_PASSWORD_RESET_PATH, {
             user: {
                 reset_password_token: resetToken,
+                password: newPassword,
+                password_confirmation: newPasswordConfirmation,
+            },
+        }),
+    );
+}
+
+export function updatePassword(
+    currentPassword: string,
+    newPassword: string,
+    newPasswordConfirmation: string,
+): Promise<boolean> {
+    return requestAwaiter(
+        ApiRequest.patchItem<UpdatePasswordPatch>(ApiPaths.USERS_REGISTRATIONS_PATH, {
+            user: {
+                current_password: currentPassword,
                 password: newPassword,
                 password_confirmation: newPasswordConfirmation,
             },

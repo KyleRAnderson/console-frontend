@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AuthForm, { FieldMappings, emailField, AuthData } from './AuthForm';
+import AuthPage, { FieldMappings, emailField, AuthData } from './AuthPage';
 import { createNotification } from '../../notification';
 import { resendConfirmation } from '../../api/AuthAPI';
 
@@ -27,7 +27,7 @@ export default function ResendConfirmation(): JSX.Element {
     fieldMappings.set(EMAIL_KEY, emailField);
 
     return (
-        <AuthForm
+        <AuthPage
             fieldMappings={fieldMappings}
             onSubmit={onSubmit}
             buttonLabel="Resend Confirmation"

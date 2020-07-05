@@ -1,8 +1,9 @@
 import React from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
-import LogoutButton from './LogoutButton';
-import * as AppPaths from '../../../routes/AppPaths';
+import { ButtonGroup, Nav, Navbar } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
+import * as AppPaths from '../../../routes/AppPaths';
+import ChangePasswordButton from './ChangePasswordButton';
+import LogoutButton from './LogoutButton';
 
 type Props = RouteComponentProps & {
     children?: React.ReactNode;
@@ -19,9 +20,10 @@ export default function UserNavbar(props: Props): JSX.Element {
                     {props.children}
                 </Nav>
                 <Nav>
-                    <Nav.Item>
+                    <ButtonGroup>
+                        <ChangePasswordButton />
                         <LogoutButton />
-                    </Nav.Item>
+                    </ButtonGroup>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
