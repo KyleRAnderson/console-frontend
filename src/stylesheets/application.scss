@@ -41,6 +41,15 @@ $text-forefront: white;
         }
     }
 }
+
+.danger-link.btn-link {
+    color: $reindeer-red;
+}
+
+.warning-link.btn-link {
+    color: #ff741f;
+}
+
 .hero {
     width: 100vw;
     height: 50vh;
