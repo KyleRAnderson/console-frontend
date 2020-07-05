@@ -11,6 +11,7 @@ import ResendConfirmation from '../components/user/ResendConfirmation';
 import ResetPassword from '../components/user/ResetPassword';
 import SendResetPassword from '../components/user/SendResetPassword';
 import NotFound from './NotFound';
+import UpdatePassword from '../components/user/UpdatePassword';
 
 export default function Index(): JSX.Element {
     return (
@@ -24,6 +25,7 @@ export default function Index(): JSX.Element {
                 <Route exact path={AppPaths.REGISTER_PATH} component={Register} />
                 <Route exact path={AppPaths.LOGIN_PATH} component={Login} />
                 <AuthRoute path={AppPaths.APP_ROOT} component={AppPage} />
+                <AuthRoute path={AppPaths.UPDATE_PASSWORD_PATH} component={UpdatePassword} />
                 <Route path="*" component={NotFound} />
             </Switch>
         </BrowserRouter>

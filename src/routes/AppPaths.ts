@@ -4,6 +4,19 @@ import Hunt from '../models/Hunt';
 export const ROOT = '/';
 export const LOGIN_PATH = '/login';
 export const REGISTER_PATH = '/register';
+export const UPDATE_PASSWORD_PATH = '/password/update';
+
+export const CONFIRMATION_TOKEN_PARAM = 'confirmationToken' as const;
+export const CONFIRMATION_BASE_PATH = '/confirmation/';
+export function confirmationPath(token = `:${CONFIRMATION_TOKEN_PARAM}`): string {
+    return `${CONFIRMATION_BASE_PATH}${token}`;
+}
+
+export const PASSWORD_RESET_TOKEN_PARAM = 'resetToken' as const;
+export const RESET_PASSWORD_BASE_PATH = '/reset_password/';
+export function resetPasswordPath(resetToken = `:${PASSWORD_RESET_TOKEN_PARAM}`): string {
+    return `${RESET_PASSWORD_BASE_PATH}${resetToken}`;
+}
 
 export const APP_ROOT = '/app';
 
@@ -41,16 +54,4 @@ export function matchesPath(hunt?: Hunt | string): string {
 export const MATCHMAKE_EXTENSION = 'matchmake/';
 export function matchmakePath(hunt: Hunt | string): string {
     return `${huntPath(hunt)}${MATCHMAKE_EXTENSION}`;
-}
-
-export const CONFIRMATION_TOKEN_PARAM = 'confirmationToken' as const;
-export const CONFIRMATION_BASE_PATH = '/confirmation/';
-export function confirmationPath(token = `:${CONFIRMATION_TOKEN_PARAM}`): string {
-    return `${CONFIRMATION_BASE_PATH}${token}`;
-}
-
-export const PASSWORD_RESET_TOKEN_PARAM = 'resetToken' as const;
-export const RESET_PASSWORD_BASE_PATH = '/reset_password/';
-export function resetPasswordPath(resetToken = `:${PASSWORD_RESET_TOKEN_PARAM}`): string {
-    return `${RESET_PASSWORD_BASE_PATH}${resetToken}`;
 }
