@@ -11,14 +11,22 @@ type LicensePaginatedResponse = {
     num_pages: number;
 };
 
+export type LicenseFilters = {
+    eliminated?: boolean;
+};
+
 /**
  * Gets the licenses associated with the hunt given by the ID.
  * @param huntId The hunt ID of the licenses to be fetching
  * @param params The page and records per page parameters.
  */
-export function getLicenses(huntId: string, params: ApiRequest.PaginationParams): Promise<LicensePaginatedResponse> {
+export function getLicenses(
+    huntId: string,
+    params: ApiRequest.PaginationParams,
+    filters?: LicenseFilters,
+): Promise<LicensePaginatedResponse> {
     return ApiRequest.getItem<LicensePaginatedResponse>(ApiPaths.licensesPath(huntId), {
-        params: params,
+        params: { ...params, ...filters },
     });
 }
 
