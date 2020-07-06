@@ -1,13 +1,13 @@
+import MiniSignal from 'mini-signals';
 import React, { useRef } from 'react';
-import { RouteComponentProps, Switch, Route, Redirect } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
-import LicensesAdapter from '../licenses/LicensesAdapter';
-import HuntNav, { ActiveTab } from './HuntNav';
+import LicensesList from '../licenses/LicensesList';
 import MatchesAdapter from '../matches/MatchesAdapter';
-import MiniSignal from 'mini-signals';
 import HuntActions, { ACTION_ROUTES } from './HuntActions';
-import { Container } from 'react-bootstrap';
+import HuntNav, { ActiveTab } from './HuntNav';
 
 type Props = RouteComponentProps<{ [AppPaths.HUNT_ID_PARAM]: string }> & {
     currentHunt: HuntWithProperties;
@@ -55,8 +55,8 @@ export default function HuntNavigator(props: Props): JSX.Element {
             activeTab = ActiveTab.None;
             break;
     }
-    const licensesAdapter: React.ReactNode = (
-        <LicensesAdapter
+    const licensesView: React.ReactNode = (
+        <LicensesList
             huntId={props.match.params[AppPaths.HUNT_ID_PARAM]}
             participantProperties={currentHunt.roster.participant_properties}
             updateSignal={updateSignal.current}
@@ -91,7 +91,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
                     }}
                 />
                 <Route exact path={`${licensesPath}${possibleRouteExtensions}`}>
-                    {licensesAdapter}
+                    {licensesView}
                 </Route>
                 <Route>
                     <Redirect to={AppPaths.huntPath(currentHunt)} />
