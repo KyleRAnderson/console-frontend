@@ -65,17 +65,15 @@ export default class PaginatedLoader<Model> extends React.Component<Props<Model>
     }
 
     render() {
-        const paginationBar: React.ReactNode =
-            this.state.numPages > 1 ? (
-                <PaginationBar
-                    numPages={this.state.numPages}
-                    includeFirstLast
-                    includeNextPrevious
-                    onSetPage={(pageNum) => this.setPage(pageNum)}
-                    currentPage={this.state.currentPage}
-                />
-            ) : null;
-
+        const paginationBar: React.ReactNode = (
+            <PaginationBar
+                numPages={this.state.numPages}
+                includeFirstLast
+                includeNextPrevious
+                onSetPage={(pageNum) => this.setPage(pageNum)}
+                currentPage={this.state.currentPage}
+            />
+        );
         return (
             <BlockLoader<[Model[], number]>
                 isLoaded={this.state.loaded}

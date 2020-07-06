@@ -4,15 +4,21 @@ import { Container, Row, Pagination } from 'react-bootstrap';
 // Largest amount of pages to show on either side of the current page.
 const MAX_NUMBERS = 3;
 
-type Props = {
+export type Props = {
     onSetPage?: (pageNumber: number) => void;
     includeFirstLast?: boolean;
     includeNextPrevious?: boolean;
     numPages: number;
     currentPage: number;
+    /** True to render the pagination bar even if there is only one page. Defaults to false. */
+    showForOnePage?: boolean;
 };
 
 export default function PaginationBar(props: Props): JSX.Element {
+    if (props.numPages <= 1 && !props.showForOnePage) {
+        return <></>;
+    }
+
     function createPage(page: number): React.ReactNode {
         return (
             <Pagination.Item key={page} onClick={() => props.onSetPage?.(page)} active={props.currentPage === page}>
