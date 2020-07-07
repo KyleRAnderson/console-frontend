@@ -6,6 +6,7 @@ import PaginatedElement from '../../../generics/PaginatedElement';
 import LoadUntilReady from '../../../generics/LoadUntilReady';
 import { Props as HandlerProps } from '../participants/ParticipantsHandler';
 import ParticipantsTable from '../participants/ParticipantsTable';
+import { createNotification } from '../../../../notification';
 
 export type Props = Pick<HandlerProps<ParticipantWithEliminated>, 'updateSignal'> & {
     huntId: string;
@@ -21,14 +22,16 @@ export default function LicensesAdapter(props: Props) {
     const [licenses, setLicenses] = useState<ParticipantWithEliminated[]>();
 
     function loadLicenses(): void {
-        getLicenses(props.huntId, { page: currentPage }, props.filters).then(({ num_pages: numPages, licenses }) => {
-            setNumPages(numPages);
-            setLicenses(
-                licenses.map((license) => {
-                    return { ...license.participant, eliminated: license.eliminated };
-                }),
-            );
-        });
+        getLicenses(props.huntId, { page: currentPage }, props.filters)
+            .then(({ num_pages: numPages, licenses }) => {
+                setNumPages(numPages);
+                setLicenses(
+                    licenses.map((license) => {
+                        return { ...license.participant, eliminated: license.eliminated };
+                    }),
+                );
+            })
+            .catch(() => createNotification({ type: 'danger', message: 'Failed to load licenses' }));
     }
 
     // Order of hooks here matters. Must update page number before loading.
