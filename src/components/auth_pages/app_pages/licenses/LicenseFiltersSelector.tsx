@@ -24,14 +24,11 @@ export default function LicenseFiltersSelector(props: Props): JSX.Element {
         <Form inline>
             <Form.Row>
                 <Col md="4">
-                    <Form.Group controlId="eliminatedFilter">
-                        <Form.Label>Eliminated</Form.Label>
-                        <Form.Control as="select" value={eliminatedValue} onChange={handleEliminatedChange}>
-                            <option value="">All</option>
-                            <option value="true">Eliminated</option>
-                            <option value="false">Not Eliminated</option>
-                        </Form.Control>
-                    </Form.Group>
+                    <Form.Control as="select" value={eliminatedValue} onChange={handleEliminatedChange}>
+                        <option value="">All</option>
+                        <option value="true">Eliminated</option>
+                        <option value="false">Not Eliminated</option>
+                    </Form.Control>
                 </Col>
             </Form.Row>
         </Form>
