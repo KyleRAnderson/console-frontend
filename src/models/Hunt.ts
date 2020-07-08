@@ -2,11 +2,13 @@ import Timestamps from './Timestamps';
 import Identifiable from './Identifiable';
 import Roster from './Roster';
 
+/** Base type of the hunt  */
 type HuntBase = {
     name: string;
     roster_id: string;
     current_match_id: number;
     num_active_licenses: number;
+    current_round_number: number;
 };
 
 type Hunt = Timestamps & Identifiable & HuntBase;
