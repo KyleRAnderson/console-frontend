@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getMatches } from '../../../../api/matchAPI';
+import { getMatches, MatchFilters } from '../../../../api/matchAPI';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import Match from '../../../../models/Match';
 import { Props as GenericPaginatedProps } from '../../../generics/GenericPaginated';
@@ -8,8 +8,9 @@ import PaginatedElement from '../../../generics/PaginatedElement';
 import LoadUntilReady from '../../../generics/LoadUntilReady';
 import { createNotification } from '../../../../notification';
 
-type Props = Pick<GenericPaginatedProps<Match>, 'updateSignal'> & {
+export type Props = Pick<GenericPaginatedProps<Match>, 'updateSignal'> & {
     hunt: HuntWithProperties;
+    filters?: MatchFilters;
 };
 
 export default function MatchesAdapter(props: Props): JSX.Element {
@@ -18,7 +19,7 @@ export default function MatchesAdapter(props: Props): JSX.Element {
     const [matches, setMatches] = useState<Match[]>();
 
     function loadMatches(): void {
-        getMatches(props.hunt, { page: currentPage })
+        getMatches(props.hunt, { page: currentPage }, props.filters)
             .then(({ matches, num_pages: numPages }) => {
                 setNumPages(numPages);
                 setMatches(matches);
@@ -27,7 +28,11 @@ export default function MatchesAdapter(props: Props): JSX.Element {
     }
 
     props.updateSignal?.add(loadMatches);
-    useEffect(loadMatches, [currentPage]);
+    // Order of useEffects is important here, need to update the page to 1 before loading again.
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [props.filters]);
+    useEffect(loadMatches, [currentPage, props.filters]);
 
     const propertyMappings: PropertyMapping<Match>[] = [
         ['First 1', (match) => match.licenses[0]?.participant?.first || ''],

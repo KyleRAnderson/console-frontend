@@ -5,7 +5,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
 import LicensesList from '../licenses/LicensesList';
-import MatchesAdapter from '../matches/MatchesAdapter';
+import MatchesList from '../matches/MatchesList';
 import HuntActions, { ACTION_ROUTES } from './HuntActions';
 import HuntNav, { ActiveTab } from './HuntNav';
 
@@ -85,7 +85,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
                     render={(props) => {
                         return (
                             <>
-                                <MatchesAdapter updateSignal={updateSignal.current} hunt={currentHunt} {...props} />
+                                <MatchesList updateSignal={updateSignal.current} hunt={currentHunt} {...props} />
                             </>
                         );
                     }}
