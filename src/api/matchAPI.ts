@@ -6,9 +6,17 @@ import Hunt from '../models/Hunt';
 type PaginatedMatches = PaginatedResponse & {
     matches: Match[];
 };
+export type MatchFilters = {
+    ongoing?: boolean;
+    round?: number | number[];
+};
 
-export function getMatches(hunt: Hunt | string, pageParams: ApiRequest.PaginationParams): Promise<PaginatedMatches> {
-    return ApiRequest.getItem<PaginatedMatches>(ApiPaths.matchesPath(hunt), { params: pageParams });
+export function getMatches(
+    hunt: Hunt | string,
+    pageParams: ApiRequest.PaginationParams,
+    filters?: MatchFilters,
+): Promise<PaginatedMatches> {
+    return ApiRequest.getItem<PaginatedMatches>(ApiPaths.matchesPath(hunt), { params: { ...pageParams, ...filters } });
 }
 
 export function getMatch(hunt: Hunt | string, matchNumber: number): Promise<Match> {
