@@ -8,7 +8,10 @@ import { asServerError, formatForPrint } from '../../../../models/ServerError';
 
 export type Props = {
     hunt: Hunt;
-    onUpdated?: () => void;
+    /** Function to call when a match is created.
+     * @param newRoundNumber The new properties updated on the hunt object.
+     */
+    onUpdated?: (updatedHuntProperties: Partial<Hunt>) => void;
 };
 
 /**
@@ -17,9 +20,9 @@ export type Props = {
 export default function NextRound(props: Props): JSX.Element {
     function createNewRound(): void {
         createRound(props.hunt, {})
-            .then(() => {
+            .then(({ number }) => {
                 createNotification({ type: 'success', message: 'Round created' });
-                props.onUpdated?.();
+                props.onUpdated?.({ current_round_number: number });
             })
             .catch((error) => {
                 const errorCasted = asServerError(error);

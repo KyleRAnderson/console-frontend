@@ -25,9 +25,20 @@ export default function HuntDetails(props: Props): JSX.Element {
         props.history.goBack();
     }
 
+    function handleHuntUpdated(newHuntProperties?: Partial<HuntWithProperties>): void {
+        if (currentHunt && newHuntProperties) {
+            setCurrentHunt({ ...currentHunt, ...newHuntProperties });
+        }
+    }
+
     function getNavigator(notificationSignal: MiniSignal): React.ReactNode {
         return currentHunt ? (
-            <HuntNavigator currentHunt={currentHunt} matchmakingCompleteSignal={notificationSignal} {...props} />
+            <HuntNavigator
+                onHuntPropertiesUpdated={handleHuntUpdated}
+                currentHunt={currentHunt}
+                matchmakingCompleteSignal={notificationSignal}
+                {...props}
+            />
         ) : null;
     }
 

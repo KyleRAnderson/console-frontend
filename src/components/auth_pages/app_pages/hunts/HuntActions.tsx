@@ -10,8 +10,10 @@ import NextRound from '../rounds/NextRound';
 
 type Props = RouteComponentProps & {
     currentHunt: HuntWithProperties;
-    /** Function to be called if this component changes something and hunt data may need to be reloaded. */
-    onChanged?: () => void;
+    /** Function to be called if this component changes something and hunt data may need to be reloaded.
+     * @param updatedHuntProperties The modified portion of the hunt properties.
+     */
+    onChanged?: (updatedHuntProperties?: Partial<HuntWithProperties>) => void;
 };
 
 export const ACTION_ROUTES = {
@@ -51,8 +53,8 @@ export default function HuntActions(props: Props): JSX.Element {
         }
     }
 
-    function dispatchAndHide(): void {
-        props.onChanged?.();
+    function dispatchAndHide(updatedHuntProperties?: Partial<HuntWithProperties>): void {
+        props.onChanged?.(updatedHuntProperties);
         hideModals();
     }
 

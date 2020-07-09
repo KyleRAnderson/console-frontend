@@ -11,6 +11,7 @@ import HuntNav, { ActiveTab } from './HuntNav';
 
 type Props = RouteComponentProps<{ [AppPaths.HUNT_ID_PARAM]: string }> & {
     currentHunt: HuntWithProperties;
+    onHuntPropertiesUpdated: (newHuntProperties?: Partial<HuntWithProperties>) => void;
     matchmakingCompleteSignal?: MiniSignal;
 };
 
@@ -71,11 +72,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
             </Container>
             <Container fluid className="py-1">
                 <Route>
-                    <HuntActions
-                        onChanged={() => updateSignal.current.dispatch()}
-                        {...props}
-                        currentHunt={currentHunt}
-                    />
+                    <HuntActions onChanged={props.onHuntPropertiesUpdated} {...props} currentHunt={currentHunt} />
                 </Route>
             </Container>
             <Switch>
