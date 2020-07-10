@@ -6,6 +6,12 @@ export type PaginationParams = {
     per_page?: number;
 };
 
+export type SearchParams = {
+    q?: string;
+};
+
+export type SearchPaginationParams = PaginationParams & SearchParams;
+
 export type FailureCodeSubscriber = {
     callback: (response: AxiosError) => void;
     code: number;
