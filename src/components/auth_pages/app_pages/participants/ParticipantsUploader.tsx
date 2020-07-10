@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import UploadForm from './UploadForm';
-import Roster from '../../../../models/Roster';
-import { uploadParticipants } from '../../../../api/participantAPI';
-import { createNotification } from '../../../../notification';
 import { AxiosError } from 'axios';
-import ParticipantErrors from './ParticipantErrors';
+import React, { useState } from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import { uploadParticipants } from '../../../../api/participantAPI';
 import ErrorParticipant from '../../../../models/ErrorParticipant';
-import { Modal, Button, Col } from 'react-bootstrap';
+import Roster from '../../../../models/Roster';
+import { createNotification } from '../../../../notification';
+import ParticipantErrors from './ParticipantErrors';
+import UploadForm from './UploadForm';
 
 export type Props = {
     roster: Roster | string;
@@ -84,15 +84,11 @@ export default function ParticipantsUploader(props: Props): JSX.Element {
 
     return (
         <>
-            <Col lg="4" md="6">
-                <UploadForm onUpload={uploadData} />
-            </Col>
+            <UploadForm onUpload={uploadData} />
             {errorData && (
-                <Col lg="4" md="6">
-                    <Button variant="warning" onClick={showErrors}>
-                        Show Errors
-                    </Button>
-                </Col>
+                <Button variant="warning" onClick={showErrors}>
+                    Show Errors
+                </Button>
             )}
             {modal}
         </>

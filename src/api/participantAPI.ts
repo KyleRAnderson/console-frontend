@@ -19,7 +19,7 @@ export type ParticipantOrdering = {
 
 export function getParticipants(
     roster: Roster | string,
-    params: ApiRequest.PaginationParams,
+    params: ApiRequest.SearchPaginationParams,
     ordering?: ParticipantOrdering,
 ): Promise<ParticipantPaginatedResponse<Participant>> {
     return ApiRequest.getItem<ParticipantPaginatedResponse<Participant>>(ApiPaths.participantsPath(roster), {
