@@ -6,6 +6,7 @@ export type Props = {
     /** Function to call with the new updated filters. */
     filtersChanged: (newFilters: LicenseFilters) => void;
     currentFilters: LicenseFilters;
+    children?: React.ReactNode;
 };
 
 export default function LicenseFiltersSelector(props: Props): JSX.Element {
@@ -21,8 +22,8 @@ export default function LicenseFiltersSelector(props: Props): JSX.Element {
     }
 
     return (
-        <Form inline>
-            <Form.Row>
+        <Form>
+            <Form.Row className="justify-content-between">
                 <Col md="4">
                     <Form.Control as="select" value={eliminatedValue} onChange={handleEliminatedChange}>
                         <option value="">All</option>
@@ -30,6 +31,7 @@ export default function LicenseFiltersSelector(props: Props): JSX.Element {
                         <option value="false">Not Eliminated</option>
                     </Form.Control>
                 </Col>
+                {props.children}
             </Form.Row>
         </Form>
     );

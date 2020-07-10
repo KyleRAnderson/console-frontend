@@ -22,7 +22,7 @@ export type LicenseFilters = {
  */
 export function getLicenses(
     huntId: string,
-    params: ApiRequest.PaginationParams,
+    params: ApiRequest.SearchPaginationParams,
     filters?: LicenseFilters,
 ): Promise<LicensePaginatedResponse> {
     return ApiRequest.getItem<LicensePaginatedResponse>(ApiPaths.licensesPath(huntId), {

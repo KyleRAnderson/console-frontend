@@ -12,6 +12,7 @@ export type Props = Pick<HandlerProps<ParticipantWithEliminated>, 'updateSignal'
     huntId: string;
     participantProperties: string[];
     filters?: LicenseFilters;
+    currentSearch?: string;
 };
 
 type ParticipantWithEliminated = ParticipantBase & Pick<License, 'eliminated'>;
@@ -22,7 +23,7 @@ export default function LicensesAdapter(props: Props) {
     const [licenses, setLicenses] = useState<ParticipantWithEliminated[]>();
 
     function loadLicenses(): void {
-        getLicenses(props.huntId, { page: currentPage }, props.filters)
+        getLicenses(props.huntId, { page: currentPage, q: props.currentSearch }, props.filters)
             .then(({ num_pages: numPages, licenses }) => {
                 setNumPages(numPages);
                 setLicenses(
@@ -37,9 +38,9 @@ export default function LicensesAdapter(props: Props) {
     // Order of hooks here matters. Must update page number before loading.
     useEffect(() => {
         setCurrentPage(1);
-    }, [props.filters]);
+    }, [props.filters, props.currentSearch]);
 
-    useEffect(loadLicenses, [currentPage, props.filters]);
+    useEffect(loadLicenses, [currentPage, props.filters, props.currentSearch]);
 
     const extraColumn: [string, (participant: ParticipantWithEliminated) => string] = [
         'Eliminated',
