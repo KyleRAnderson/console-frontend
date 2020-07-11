@@ -9,7 +9,7 @@ export type ParticipantsProps<T extends ParticipantBase> = {
      * is the <th> to go with the column, second entry is a function that takes the participant
      * and transforms it into the column entry. Extra columns go after participant properties by default.
      */
-    extraColumns?: [string, (participant: T) => string][];
+    extraColumns?: [React.ReactNode, (participant: T) => React.ReactNode][];
 };
 
 export default function ParticipantsTable<T extends ParticipantBase>(props: ParticipantsProps<T>): JSX.Element {

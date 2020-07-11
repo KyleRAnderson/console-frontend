@@ -1,17 +1,12 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
 import BooleanRoute from './BooleanRoute';
 
 export type Props = {
     routeMap: {
-        /** The element to display in the modal's title. */
-        modalTitle?: React.ReactNode;
-        /** The element to display in the modal's footer. */
-        modalFooter?: React.ReactNode;
-        /** The route for which this modal should be rendered. */
+        /** Either a function which takes a boolean to show and hide the modal, and renders the modal,
+         * or nothing to do nothing on click. */
+        modal?: ((show: boolean) => React.ReactNode) | null;
         route?: string;
-        /** The modal's content element. */
-        elementInModal: React.ReactNode;
     }[];
     onHide: () => void;
 };
@@ -19,34 +14,20 @@ export type Props = {
 export default function RoutedModals(props: Props): JSX.Element {
     function routedModalFor(
         pathExtension: string,
-        node: React.ReactNode,
+        modal: Props['routeMap'][number]['modal'],
         index: number,
-        modalTitle?: React.ReactNode,
-        modalFooter?: React.ReactNode,
     ): React.ReactNode {
         return (
-            node && (
+            modal && (
                 <BooleanRoute key={index} pathExtension={pathExtension}>
-                    {(show) => {
-                        return (
-                            <Modal size="lg" show={show} onHide={props.onHide}>
-                                {modalTitle && (
-                                    <Modal.Header closeButton>
-                                        <Modal.Title>{modalTitle}</Modal.Title>
-                                    </Modal.Header>
-                                )}
-                                <Modal.Body>{node}</Modal.Body>
-                                {modalFooter && <Modal.Footer>{modalFooter}</Modal.Footer>}
-                            </Modal>
-                        );
-                    }}
+                    {modal}
                 </BooleanRoute>
             )
         );
     }
 
-    const routes = props.routeMap.map(({ route, elementInModal, modalTitle: modalHeader, modalFooter }, i) => {
-        return route && routedModalFor(route, elementInModal, i, modalHeader, modalFooter);
+    const routes = props.routeMap.map(({ route, modal }, i) => {
+        return route && routedModalFor(route, modal, i);
     });
 
     return <>{routes}</>;

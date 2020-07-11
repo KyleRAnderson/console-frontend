@@ -1,12 +1,13 @@
 import React from 'react';
-import SwitchBar, { Props as SwitchBarProps } from './SwitchBar';
-import RoutedModals, { Props as RouteSwitcherProps } from '../../../generics/RoutedModals';
+import { Container } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import Matchmake from '../matches/Matchmake';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
-import { Container } from 'react-bootstrap';
+import { renderPropWrap } from '../../../generics/ModalWrapper';
+import RoutedModals, { Props as RouteSwitcherProps } from '../../../generics/RoutedModals';
+import Matchmake from '../matches/Matchmake';
 import NextRound from '../rounds/NextRound';
+import SwitchBar, { Props as SwitchBarProps } from './SwitchBar';
 
 type Props = RouteComponentProps & {
     currentHunt: HuntWithProperties;
@@ -16,7 +17,14 @@ type Props = RouteComponentProps & {
     onChanged?: (updatedHuntProperties?: Partial<HuntWithProperties>) => void;
 };
 
+type Mapping = {
+    modal: RouteSwitcherProps['routeMap'][number]['modal'];
+    route: RouteSwitcherProps['routeMap'][number]['route'];
+    title: React.ReactNode;
+};
+
 export const ACTION_ROUTES = {
+    addLicenses: AppPaths.ADD_LICENSES_EXTENSION,
     matchmake: AppPaths.MATCHMAKE_EXTENSION,
     nextRound: AppPaths.NEXT_ROUND_EXTENSION,
     newMatch: AppPaths.NEW_MATCH_EXTENSION,
@@ -58,34 +66,45 @@ export default function HuntActions(props: Props): JSX.Element {
         hideModals();
     }
 
-    const routeMap: RouteSwitcherProps['routeMap'] = [
+    const routeMap: Mapping[] = [
         {
-            elementInModal: (
-                <Container fluid>
-                    <Matchmake hunt={props.currentHunt} onMatchmake={hideModals} />
-                </Container>
-            ),
+            modal: null,
+            route: ACTION_ROUTES.addLicenses,
+            title: 'Add Participants',
+        },
+        {
+            modal: renderPropWrap({
+                node: (
+                    <Container fluid>
+                        <Matchmake hunt={props.currentHunt} onMatchmake={hideModals} />
+                    </Container>
+                ),
+                title: 'Matchmake',
+            }),
             route: ACTION_ROUTES.matchmake,
-            modalTitle: 'Matchmake',
+            title: 'Matchmake',
         },
         {
-            elementInModal: null,
+            modal: null,
             route: ACTION_ROUTES.newMatch,
-            modalTitle: 'New Match',
+            title: 'New Match',
         },
         {
-            elementInModal: (
-                <Container fluid>
-                    <NextRound hunt={props.currentHunt} onUpdated={dispatchAndHide} />
-                </Container>
-            ),
+            modal: renderPropWrap({
+                node: (
+                    <Container fluid>
+                        <NextRound hunt={props.currentHunt} onUpdated={dispatchAndHide} />
+                    </Container>
+                ),
+                title: 'Next Round',
+            }),
             route: ACTION_ROUTES.nextRound,
-            modalTitle: 'Next Round',
+            title: 'Next Round',
         },
     ];
 
-    const buttonMappings: SwitchBarProps['buttonMappings'] = routeMap.map(({ route, modalTitle: modalHeader }) => {
-        return { buttonContent: modalHeader, path: route };
+    const buttonMappings: SwitchBarProps['buttonMappings'] = routeMap.map(({ route, title }) => {
+        return { buttonContent: title, path: route };
     });
 
     return (

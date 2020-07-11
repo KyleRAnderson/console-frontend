@@ -1,17 +1,18 @@
+import MiniSignal from 'mini-signals';
 import React, { useEffect, useState } from 'react';
 import { getParticipants } from '../../../../api/participantAPI';
 import Participant from '../../../../models/Participant';
 import Roster from '../../../../models/Roster';
 import LoadUntilReady from '../../../generics/LoadUntilReady';
 import PaginatedElement from '../../../generics/PaginatedElement';
-import { Props as HandlerProps } from './ParticipantsHandler';
-import ParticipantsTable from './ParticipantsTable';
+import ParticipantsTable, { ParticipantsProps } from './ParticipantsTable';
 
 type Props = {
     roster: Roster;
-    updateSignal: HandlerProps<Participant>['updateSignal'];
+    updateSignal?: MiniSignal;
     /** The text to search for. */
     searchQuery?: string;
+    extraColumns: ParticipantsProps<Participant>['extraColumns'];
 };
 
 export default function ParticipantAdapter(props: Props): JSX.Element {
@@ -35,11 +36,14 @@ export default function ParticipantAdapter(props: Props): JSX.Element {
     }, [props.searchQuery]);
     useEffect(loadParticipants, [props.searchQuery, props.roster, currentPage]);
 
+    props.updateSignal?.add(loadParticipants);
+
     const participantsTable: React.ReactNode = (
         <LoadUntilReady isLoaded={!!participants}>
             <ParticipantsTable
                 participantProperties={props.roster.participant_properties}
                 participants={participants as Participant[]}
+                extraColumns={props.extraColumns}
             />
         </LoadUntilReady>
     );

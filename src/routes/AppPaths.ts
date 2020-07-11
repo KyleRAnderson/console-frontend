@@ -54,6 +54,7 @@ export function matchesPath(hunt?: Hunt | string): string {
 export const MATCHMAKE_EXTENSION = 'matchmake/';
 export const NEW_MATCH_EXTENSION = 'new_match/';
 export const NEXT_ROUND_EXTENSION = 'next_round/';
+export const ADD_LICENSES_EXTENSION = 'add_licenses/';
 
 export function matchmakePath(hunt: Hunt | string): string {
     return `${huntPath(hunt)}${MATCHMAKE_EXTENSION}`;
