@@ -1,8 +1,8 @@
-import React from 'react';
-import HuntsList from '../hunts/HuntsList';
-import Roster from '../../../../models/Roster';
-import ParticipantsView from '../participants/ParticipantsView';
+import React, { useState } from 'react';
 import Hunt, { HuntWithProperties } from '../../../../models/Hunt';
+import Roster from '../../../../models/Roster';
+import HuntsList from '../hunts/HuntsList';
+import ParticipantsView from '../participants/ParticipantsView';
 
 export type Props = {
     roster: Roster;
@@ -10,14 +10,21 @@ export type Props = {
 };
 
 export default function RosterDashboard(props: Props): JSX.Element {
+    const [hunts, setHunts] = useState<Hunt[]>();
+
     function selectHunt(hunt: Hunt): void {
         props.onSelectHunt?.({ ...hunt, roster: { participant_properties: props.roster.participant_properties } });
     }
 
     return (
         <>
-            <HuntsList rosterId={props.roster.id} onHuntSelect={(hunt) => selectHunt(hunt)} />
-            <ParticipantsView roster={props.roster} />
+            <HuntsList
+                hunts={hunts}
+                onHuntsUpdated={setHunts}
+                rosterId={props.roster.id}
+                onHuntSelect={(hunt) => selectHunt(hunt)}
+            />
+            <ParticipantsView hunts={hunts} roster={props.roster} />
         </>
     );
 }

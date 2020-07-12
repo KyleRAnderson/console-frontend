@@ -8,25 +8,15 @@ import { getHunts, HuntPost, createHunt, deleteHunt } from '../../../../api/hunt
 import BlockLoader from '../../../generics/BlockLoader';
 import ServerError, { formatForPrint, asServerError } from '../../../../models/ServerError';
 
-type State = {
-    hunts: Hunt[];
-    loaded: boolean;
-};
-
 type HuntsProps = {
     rosterId: string;
     onHuntSelect?: (hunt: Hunt) => void;
+    hunts: Hunt[] | undefined;
+    /** Function to call with the loaded hunts, for state storage. */
+    onHuntsUpdated: (hunts: Hunt[]) => void;
 };
 
-class HuntsList extends React.Component<HuntsProps, State> {
-    constructor(props: HuntsProps) {
-        super(props);
-        this.state = {
-            hunts: [],
-            loaded: false,
-        };
-    }
-
+export default class HuntsList extends React.Component<HuntsProps> {
     render() {
         const actionButtons: (hunt: Hunt) => React.ReactNode = (hunt) => {
             return (
@@ -46,16 +36,16 @@ class HuntsList extends React.Component<HuntsProps, State> {
                 loadFunction={() => getHunts(this.props.rosterId)}
                 onLoaded={(hunts) => this.setHunts(hunts)}
                 onError={() => this.onError()}
-                isLoaded={this.state.loaded}
+                isLoaded={this.props.hunts !== undefined}
             >
-                <HuntsTable hunts={this.state.hunts} actionButtons={actionButtons} />
+                <HuntsTable hunts={this.props.hunts as Hunt[]} actionButtons={actionButtons} />
                 <CreateHunt onSubmission={(hunt) => this.createHunt(hunt)} />
             </BlockLoader>
         );
     }
 
     setHunts(hunts: Hunt[]): void {
-        this.setState({ ...this.state, hunts: hunts, loaded: true });
+        this.props.onHuntsUpdated(hunts);
     }
 
     onError(): void {
@@ -68,9 +58,9 @@ class HuntsList extends React.Component<HuntsProps, State> {
 
     createHunt(hunt: HuntPost): void {
         createHunt(this.props.rosterId, hunt)
-            .then((hunts) => {
+            .then((newHunt) => {
                 createNotification({ message: 'Successfully created hunt.', type: 'success' });
-                this.setState({ ...this.state, hunts: [...this.state.hunts, hunts] });
+                this.props.onHuntsUpdated([...(this.props.hunts || []), newHunt]);
             })
             .catch((error) => {
                 let title: string | undefined;
@@ -88,14 +78,12 @@ class HuntsList extends React.Component<HuntsProps, State> {
         deleteHunt(hunt.id)
             .then(() => {
                 createNotification({ message: 'Successfully deleted hunt', type: 'success' });
-                const newHuntsList = [...this.state.hunts];
-                newHuntsList.splice(this.state.hunts.indexOf(hunt), 1);
-                this.setState({ ...this.state, hunts: newHuntsList });
+                const newHuntsList = [...(this.props.hunts || [])];
+                newHuntsList.splice(newHuntsList.indexOf(hunt), 1);
+                this.props.onHuntsUpdated(newHuntsList);
             })
             .catch(() => {
                 createNotification({ message: 'Failed to delete hunt.', type: 'danger' });
             });
     }
 }
-
-export default HuntsList;
