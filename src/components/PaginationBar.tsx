@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Pagination } from 'react-bootstrap';
+import { Pagination, Row } from 'react-bootstrap';
 
 // Largest amount of pages to show on either side of the current page.
 const MAX_NUMBERS = 3;
@@ -87,16 +87,14 @@ export default function PaginationBar(props: Props): JSX.Element {
     paginationItems.push(createPage(props.numPages));
 
     return (
-        <Container>
-            <Row className="justify-content-center">
-                <Pagination>
-                    {paginationFirstLast[0]}
-                    {paginationNextPrevious[0]}
-                    {paginationItems}
-                    {paginationNextPrevious[1]}
-                    {paginationFirstLast[1]}
-                </Pagination>
-            </Row>
-        </Container>
+        <Row className="justify-content-center">
+            <Pagination>
+                {paginationFirstLast[0]}
+                {paginationNextPrevious[0]}
+                {paginationItems}
+                {paginationNextPrevious[1]}
+                {paginationFirstLast[1]}
+            </Pagination>
+        </Row>
     );
 }

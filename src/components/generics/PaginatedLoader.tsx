@@ -1,7 +1,8 @@
+import MiniSignal from 'mini-signals';
 import React from 'react';
+import { Container } from 'react-bootstrap';
 import { createNotification } from '../../notification';
 import PaginationBar from '../PaginationBar';
-import MiniSignal from 'mini-signals';
 import BlockLoader from './BlockLoader';
 
 /**
@@ -66,13 +67,15 @@ export default class PaginatedLoader<Model> extends React.Component<Props<Model>
 
     render() {
         const paginationBar: React.ReactNode = (
-            <PaginationBar
-                numPages={this.state.numPages}
-                includeFirstLast
-                includeNextPrevious
-                onSetPage={(pageNum) => this.setPage(pageNum)}
-                currentPage={this.state.currentPage}
-            />
+            <Container>
+                <PaginationBar
+                    numPages={this.state.numPages}
+                    includeFirstLast
+                    includeNextPrevious
+                    onSetPage={(pageNum) => this.setPage(pageNum)}
+                    currentPage={this.state.currentPage}
+                />
+            </Container>
         );
         return (
             <BlockLoader<[Model[], number]>
