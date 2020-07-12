@@ -1,14 +1,15 @@
+import MiniSignal from 'mini-signals';
 import React, { useEffect, useState } from 'react';
 import { getLicenses, LicenseFilters } from '../../../../api/licenseAPI';
 import License from '../../../../models/License';
 import { ParticipantBase } from '../../../../models/Participant';
-import PaginatedElement from '../../../generics/PaginatedElement';
-import LoadUntilReady from '../../../generics/LoadUntilReady';
-import { Props as HandlerProps } from '../participants/ParticipantsHandler';
-import ParticipantsTable from '../participants/ParticipantsTable';
 import { createNotification } from '../../../../notification';
+import LoadUntilReady from '../../../generics/LoadUntilReady';
+import PaginatedElement from '../../../generics/PaginatedElement';
+import ParticipantsTable from '../participants/ParticipantsTable';
 
-export type Props = Pick<HandlerProps<ParticipantWithEliminated>, 'updateSignal'> & {
+export type Props = {
+    updateSignal: MiniSignal;
     huntId: string;
     participantProperties: string[];
     filters?: LicenseFilters;
@@ -23,7 +24,7 @@ export default function LicensesAdapter(props: Props) {
     const [licenses, setLicenses] = useState<ParticipantWithEliminated[]>();
 
     function loadLicenses(): void {
-        getLicenses(props.huntId, { page: currentPage, q: props.currentSearch }, props.filters)
+        getLicenses(props.huntId, { page: currentPage, q: props.currentSearch, ...props.filters })
             .then(({ num_pages: numPages, licenses }) => {
                 setNumPages(numPages);
                 setLicenses(
@@ -41,6 +42,13 @@ export default function LicensesAdapter(props: Props) {
     }, [props.filters, props.currentSearch]);
 
     useEffect(loadLicenses, [currentPage, props.filters, props.currentSearch]);
+
+    useEffect(() => {
+        const subscription = props.updateSignal.add(loadLicenses);
+        return () => {
+            subscription?.detach();
+        };
+    });
 
     const extraColumn: [string, (participant: ParticipantWithEliminated) => string] = [
         'Eliminated',
