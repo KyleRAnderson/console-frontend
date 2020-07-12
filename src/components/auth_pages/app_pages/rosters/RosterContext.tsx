@@ -1,11 +1,9 @@
 import React from 'react';
 import Roster from '../../../../models/Roster';
-import { RouteComponentProps } from 'react-router-dom';
-import { ROSTER_ID_PARAM } from '../../../../routes/AppPaths';
-import RosterLoading, { Props as LoaderProps } from './RosterLoading';
 import RosterDashboard, { Props as RosterDashboardProps } from './RosterDashboard';
+import RosterLoading, { Props as LoaderProps } from './RosterLoading';
 
-type Props = RouteComponentProps<{ [ROSTER_ID_PARAM]: string }> & {
+type Props = {
     /** The roster to be used in the context. Either a fully loaded roster, or a string id. */
     roster?: Roster;
     /** Function to be called if this component ends up loading the roster.  */

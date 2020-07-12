@@ -1,14 +1,14 @@
 import React from 'react';
-import SwitchBar, { Props as SwitchBarProps } from './SwitchBar';
-import RoutedModals, { Props as RouteSwitcherProps } from '../../../generics/RoutedModals';
-import { RouteComponentProps } from 'react-router-dom';
-import Matchmake from '../matches/Matchmake';
+import { Container } from 'react-bootstrap';
+import { useHistory, useLocation } from 'react-router-dom';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
-import { Container } from 'react-bootstrap';
+import RoutedModals, { Props as RouteSwitcherProps } from '../../../generics/RoutedModals';
+import Matchmake from '../matches/Matchmake';
 import NextRound from '../rounds/NextRound';
+import SwitchBar, { Props as SwitchBarProps } from './SwitchBar';
 
-type Props = RouteComponentProps & {
+type Props = {
     currentHunt: HuntWithProperties;
     /** Function to be called if this component changes something and hunt data may need to be reloaded.
      * @param updatedHuntProperties The modified portion of the hunt properties.
@@ -23,6 +23,8 @@ export const ACTION_ROUTES = {
 };
 
 export default function HuntActions(props: Props): JSX.Element {
+    const [location, history] = [useLocation(), useHistory()];
+
     function isShowingModal(paths?: string | string[]): boolean {
         let value: boolean;
         if (!paths) {
@@ -30,26 +32,26 @@ export default function HuntActions(props: Props): JSX.Element {
         } else if (Array.isArray(paths)) {
             value = paths.some(isShowingModal);
         } else {
-            value = new RegExp(`${paths.replace('/', '')}\/?`).test(props.location.pathname);
+            value = new RegExp(`${paths.replace('/', '')}\/?`).test(location.pathname);
         }
         return value;
     }
 
     function pathWithoutModals(): string {
-        return isShowingModal() ? props.location.pathname.replace(/[^\/]+\/?$/, '') : props.location.pathname;
+        return isShowingModal() ? location.pathname.replace(/[^\/]+\/?$/, '') : location.pathname;
     }
 
     function hideModals(): void {
         const newPath = pathWithoutModals();
-        if (newPath != props.location.pathname) {
+        if (newPath != location.pathname) {
             // Just remove the last part of the URL.
-            props.history.push(newPath);
+            history.push(newPath);
         }
     }
 
     function showModal(path: string): void {
         if (!isShowingModal(path)) {
-            props.history.push(`${pathWithoutModals()}${path}`);
+            history.push(`${pathWithoutModals()}${path}`);
         }
     }
 

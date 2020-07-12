@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
-import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
 import LicensesList from '../licenses/LicensesList';
@@ -8,7 +8,7 @@ import MatchesList from '../matches/MatchesList';
 import HuntActions, { ACTION_ROUTES } from './HuntActions';
 import HuntNav, { ActiveTab } from './HuntNav';
 
-type Props = RouteComponentProps & {
+type Props = {
     currentHunt: HuntWithProperties;
     onHuntPropertiesUpdated: (newHuntProperties?: Partial<HuntWithProperties>) => void;
     /** True if there are new matches to be loaded, false otherwise. */
@@ -19,16 +19,18 @@ type Props = RouteComponentProps & {
 
 export default function HuntNavigator(props: Props): JSX.Element {
     const currentHunt = props.currentHunt;
+    const history = useHistory();
+    const location = useLocation();
 
     const licensesPath: string = AppPaths.huntPath(currentHunt);
     const matchesPath: string = AppPaths.matchesPath(currentHunt);
 
     function goToHunt(): void {
-        props.history.push(licensesPath);
+        history.push(licensesPath);
     }
 
     function goToMatches(): void {
-        props.history.push(matchesPath);
+        history.push(matchesPath);
     }
 
     function goTo(tab: ActiveTab): void {
@@ -43,7 +45,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
     }
 
     let activeTab: ActiveTab;
-    switch (props.location.pathname) {
+    switch (location.pathname) {
         case matchesPath:
             activeTab = ActiveTab.Matches;
             break;
@@ -66,7 +68,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
             </Container>
             <Container fluid className="py-1">
                 <Route>
-                    <HuntActions onChanged={props.onHuntPropertiesUpdated} {...props} currentHunt={currentHunt} />
+                    <HuntActions onChanged={props.onHuntPropertiesUpdated} currentHunt={currentHunt} />
                 </Route>
             </Container>
             <Switch>

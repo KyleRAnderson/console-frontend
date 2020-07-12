@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { getHunt } from '../../../../api/huntAPI';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import { createNotification } from '../../../../notification';
@@ -7,21 +7,23 @@ import * as AppPaths from '../../../../routes/AppPaths';
 import LoadUntilReady from '../../../generics/LoadUntilReady';
 import HuntDetails from './HuntDetails';
 
-export type Props = RouteComponentProps<{ [AppPaths.HUNT_ID_PARAM]: string }> & {
+export type Props = {
     hunt?: HuntWithProperties;
 };
 
 export default function HuntLoader({ hunt, ...routeProps }: Props): JSX.Element {
     const [loadedHunt, setLoadedHunt] = useState<HuntWithProperties>();
     const previousHuntId = useRef<string | undefined>();
+    const history = useHistory();
+    const { [AppPaths.HUNT_ID_PARAM]: huntId } = useParams();
 
     function onError(): void {
         createNotification({ message: 'Failed to load hunt data.', type: 'danger' });
-        routeProps.history.goBack();
+        history.goBack();
     }
 
     function loadHunt(): void {
-        getHunt(routeProps.match.params[AppPaths.HUNT_ID_PARAM])
+        getHunt(huntId)
             .then((hunt) => {
                 setLoadedHunt(hunt);
             })
@@ -29,13 +31,13 @@ export default function HuntLoader({ hunt, ...routeProps }: Props): JSX.Element 
     }
 
     useEffect(() => {
-        const newHuntId = routeProps.match.params[AppPaths.HUNT_ID_PARAM];
+        const newHuntId = huntId;
         if (newHuntId !== previousHuntId.current && (previousHuntId.current !== undefined || !hunt)) {
             loadHunt();
         } else {
             setLoadedHunt(hunt);
         }
-    }, [hunt, routeProps.match.params[AppPaths.HUNT_ID_PARAM]]);
+    }, [hunt, huntId]);
 
     return (
         <LoadUntilReady isLoaded={!!loadedHunt}>

@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import HuntNavigator from './HuntNavigator';
 import NewMatchSubscription from './NewMatchSubscription';
-import { RouteComponentProps } from 'react-router-dom';
 import { createNotification } from '../../../../notification';
 
-export type Props = RouteComponentProps & {
+export type Props = {
     hunt: HuntWithProperties;
     /** Function to call in order to update the hunt. */
     updateHunt: (hunt: HuntWithProperties) => void;
@@ -13,7 +12,7 @@ export type Props = RouteComponentProps & {
     reloadHunt: () => void;
 };
 
-export default function HuntDetails({ hunt, updateHunt, reloadHunt, ...routeProps }: Props): JSX.Element {
+export default function HuntDetails({ hunt, updateHunt, reloadHunt }: Props): JSX.Element {
     const subscriptionHolder = useRef<NewMatchSubscription>();
     /** True if there are new matches in the hunt to load, false otherwise. */
     const [areNewMatches, setAreNewMatches] = useState<boolean>(false);
@@ -44,7 +43,6 @@ export default function HuntDetails({ hunt, updateHunt, reloadHunt, ...routeProp
             currentHunt={hunt}
             setNewMatches={setAreNewMatches}
             newMatches={areNewMatches}
-            {...routeProps}
         />
     );
 }
