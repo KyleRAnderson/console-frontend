@@ -28,10 +28,9 @@ export default function HuntDetails({ hunt, updateHunt, reloadHunt, ...routeProp
             subscriptionHolder.current?.cleanup();
         };
     }, []);
-    function onError(): void {
-        createNotification({ message: 'Failed to load hunt data.', type: 'danger' });
-        props.history.goBack();
-    }
+    useEffect(() => {
+        hunt.current_round_number === 0 && reloadHunt();
+    }, [areNewMatches]);
 
     function handleHuntUpdated(newHuntProperties?: Partial<HuntWithProperties>): void {
         if (newHuntProperties) {
