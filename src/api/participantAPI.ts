@@ -9,6 +9,11 @@ export type ParticipantPost = PartialBy<ParticipantBase, 'extras'>;
 export type ParticipantPaginatedResponse<U extends ParticipantBase> = PaginatedResponse & {
     participants: U[];
 };
+export type ParticipantFilters = {
+    /** ID of the hunt of which to show affiliated participants. */
+    exclude_hunt_id?: string;
+};
+
 /**
  * The properties that are orderable on the server end for the participant.
  */
@@ -19,7 +24,7 @@ export type ParticipantOrdering = {
 
 export function getParticipants(
     roster: Roster | string,
-    params: ApiRequest.SearchPaginationParams,
+    params: ApiRequest.SearchPaginationParams & Partial<ParticipantFilters>,
     ordering?: ParticipantOrdering,
 ): Promise<ParticipantPaginatedResponse<Participant>> {
     return ApiRequest.getItem<ParticipantPaginatedResponse<Participant>>(ApiPaths.participantsPath(roster), {
