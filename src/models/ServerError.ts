@@ -2,10 +2,21 @@
 
 import { AxiosError } from 'axios';
 
+/**
+ * The error attribute that exists on server records.
+ */
+type RecordError = {
+    [key: string]: string[];
+};
+
+/**
+ * The nicely formatted response that the server will send back when there are user
+ * errors with records.
+ */
 type ServerError = {
     status: string;
     title: string;
-    detail: { [key: string]: string[] };
+    detail: RecordError;
 };
 
 function isServerError(error: ServerError | any): boolean {
@@ -29,4 +40,4 @@ function formatForPrint(error: ServerError['detail']): string {
 }
 
 export default ServerError;
-export { isServerError, asServerError, formatForPrint, toSentenceArray };
+export { isServerError, asServerError, formatForPrint, toSentenceArray, RecordError };
