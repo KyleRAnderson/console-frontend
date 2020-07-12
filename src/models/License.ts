@@ -1,6 +1,7 @@
-import Timestamps from './Timestamps';
 import Identifiable from './Identifiable';
 import { ParticipantBase } from './Participant';
+import { RecordError } from './ServerError';
+import Timestamps from './Timestamps';
 
 type LicenseBase = {
     eliminated?: boolean;
@@ -15,5 +16,16 @@ type License = Identifiable &
         participant: ParticipantBase;
     };
 
+/**
+ * A license with validation errors.
+ * Timestamps and identifiable aren't guaranteed because the license record
+ * may not be persisted to the database.
+ */
+type LicenseWithErrors = Partial<Identifiable> &
+    Partial<Timestamps> &
+    Required<LicenseBase> & {
+        errors: RecordError;
+    };
+
 export default License;
-export { LicenseBase };
+export { LicenseBase, LicenseWithErrors };
