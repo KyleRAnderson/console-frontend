@@ -5,7 +5,7 @@ export type Props = {
     onUpload: (data: FormData) => void;
 };
 
-export default function UploadForm(props: Props): JSX.Element {
+export default function UploadControl(props: Props): JSX.Element {
     function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
         const file = event.target.files?.[0];
         if (file) {
@@ -16,11 +16,5 @@ export default function UploadForm(props: Props): JSX.Element {
         }
     }
 
-    return (
-        <Form>
-            <Form.Group>
-                <Form.File id="participantsFileUpload" label="Upload Participants" custom onChange={onChange} />
-            </Form.Group>
-        </Form>
-    );
+    return <Form.File id="participantsFileUpload" label="Upload Participants" custom onChange={onChange} />;
 }

@@ -6,7 +6,7 @@ import ErrorParticipant from '../../../../models/ErrorParticipant';
 import Roster from '../../../../models/Roster';
 import { createNotification } from '../../../../notification';
 import ParticipantErrors from './ParticipantErrors';
-import UploadForm from './UploadForm';
+import UploadControl from './UploadControl';
 
 export type Props = {
     roster: Roster | string;
@@ -84,7 +84,7 @@ export default function ParticipantsUploader(props: Props): JSX.Element {
 
     return (
         <>
-            <UploadForm onUpload={uploadData} />
+            <UploadControl onUpload={uploadData} />
             {errorData && (
                 <Button variant="warning" onClick={showErrors}>
                     Show Errors
