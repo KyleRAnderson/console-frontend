@@ -85,6 +85,11 @@ export function eliminateHalfPath(hunt: string | Hunt): string {
     return `${licensesPath(hunt)}${ELIMINATE_HALF_EXTENSION}`;
 }
 
+export const BULK_LICENSES_EXTENSION = 'bulk/';
+export function bulkCreateLicensesPath(hunt: string | Hunt): string {
+    return `${licensesPath(hunt)}${BULK_LICENSES_EXTENSION}`;
+}
+
 const PERMISSION_EXTENSION = 'permissions/';
 export function permissionsPath(roster: string | Roster): string {
     return `${rosterPath(roster)}${PERMISSION_EXTENSION}`;
