@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
-import PaginatedLoader, { Props as PaginationProps } from '../../../generics/PaginatedLoader';
-import GenericTable, { PropertyMapping } from '../../../generics/GenericTable';
-import Permission, { Role } from '../../../../models/Permission';
-import {
-    PermissionPaginatedResponse,
-    getPermissions,
-    updatePermission as patchPermission,
-    deletePermission as deletePermissionAPI,
-} from '../../../../api/permissionAPI';
-import { RouteComponentProps, Redirect } from 'react-router-dom';
-import { ROSTER_ID_PARAM } from '../../../../routes/AppPaths';
-import LevelSelect from './LevelSelect';
-import { createNotification } from '../../../../notification';
-import { Button } from 'react-bootstrap';
 import { AxiosError } from 'axios';
+import React, { useState } from 'react';
+import { Button } from 'react-bootstrap';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
+import {
+    deletePermission as deletePermissionAPI,
+    getPermissions,
+    PermissionPaginatedResponse,
+    updatePermission as patchPermission,
+} from '../../../../api/permissionAPI';
+import FormControlElement from '../../../../FormControlElement';
+import Permission, { Role } from '../../../../models/Permission';
+import { createNotification } from '../../../../notification';
 import * as AppPaths from '../../../../routes/AppPaths';
+import { ROSTER_ID_PARAM } from '../../../../routes/AppPaths';
+import GenericTable, { PropertyMapping } from '../../../generics/GenericTable';
+import PaginatedLoader, { Props as PaginationProps } from '../../../generics/PaginatedLoader';
+import LevelSelect from './LevelSelect';
 
 export type Props = RouteComponentProps<{ [ROSTER_ID_PARAM]: string }> &
     Pick<PaginationProps<Permission>, 'updateSignal'>;
@@ -33,7 +34,7 @@ export default function PermissionsAdapter(props: Props): JSX.Element {
     }
 
     // Known issue: This will not update the current owner if they promote someone else.
-    function updatePermission(event: React.ChangeEvent<HTMLInputElement>, permission: Permission): void {
+    function updatePermission(event: React.ChangeEvent<FormControlElement>, permission: Permission): void {
         function setPermissionChanging(permission: Permission, changing: boolean): void {
             setChangingPermissions({ ...changingPermissions, [permission.id]: changing });
         }

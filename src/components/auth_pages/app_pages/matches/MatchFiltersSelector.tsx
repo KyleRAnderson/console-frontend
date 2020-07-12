@@ -2,6 +2,7 @@ import React from 'react';
 import { Col, Form } from 'react-bootstrap';
 import Select, { OptionsType, ValueType } from 'react-select';
 import { MatchFilters } from '../../../../api/matchAPI';
+import FormControlElement from '../../../../FormControlElement';
 
 const STATE_SELECT_NAME = 'ongoing' as const;
 
@@ -20,7 +21,7 @@ export default function MatchFiltersSelector({ numRounds, currentFilters, ...pro
         props.setFilters({ ...currentFilters, ...changes });
     }
 
-    function handleFormChange({ target }: React.ChangeEvent<HTMLInputElement>): void {
+    function handleFormChange({ target }: React.ChangeEvent<FormControlElement>): void {
         const newFilters: MatchFilters = {};
         switch (target.name) {
             case STATE_SELECT_NAME:

@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Form, Button, Row, Col, FormControlProps } from 'react-bootstrap';
-import { PASSWORD_REGEX, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from '../../auth';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, Col, Form, FormControlProps, Row } from 'react-bootstrap';
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEX } from '../../auth';
+import FormControlElement from '../../FormControlElement';
 
 type AcceptedKey = string | symbol;
 /**
@@ -125,7 +126,7 @@ export default function AuthForm(props: Props): JSX.Element {
         return valid;
     }
 
-    function handleValueChanged(key: AcceptedKey, event: React.FormEvent<HTMLInputElement>): void {
+    function handleValueChanged(key: AcceptedKey, event: React.FormEvent<FormControlElement>): void {
         const value: string = event.currentTarget.value;
         const newCredentials = new Map(credentials).set(key, value);
         setCredentials(newCredentials);
@@ -146,7 +147,7 @@ export default function AuthForm(props: Props): JSX.Element {
                     type={mapping.type}
                     placeholder={mapping.placeholder}
                     value={credentials.get(key)}
-                    onChange={(e) => handleValueChanged(key, e as React.FormEvent<HTMLInputElement>)}
+                    onChange={(e) => handleValueChanged(key, e)}
                 />
                 <span className="error">
                     {/*If form has been submitted, we should show error. Otherwise, if length is not nothing, show error.*/}

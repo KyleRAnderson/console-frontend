@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Form } from 'react-bootstrap';
 import { LicenseFilters } from '../../../../api/licenseAPI';
+import FormControlElement from '../../../../FormControlElement';
 
 export type Props = {
     /** Function to call with the new updated filters. */
@@ -13,7 +14,7 @@ export default function LicenseFiltersSelector(props: Props): JSX.Element {
     const eliminatedValue: string =
         typeof props.currentFilters.eliminated === 'boolean' ? props.currentFilters.eliminated.toString() : '';
 
-    function handleEliminatedChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    function handleEliminatedChange(event: React.ChangeEvent<FormControlElement>): void {
         let newValue: boolean | undefined = undefined;
         if (event.target.value === 'true' || event.target.value === 'false') {
             newValue = event.target.value === 'true';

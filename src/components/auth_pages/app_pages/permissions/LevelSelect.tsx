@@ -1,10 +1,11 @@
 import React from 'react';
-import { Role, ROLES } from '../../../../models/Permission';
 import { Form } from 'react-bootstrap';
+import FormControlElement from '../../../../FormControlElement';
+import { Role, ROLES } from '../../../../models/Permission';
 
 export type Props = {
     level: Role;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange: (event: React.ChangeEvent<FormControlElement>) => void;
     disabled?: boolean;
 };
 

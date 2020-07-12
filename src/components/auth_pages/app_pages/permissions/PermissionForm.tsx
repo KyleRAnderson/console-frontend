@@ -4,6 +4,7 @@ import { PermissionPost } from '../../../../api/permissionAPI';
 import LevelSelect from './LevelSelect';
 import { Role } from '../../../../models/Permission';
 import { EMAIL_REGEX } from '../../../user/AuthForm';
+import FormControlElement from '../../../../FormControlElement';
 
 type Props = {
     onSubmit?: (permission: PermissionPost) => void;
@@ -18,12 +19,12 @@ export default function PermissionForm(props: Props): JSX.Element {
         return emailValid;
     }
 
-    function emailChanged(event: React.ChangeEvent<HTMLInputElement>): void {
+    function emailChanged(event: React.ChangeEvent<FormControlElement>): void {
         setPost({ ...post, email: event.currentTarget.value });
         setEmailValid(EMAIL_REGEX.test(event.currentTarget.value));
     }
 
-    function levelChanged(event: React.ChangeEvent<HTMLInputElement>): void {
+    function levelChanged(event: React.ChangeEvent<FormControlElement>): void {
         setPost({ ...post, level: event.currentTarget.value as Role });
     }
 
