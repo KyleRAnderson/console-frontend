@@ -3,14 +3,17 @@ import { getMatches, MatchFilters } from '../../../../api/matchAPI';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import Match from '../../../../models/Match';
 import { createNotification } from '../../../../notification';
-import { Props as GenericPaginatedProps } from '../../../generics/GenericPaginated';
 import GenericTable, { PropertyMapping } from '../../../generics/GenericTable';
 import LoadUntilReady from '../../../generics/LoadUntilReady';
 import PaginatedElement from '../../../generics/PaginatedElement';
 
-export type Props = Pick<GenericPaginatedProps<Match>, 'updateSignal'> & {
+export type Props = {
     hunt: HuntWithProperties;
     filters?: MatchFilters;
+    /** True when there are new matches, false otherwise. */
+    newMatches?: boolean;
+    /** Function to call when matches are loaded. Should be provided if newMatches is provided. */
+    onMatchesLoaded?: () => void;
 };
 
 export default function MatchesAdapter(props: Props): JSX.Element {
@@ -23,6 +26,7 @@ export default function MatchesAdapter(props: Props): JSX.Element {
             .then(({ matches, num_pages: numPages }) => {
                 setNumPages(numPages);
                 setMatches(matches);
+                props.onMatchesLoaded?.();
             })
             .catch(() => createNotification({ message: 'Failed to load matches', type: 'danger' }));
     }
@@ -33,11 +37,10 @@ export default function MatchesAdapter(props: Props): JSX.Element {
     }, [props.filters]);
     useEffect(loadMatches, [currentPage, props.filters]);
     useEffect(() => {
-        const subscription = props.updateSignal?.add(loadMatches);
-        return () => {
-            subscription?.detach();
-        };
-    });
+        if (props.newMatches) {
+            loadMatches();
+        }
+    }, [props.newMatches]);
 
     const propertyMappings: PropertyMapping<Match>[] = [
         ['First 1', (match) => match.licenses[0]?.participant?.first || ''],

@@ -1,5 +1,4 @@
-import MiniSignal from 'mini-signals';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Container } from 'react-bootstrap';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { HuntWithProperties } from '../../../../models/Hunt';
@@ -9,27 +8,20 @@ import MatchesList from '../matches/MatchesList';
 import HuntActions, { ACTION_ROUTES } from './HuntActions';
 import HuntNav, { ActiveTab } from './HuntNav';
 
-type Props = RouteComponentProps<{ [AppPaths.HUNT_ID_PARAM]: string }> & {
+type Props = RouteComponentProps & {
     currentHunt: HuntWithProperties;
     onHuntPropertiesUpdated: (newHuntProperties?: Partial<HuntWithProperties>) => void;
-    matchmakingCompleteSignal?: MiniSignal;
+    /** True if there are new matches to be loaded, false otherwise. */
+    newMatches?: boolean;
+    /** Function to set whether or not there are new matches. Should be provided if setNewMatches is provided. */
+    setNewMatches?: (newMatches: boolean) => void;
 };
 
 export default function HuntNavigator(props: Props): JSX.Element {
-    const updateSignal = useRef<MiniSignal>(new MiniSignal());
     const currentHunt = props.currentHunt;
 
     const licensesPath: string = AppPaths.huntPath(currentHunt);
     const matchesPath: string = AppPaths.matchesPath(currentHunt);
-
-    useEffect(() => {
-        // Relay through the matchmaking complete signal.
-        const subscription = props.matchmakingCompleteSignal?.add(() => updateSignal.current.dispatch());
-
-        return () => {
-            subscription?.detach();
-        };
-    });
 
     function goToHunt(): void {
         props.history.push(licensesPath);
@@ -63,11 +55,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
             break;
     }
     const licensesView: React.ReactNode = (
-        <LicensesList
-            huntId={props.match.params[AppPaths.HUNT_ID_PARAM]}
-            participantProperties={currentHunt.roster.participant_properties}
-            updateSignal={updateSignal.current}
-        />
+        <LicensesList huntId={currentHunt.id} participantProperties={currentHunt.roster.participant_properties} />
     );
 
     const possibleRouteExtensions = `(${Object.values(ACTION_ROUTES).join('|')})?`;
@@ -85,10 +73,15 @@ export default function HuntNavigator(props: Props): JSX.Element {
                 <Route
                     exact
                     path={`${matchesPath}${possibleRouteExtensions}`}
-                    render={(props) => {
+                    render={(routeProps) => {
                         return (
                             <>
-                                <MatchesList updateSignal={updateSignal.current} hunt={currentHunt} {...props} />
+                                <MatchesList
+                                    onMatchesLoaded={() => props.setNewMatches?.(false)}
+                                    newMatches={props.newMatches}
+                                    hunt={currentHunt}
+                                    {...routeProps}
+                                />
                             </>
                         );
                     }}

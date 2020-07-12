@@ -14,9 +14,9 @@ export type Props = {
  * Basic search bar with an included delay on search.
  */
 export default function SearchBar(props: Props): JSX.Element {
-    let delayTimer: NodeJS.Timeout;
+    let delayTimer: NodeJS.Timeout | undefined;
     function handleChange(event: React.ChangeEvent<FormControlElement>): void {
-        clearTimeout(delayTimer);
+        delayTimer && clearTimeout(delayTimer);
         const value = event.target.value.length > 0 ? event.target.value : undefined;
         delayTimer = setTimeout(() => props.onSearch(value), SEARCH_DELAY);
     }

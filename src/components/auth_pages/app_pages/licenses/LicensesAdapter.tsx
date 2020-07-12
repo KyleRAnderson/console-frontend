@@ -1,4 +1,3 @@
-import MiniSignal from 'mini-signals';
 import React, { useEffect, useState } from 'react';
 import { getLicenses, LicenseFilters } from '../../../../api/licenseAPI';
 import License from '../../../../models/License';
@@ -9,7 +8,6 @@ import PaginatedElement from '../../../generics/PaginatedElement';
 import ParticipantsTable from '../participants/ParticipantsTable';
 
 export type Props = {
-    updateSignal: MiniSignal;
     huntId: string;
     participantProperties: string[];
     filters?: LicenseFilters;
@@ -42,13 +40,6 @@ export default function LicensesAdapter(props: Props) {
     }, [props.filters, props.currentSearch]);
 
     useEffect(loadLicenses, [currentPage, props.filters, props.currentSearch]);
-
-    useEffect(() => {
-        const subscription = props.updateSignal.add(loadLicenses);
-        return () => {
-            subscription?.detach();
-        };
-    });
 
     const extraColumn: [string, (participant: ParticipantWithEliminated) => string] = [
         'Eliminated',

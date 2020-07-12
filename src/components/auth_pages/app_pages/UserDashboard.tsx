@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Roster from '../../../models/Roster';
-import { Switch, Route, Redirect, RouteComponentProps } from 'react-router-dom';
-import * as AppPaths from '../../../routes/AppPaths';
-import HuntDetails from './hunts/HuntDetails';
-import { HuntWithProperties } from '../../../models/Hunt';
-import RostersList from './rosters/RostersList';
+import React, { useEffect, useState } from 'react';
 import { Nav } from 'react-bootstrap';
-import RosterContext from './rosters/RosterContext';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
+import { HuntWithProperties } from '../../../models/Hunt';
+import Roster from '../../../models/Roster';
+import * as AppPaths from '../../../routes/AppPaths';
+import HuntLoader from './hunts/HuntLoader';
 import PermissionsPage from './permissions/PermissionsPage';
+import RosterContext from './rosters/RosterContext';
+import RostersList from './rosters/RostersList';
 
 /**
  * setMenuItem: A function to call to set a menu item for this user's dashboard,
@@ -68,7 +68,7 @@ export default function UserDashboard(props: Props) {
                 <Route
                     path={AppPaths.huntPath()}
                     render={(props) => {
-                        return <HuntDetails hunt={currentHunt} {...props} />;
+                        return <HuntLoader hunt={currentHunt} {...props} />;
                     }}
                 />
                 <Route

@@ -1,55 +1,51 @@
-import React, { useState } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
-import * as AppPaths from '../../../../routes/AppPaths';
-import { createNotification } from '../../../../notification';
+import React, { useEffect, useRef, useState } from 'react';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import HuntNavigator from './HuntNavigator';
-import HuntSubscriptionHolder from './HuntSubscriptionHolder';
-import MiniSignal from 'mini-signals';
-import { getHunt } from '../../../../api/huntAPI';
-import BlockLoader from '../../../generics/BlockLoader';
+import NewMatchSubscription from './NewMatchSubscription';
+import { RouteComponentProps } from 'react-router-dom';
+import { createNotification } from '../../../../notification';
 
-type Props = RouteComponentProps<{ [AppPaths.HUNT_ID_PARAM]: string }> & {
-    hunt?: HuntWithProperties;
+export type Props = RouteComponentProps & {
+    hunt: HuntWithProperties;
+    /** Function to call in order to update the hunt. */
+    updateHunt: (hunt: HuntWithProperties) => void;
+    /** Function to call when the hunt needs to be reloaded. */
+    reloadHunt: () => void;
 };
 
-export default function HuntDetails(props: Props): JSX.Element {
-    const [currentHunt, setCurrentHunt] = useState<HuntWithProperties | undefined>(props.hunt);
+export default function HuntDetails({ hunt, updateHunt, reloadHunt, ...routeProps }: Props): JSX.Element {
+    const subscriptionHolder = useRef<NewMatchSubscription>();
+    /** True if there are new matches in the hunt to load, false otherwise. */
+    const [areNewMatches, setAreNewMatches] = useState<boolean>(false);
 
-    function loadHunt(): Promise<HuntWithProperties> {
-        return getHunt(props.match.params[AppPaths.HUNT_ID_PARAM]);
-    }
+    useEffect(() => {
+        subscriptionHolder.current = new NewMatchSubscription(hunt, () => {
+            createNotification({ type: 'success', message: 'Matchmaking complete!' });
+            setAreNewMatches(true);
+        });
 
+        return () => {
+            subscriptionHolder.current?.cleanup();
+        };
+    }, []);
     function onError(): void {
         createNotification({ message: 'Failed to load hunt data.', type: 'danger' });
         props.history.goBack();
     }
 
     function handleHuntUpdated(newHuntProperties?: Partial<HuntWithProperties>): void {
-        if (currentHunt && newHuntProperties) {
-            setCurrentHunt({ ...currentHunt, ...newHuntProperties });
+        if (newHuntProperties) {
+            updateHunt({ ...hunt, ...newHuntProperties });
         }
     }
 
-    function getNavigator(notificationSignal: MiniSignal): React.ReactNode {
-        return currentHunt ? (
-            <HuntNavigator
-                onHuntPropertiesUpdated={handleHuntUpdated}
-                currentHunt={currentHunt}
-                matchmakingCompleteSignal={notificationSignal}
-                {...props}
-            />
-        ) : null;
-    }
-
     return (
-        <BlockLoader<HuntWithProperties>
-            onError={onError}
-            isLoaded={!!currentHunt}
-            loadFunction={loadHunt}
-            onLoaded={setCurrentHunt}
-        >
-            <HuntSubscriptionHolder hunt={currentHunt as HuntWithProperties}>{getNavigator}</HuntSubscriptionHolder>
-        </BlockLoader>
+        <HuntNavigator
+            onHuntPropertiesUpdated={handleHuntUpdated}
+            currentHunt={hunt}
+            setNewMatches={setAreNewMatches}
+            newMatches={areNewMatches}
+            {...routeProps}
+        />
     );
 }
