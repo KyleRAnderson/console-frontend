@@ -1,5 +1,5 @@
 import MiniSignal from 'mini-signals';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Container } from 'react-bootstrap';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { HuntWithProperties } from '../../../../models/Hunt';
@@ -22,8 +22,14 @@ export default function HuntNavigator(props: Props): JSX.Element {
     const licensesPath: string = AppPaths.huntPath(currentHunt);
     const matchesPath: string = AppPaths.matchesPath(currentHunt);
 
-    // Relay through the matchmaking complete signal.
-    props.matchmakingCompleteSignal?.add(() => updateSignal.current.dispatch());
+    useEffect(() => {
+        // Relay through the matchmaking complete signal.
+        const subscription = props.matchmakingCompleteSignal?.add(() => updateSignal.current.dispatch());
+
+        return () => {
+            subscription?.detach();
+        };
+    });
 
     function goToHunt(): void {
         props.history.push(licensesPath);

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { getMatches, MatchFilters } from '../../../../api/matchAPI';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import Match from '../../../../models/Match';
+import { createNotification } from '../../../../notification';
 import { Props as GenericPaginatedProps } from '../../../generics/GenericPaginated';
 import GenericTable, { PropertyMapping } from '../../../generics/GenericTable';
-import PaginatedElement from '../../../generics/PaginatedElement';
 import LoadUntilReady from '../../../generics/LoadUntilReady';
-import { createNotification } from '../../../../notification';
+import PaginatedElement from '../../../generics/PaginatedElement';
 
 export type Props = Pick<GenericPaginatedProps<Match>, 'updateSignal'> & {
     hunt: HuntWithProperties;
@@ -27,12 +27,17 @@ export default function MatchesAdapter(props: Props): JSX.Element {
             .catch(() => createNotification({ message: 'Failed to load matches', type: 'danger' }));
     }
 
-    props.updateSignal?.add(loadMatches);
     // Order of useEffects is important here, need to update the page to 1 before loading again.
     useEffect(() => {
         setCurrentPage(1);
     }, [props.filters]);
     useEffect(loadMatches, [currentPage, props.filters]);
+    useEffect(() => {
+        const subscription = props.updateSignal?.add(loadMatches);
+        return () => {
+            subscription?.detach();
+        };
+    });
 
     const propertyMappings: PropertyMapping<Match>[] = [
         ['First 1', (match) => match.licenses[0]?.participant?.first || ''],
