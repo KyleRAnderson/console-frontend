@@ -51,10 +51,6 @@ export function matchesPath(hunt?: Hunt | string): string {
     return `${huntPath(hunt)}${MATCHES_EXTENSION}`;
 }
 
-export const MATCHMAKE_EXTENSION = 'matchmake/';
-export const NEW_MATCH_EXTENSION = 'new_match/';
-export const NEXT_ROUND_EXTENSION = 'next_round/';
-
-export function matchmakePath(hunt: Hunt | string): string {
-    return `${huntPath(hunt)}${MATCHMAKE_EXTENSION}`;
-}
+export const MATCHMAKE_EXTENSION = 'matchmake';
+export const NEW_MATCH_EXTENSION = 'new_match';
+export const NEXT_ROUND_EXTENSION = 'next_round';
