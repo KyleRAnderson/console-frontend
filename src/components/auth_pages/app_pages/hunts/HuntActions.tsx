@@ -1,12 +1,13 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import { ButtonProps, Container } from 'react-bootstrap';
 import { useHistory, useLocation } from 'react-router-dom';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
-import RoutedModals, { Props as RouteSwitcherProps } from '../../../generics/RoutedModals';
 import Matchmake from '../matches/Matchmake';
 import NextRound from '../rounds/NextRound';
-import SwitchBar, { Props as SwitchBarProps } from './SwitchBar';
+import AddParticipantsButton from './AddParticipantsButton';
+import ButtonBar from './ButtonBar';
+import RoutedModalPairGenerator, { RoutedModalPair } from '../../../generics/modalPairGenerator';
 
 type Props = {
     currentHunt: HuntWithProperties;
@@ -15,6 +16,8 @@ type Props = {
      */
     onChanged?: (updatedHuntProperties?: Partial<HuntWithProperties>) => void;
 };
+
+const BUTTON_VARIANT: ButtonProps['variant'] = 'outline-dark';
 
 export const ACTION_ROUTES = {
     matchmake: AppPaths.MATCHMAKE_EXTENSION,
@@ -60,40 +63,48 @@ export default function HuntActions(props: Props): JSX.Element {
         hideModals();
     }
 
-    const routeMap: RouteSwitcherProps['routeMap'] = [
-        {
-            elementInModal: (
+    const generator: RoutedModalPairGenerator = new RoutedModalPairGenerator(
+        showModal,
+        { variant: BUTTON_VARIANT },
+        { modalOptions: { size: 'lg', onHide: hideModals }, headerOptions: { closeButton: true } },
+    );
+
+    const routedModals: RoutedModalPair[] = [
+        generator.generate('Matchmake', {
+            content: (
                 <Container fluid>
                     <Matchmake hunt={props.currentHunt} onMatchmake={hideModals} />
                 </Container>
             ),
             route: ACTION_ROUTES.matchmake,
             modalTitle: 'Matchmake',
-        },
-        {
-            elementInModal: null,
+        }),
+        generator.generate('New Match', {
+            content: null,
             route: ACTION_ROUTES.newMatch,
             modalTitle: 'New Match',
-        },
-        {
-            elementInModal: (
+        }),
+        generator.generate('Next Round', {
+            content: (
                 <Container fluid>
                     <NextRound hunt={props.currentHunt} onUpdated={dispatchAndHide} />
                 </Container>
             ),
             route: ACTION_ROUTES.nextRound,
             modalTitle: 'Next Round',
-        },
+        }),
     ];
 
-    const buttonMappings: SwitchBarProps['buttonMappings'] = routeMap.map(({ route, modalTitle: modalHeader }) => {
-        return { buttonContent: modalHeader, path: route };
-    });
+    const modalRoutes = routedModals.map(({ routedModal }, i) => (
+        <React.Fragment key={i}>{routedModal}</React.Fragment>
+    ));
+    const buttons = routedModals.map(({ button }) => button);
+    buttons.unshift(<AddParticipantsButton variant={BUTTON_VARIANT} hunt={props.currentHunt} />);
 
     return (
         <>
-            <SwitchBar onSelection={showModal} buttonMappings={buttonMappings} />
-            <RoutedModals {...props} onHide={hideModals} routeMap={routeMap} />
+            <ButtonBar buttons={buttons} />
+            {modalRoutes}
         </>
     );
 }
