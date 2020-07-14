@@ -9,6 +9,8 @@ export enum CloseMethod {
 
 export type Props = {
     onSubmit: (closeMethod: CloseMethod) => void;
+    /** True to disable submission of the form, false otherwise. */
+    disabled?: boolean;
 };
 
 export default function NextRoundForm(props: Props): JSX.Element {
@@ -22,13 +24,21 @@ export default function NextRoundForm(props: Props): JSX.Element {
     return (
         <Form onSubmit={handleSubmit}>
             <Row className="justify-content-around">
-                <Button type="submit" onClick={() => setCloseMethod(CloseMethod.EliminateAll)}>
+                <Button
+                    disabled={props.disabled}
+                    type="submit"
+                    onClick={() => setCloseMethod(CloseMethod.EliminateAll)}
+                >
                     Eliminate All
                 </Button>
-                <Button type="submit" onClick={() => setCloseMethod(CloseMethod.CoinToss)}>
+                <Button disabled={props.disabled} type="submit" onClick={() => setCloseMethod(CloseMethod.CoinToss)}>
                     Coin Toss
                 </Button>
-                <Button type="submit" onClick={() => setCloseMethod(CloseMethod.EliminateNone)}>
+                <Button
+                    disabled={props.disabled}
+                    type="submit"
+                    onClick={() => setCloseMethod(CloseMethod.EliminateNone)}
+                >
                     Eliminate None
                 </Button>
             </Row>

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { eliminateAll, eliminateHalf } from '../../../../api/licenseAPI';
-import Hunt from '../../../../models/Hunt';
-import NextRoundForm, { CloseMethod } from './NextRoundForm';
 import { createRound } from '../../../../api/roundAPI';
-import { createNotification } from '../../../../notification';
+import Hunt from '../../../../models/Hunt';
 import { asServerError, formatForPrint } from '../../../../models/ServerError';
+import { createNotification } from '../../../../notification';
+import NextRoundForm, { CloseMethod } from './NextRoundForm';
 
 export type Props = {
     hunt: Hunt;
@@ -18,8 +18,11 @@ export type Props = {
  * Component for advancing the hunt to the next round.
  */
 export default function NextRound(props: Props): JSX.Element {
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
     function createNewRound(): void {
         createRound(props.hunt, {})
+            .finally(() => setIsSubmitting(false))
             .then(({ number }) => {
                 createNotification({ type: 'success', message: 'Round created' });
                 props.onUpdated?.({ current_round_number: number });
@@ -38,9 +41,11 @@ export default function NextRound(props: Props): JSX.Element {
 
     function genericFailure(): void {
         createNotification({ message: 'Failed to eliminate', type: 'danger' });
+        setIsSubmitting(false);
     }
 
     function handleFormSubmit(roundResolution: CloseMethod): void {
+        setIsSubmitting(true);
         switch (roundResolution) {
             case CloseMethod.CoinToss:
                 eliminateHalf(props.hunt).then(createNewRound).catch(genericFailure);
@@ -51,8 +56,11 @@ export default function NextRound(props: Props): JSX.Element {
             case CloseMethod.EliminateNone:
                 createNewRound();
                 break;
+            default:
+                setIsSubmitting(false);
+                break;
         }
     }
 
-    return <NextRoundForm onSubmit={handleFormSubmit} />;
+    return <NextRoundForm disabled={isSubmitting} onSubmit={handleFormSubmit} />;
 }

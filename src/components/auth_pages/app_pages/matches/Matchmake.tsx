@@ -1,8 +1,8 @@
-import React from 'react';
-import { HuntWithProperties } from '../../../../models/Hunt';
-import MatchmakeForm from './MatchmakeForm';
-import { createNotification } from '../../../../notification';
+import React, { useState } from 'react';
 import { matchmake, MatchmakeParams } from '../../../../api/matchAPI';
+import { HuntWithProperties } from '../../../../models/Hunt';
+import { createNotification } from '../../../../notification';
+import MatchmakeForm from './MatchmakeForm';
 
 export type Props = {
     hunt: HuntWithProperties;
@@ -11,13 +11,23 @@ export type Props = {
 };
 
 export default function Matchmake(props: Props): JSX.Element {
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
     function submitMatchmake(matchmakeParams: MatchmakeParams) {
-        matchmake(props.hunt, matchmakeParams);
-        createNotification({ type: 'info', message: 'Matchmake request submitted...' });
-        props.onMatchmake?.(matchmakeParams);
+        setIsSubmitting(true);
+        matchmake(props.hunt, matchmakeParams)
+            .finally(() => setIsSubmitting(false))
+            .then(() => {
+                createNotification({ type: 'info', message: 'Matchmake request submitted...' });
+                props.onMatchmake?.(matchmakeParams);
+            });
     }
 
     return (
-        <MatchmakeForm onSubmit={submitMatchmake} participantProperties={props.hunt.roster.participant_properties} />
+        <MatchmakeForm
+            disabled={isSubmitting}
+            onSubmit={submitMatchmake}
+            participantProperties={props.hunt.roster.participant_properties}
+        />
     );
 }

@@ -5,6 +5,8 @@ import { MatchmakeParams } from '../../../../api/matchAPI';
 export type Props = {
     participantProperties: string[];
     onSubmit?: (matchmakeParams: Required<MatchmakeParams>) => void;
+    /** True to disable submission of the form. */
+    disabled?: boolean;
 };
 
 type PropertyTracker = {
@@ -58,6 +60,9 @@ export default function MatchmakeForm(props: Props): JSX.Element {
     }
 
     function submitForm(): void {
+        if (props.disabled) {
+            return;
+        }
         const submission: Required<MatchmakeParams> = { within: [], between: [] };
         for (const property in matchmakingParams) {
             switch (matchmakingParams[property]) {
@@ -84,7 +89,7 @@ export default function MatchmakeForm(props: Props): JSX.Element {
             </Row>
             <Row>
                 <Col>
-                    <Button variant="success" onClick={() => submitForm()}>
+                    <Button variant="success" disabled={props.disabled} onClick={() => submitForm()}>
                         Submit
                     </Button>
                 </Col>
