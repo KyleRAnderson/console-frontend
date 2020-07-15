@@ -12,6 +12,7 @@
     "@types/react-dom": "^16.9.6",
     "@types/react-router-dom": "^5.1.4",
     "@types/react-select": "^3.0.14",
+    "@types/url-join": "^4.0.0",
     "action-cable-react-jwt": "^0.0.5",
     "animate.css": "^4.1.0",
     "axios": "^0.19.2",
@@ -30,7 +31,8 @@
     "react-select": "^3.1.0",
     "ts-loader": "^7.0.1",
     "turbolinks": "^5.2.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "url-join": "^4.0.1"
   },
   "version": "0.1.0",
   "devDependencies": {
