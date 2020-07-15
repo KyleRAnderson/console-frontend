@@ -1,13 +1,14 @@
 import React from 'react';
 import { ButtonProps, Container } from 'react-bootstrap';
 import { useHistory, useLocation } from 'react-router-dom';
+import urljoin from 'url-join';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
+import RoutedModalPairGenerator, { RoutedModalPair } from '../../../generics/modalPairGenerator';
 import Matchmake from '../matches/Matchmake';
 import NextRound from '../rounds/NextRound';
 import AddParticipantsButton from './AddParticipantsButton';
 import ButtonBar from './ButtonBar';
-import RoutedModalPairGenerator, { RoutedModalPair } from '../../../generics/modalPairGenerator';
 
 type Props = {
     currentHunt: HuntWithProperties;
@@ -28,20 +29,27 @@ export const ACTION_ROUTES = {
 export default function HuntActions(props: Props): JSX.Element {
     const [location, history] = [useLocation(), useHistory()];
 
-    function isShowingModal(paths?: string | string[]): boolean {
-        let value: boolean;
+    /**
+     * Gets the path among the provided ones which is currently being shown.
+     * Returns undefined if none of the given paths match.
+     * @param paths The paths to be tested.
+     */
+    function currentModalPath(paths?: string | string[]): string | undefined {
+        let value: string | undefined;
         if (!paths) {
-            value = isShowingModal(Object.values(ACTION_ROUTES));
+            value = currentModalPath(Object.values(ACTION_ROUTES));
         } else if (Array.isArray(paths)) {
-            value = paths.some(isShowingModal);
+            // In this case, find should get the first one that doesn't return undefined.
+            value = paths.find(currentModalPath);
         } else {
-            value = new RegExp(`${paths.replace('/', '')}\/?`).test(location.pathname);
+            value = (new RegExp(`${paths}/?`).test(location.pathname) || undefined) && paths;
         }
         return value;
     }
 
     function pathWithoutModals(): string {
-        return isShowingModal() ? location.pathname.replace(/[^\/]+\/?$/, '') : location.pathname;
+        const currentModal = currentModalPath();
+        return currentModal ? location.pathname.replace(currentModal, '') : location.pathname;
     }
 
     function hideModals(): void {
@@ -53,8 +61,8 @@ export default function HuntActions(props: Props): JSX.Element {
     }
 
     function showModal(path: string): void {
-        if (!isShowingModal(path)) {
-            history.push(`${pathWithoutModals()}${path}`);
+        if (!currentModalPath(path)) {
+            history.push(urljoin(pathWithoutModals(), path));
         }
     }
 

@@ -1,34 +1,36 @@
 import Hunt from '../models/Hunt';
 import Roster from '../models/Roster';
+import urljoin from 'url-join';
 
+// Root paths (ones that need the leading / for matching)
 export const ROOT = '/';
 export const LOGIN_PATH = '/login';
 export const REGISTER_PATH = '/register';
 export const UPDATE_PASSWORD_PATH = '/password/update';
 
 export const CONFIRMATION_TOKEN_PARAM = 'confirmationToken' as const;
-export const CONFIRMATION_BASE_PATH = '/confirmation/';
+export const CONFIRMATION_BASE_PATH = '/confirmation';
 export function confirmationPath(token = `:${CONFIRMATION_TOKEN_PARAM}`): string {
-    return `${CONFIRMATION_BASE_PATH}${token}`;
+    return urljoin(CONFIRMATION_BASE_PATH, token);
 }
 
 export const PASSWORD_RESET_TOKEN_PARAM = 'resetToken' as const;
-export const RESET_PASSWORD_BASE_PATH = '/reset_password/';
+export const RESET_PASSWORD_BASE_PATH = '/reset_password';
 export function resetPasswordPath(resetToken = `:${PASSWORD_RESET_TOKEN_PARAM}`): string {
-    return `${RESET_PASSWORD_BASE_PATH}${resetToken}`;
+    return urljoin(RESET_PASSWORD_BASE_PATH, resetToken);
 }
 
 export const APP_ROOT = '/app';
 
-export const ROSTERS_PATH: string = APP_ROOT + '/rosters/';
+export const ROSTERS_PATH: string = urljoin(APP_ROOT, 'rosters');
 export const ROSTER_ID_PARAM = 'rosterId' as const;
 export function rosterPath(roster: Roster | string = `:${ROSTER_ID_PARAM}`): string {
     const rosterId: string = typeof roster == 'string' ? roster : roster.id;
-    return `${ROSTERS_PATH}${rosterId}/`;
+    return urljoin(ROSTERS_PATH, rosterId);
 }
 
 export const PERMISSION_ID_PARAM = 'permissionId' as const;
-export const PERMISSIONS_EXTENSION = 'permissions/';
+export const PERMISSIONS_EXTENSION = 'permissions';
 /**
  * Gets the app path for the permissions for the given roster.
  * @param roster The roster for which the permissions should be fetched. If not set,
@@ -36,19 +38,19 @@ export const PERMISSIONS_EXTENSION = 'permissions/';
  * @return The string path for the permissions for the given roster.
  */
 export function permissionsPath(roster?: string | Roster): string {
-    return `${rosterPath(roster)}${PERMISSIONS_EXTENSION}`;
+    return urljoin(rosterPath(roster), PERMISSIONS_EXTENSION);
 }
 
 export const HUNT_ID_PARAM = 'huntId' as const;
-const HUNTS_EXTENSION = '/hunts/';
+const HUNTS_EXTENSION = 'hunts';
 export function huntPath(hunt: Hunt | string = `:${HUNT_ID_PARAM}`): string {
     const huntId: string = typeof hunt == 'string' ? hunt : hunt.id;
-    return `${APP_ROOT}${HUNTS_EXTENSION}${huntId}/`;
+    return urljoin(APP_ROOT, HUNTS_EXTENSION, huntId);
 }
 
-export const MATCHES_EXTENSION = 'matches/';
+export const MATCHES_EXTENSION = 'matches';
 export function matchesPath(hunt?: Hunt | string): string {
-    return `${huntPath(hunt)}${MATCHES_EXTENSION}`;
+    return urljoin(huntPath(hunt), MATCHES_EXTENSION);
 }
 
 export const MATCHMAKE_EXTENSION = 'matchmake';

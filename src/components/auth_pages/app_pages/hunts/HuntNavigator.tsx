@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
 import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import urljoin from 'url-join';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
 import LicensesList from '../licenses/LicensesList';
@@ -74,7 +75,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
             <Switch>
                 <Route
                     exact
-                    path={`${matchesPath}${possibleRouteExtensions}`}
+                    path={urljoin(matchesPath, possibleRouteExtensions)}
                     render={(routeProps) => {
                         return (
                             <>
@@ -88,7 +89,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
                         );
                     }}
                 />
-                <Route exact path={`${licensesPath}${possibleRouteExtensions}`}>
+                <Route exact path={urljoin(licensesPath, possibleRouteExtensions)}>
                     {licensesView}
                 </Route>
                 <Route>

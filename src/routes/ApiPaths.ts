@@ -1,100 +1,101 @@
+import urljoin from 'url-join';
 import Hunt from '../models/Hunt';
-import Roster from '../models/Roster';
 import License from '../models/License';
-import getId from '../util/identifiableHelper';
 import Participant from '../models/Participant';
 import Permission from '../models/Permission';
+import Roster from '../models/Roster';
+import getId from '../util/identifiableHelper';
 
 export const CABLE_PATH = '/cable';
 
-export const API_ROOT_PATH = '/api/v1/';
+export const API_ROOT_PATH = '/api/v1';
 
-export const USERS_LOGIN_PATH: string = API_ROOT_PATH + 'login/';
-export const USERS_LOGOUT_PATH: string = API_ROOT_PATH + 'logout/';
-export const USERS_REGISTRATIONS_PATH: string = API_ROOT_PATH + 'signup/';
-export const USERS_CONFIRMATION_PATH: string = API_ROOT_PATH + 'confirmation/';
-export const USERS_PASSWORD_RESET_PATH: string = API_ROOT_PATH + 'password/';
+export const USERS_LOGIN_PATH: string = urljoin(API_ROOT_PATH, 'login');
+export const USERS_LOGOUT_PATH: string = urljoin(API_ROOT_PATH, 'logout');
+export const USERS_REGISTRATIONS_PATH: string = urljoin(API_ROOT_PATH, 'signup');
+export const USERS_CONFIRMATION_PATH: string = urljoin(API_ROOT_PATH, 'confirmation');
+export const USERS_PASSWORD_RESET_PATH: string = urljoin(API_ROOT_PATH, 'password');
 
-export const ROSTERS_PATH: string = API_ROOT_PATH + 'rosters/';
-const PARTICIPANTS_EXTENSION = 'participants/';
-const PARTICIPANT_UPLOAD_EXTENSION = 'upload/';
-const HUNTS_EXTENSION = 'hunts/';
-const ROUNDS_EXTENSION = 'rounds/';
-const MATCHES_EXTENSION = 'matches/';
-const LICENSES_EXTENSION = 'licenses/';
+export const ROSTERS_PATH: string = urljoin(API_ROOT_PATH, 'rosters');
+const PARTICIPANTS_EXTENSION = 'participants';
+const PARTICIPANT_UPLOAD_EXTENSION = 'upload';
+const HUNTS_EXTENSION = 'hunts';
+const ROUNDS_EXTENSION = 'rounds';
+const MATCHES_EXTENSION = 'matches';
+const LICENSES_EXTENSION = 'licenses';
 
 export function rosterPath(roster: string | Roster): string {
-    return `${ROSTERS_PATH}${getId(roster)}/`;
+    return urljoin(ROSTERS_PATH, getId(roster));
 }
 
 export function participantPath(participant: string | Participant): string {
-    return `${API_ROOT_PATH}${PARTICIPANTS_EXTENSION}${getId(participant)}/`;
+    return urljoin(API_ROOT_PATH, PARTICIPANTS_EXTENSION, getId(participant));
 }
 
 export function participantsPath(roster: string | Roster): string {
-    return `${rosterPath(roster)}${PARTICIPANTS_EXTENSION}`;
+    return urljoin(rosterPath(roster), PARTICIPANTS_EXTENSION);
 }
 
 export function participantsUploadPath(roster: string | Roster): string {
-    return `${participantsPath(roster)}${PARTICIPANT_UPLOAD_EXTENSION}`;
+    return urljoin(participantsPath(roster), PARTICIPANT_UPLOAD_EXTENSION);
 }
 
 export function huntPath(hunt: string | Hunt): string {
-    return `${API_ROOT_PATH}${HUNTS_EXTENSION}${getId(hunt)}/`;
+    return urljoin(API_ROOT_PATH, HUNTS_EXTENSION, getId(hunt));
 }
 
 export function huntsPath(roster: string | Roster): string {
-    return `${rosterPath(getId(roster))}${HUNTS_EXTENSION}`;
+    return urljoin(rosterPath(getId(roster)), HUNTS_EXTENSION);
 }
 
 export function roundsPath(hunt: string | Hunt): string {
-    return `${huntPath(getId(hunt))}${ROUNDS_EXTENSION}`;
+    return urljoin(huntPath(getId(hunt)), ROUNDS_EXTENSION);
 }
 
 export function roundPath(hunt: string | Hunt, roundNumber: number): string {
-    return `${roundsPath(getId(hunt))}${roundNumber}/`;
+    return urljoin(roundsPath(getId(hunt)), roundNumber.toString());
 }
 
 export function matchesPath(hunt: string | Hunt): string {
-    return `${huntPath(getId(hunt))}${MATCHES_EXTENSION}`;
+    return urljoin(huntPath(getId(hunt)), MATCHES_EXTENSION);
 }
 
 export function matchPath(hunt: string | Hunt, matchNumber: number): string {
-    return `${matchesPath(getId(hunt))}${matchNumber}/`;
+    return urljoin(matchesPath(getId(hunt)), matchNumber.toString());
 }
-const matchmakeExtension = 'matchmake/';
+const matchmakeExtension = 'matchmake';
 export function matchmakePath(hunt: string | Hunt): string {
-    return `${matchesPath(hunt)}${matchmakeExtension}`;
+    return urljoin(matchesPath(hunt), matchmakeExtension);
 }
 
 export function licensePath(license: string | License): string {
-    return `${API_ROOT_PATH}${LICENSES_EXTENSION}${getId(license)}/`;
+    return urljoin(API_ROOT_PATH, LICENSES_EXTENSION, getId(license));
 }
 
 export function licensesPath(hunt: string | Hunt): string {
-    return `${huntPath(hunt)}${LICENSES_EXTENSION}`;
+    return urljoin(huntPath(hunt), LICENSES_EXTENSION);
 }
 
-export const ELIMINATE_ALL_EXTENSION = 'eliminate_all/';
+export const ELIMINATE_ALL_EXTENSION = 'eliminate_all' as const;
 export function eliminateAllPath(hunt: string | Hunt): string {
-    return `${licensesPath(hunt)}${ELIMINATE_ALL_EXTENSION}`;
+    return urljoin(licensesPath(hunt), ELIMINATE_ALL_EXTENSION);
 }
 
-export const ELIMINATE_HALF_EXTENSION = 'eliminate_half/';
+export const ELIMINATE_HALF_EXTENSION = 'eliminate_half' as const;
 export function eliminateHalfPath(hunt: string | Hunt): string {
-    return `${licensesPath(hunt)}${ELIMINATE_HALF_EXTENSION}`;
+    return urljoin(licensesPath(hunt), ELIMINATE_HALF_EXTENSION);
 }
 
-export const BULK_LICENSES_EXTENSION = 'bulk/';
+export const BULK_LICENSES_EXTENSION = 'bulk' as const;
 export function bulkCreateLicensesPath(hunt: string | Hunt): string {
-    return `${licensesPath(hunt)}${BULK_LICENSES_EXTENSION}`;
+    return urljoin(licensesPath(hunt), BULK_LICENSES_EXTENSION);
 }
 
-const PERMISSION_EXTENSION = 'permissions/';
+const PERMISSION_EXTENSION = 'permissions' as const;
 export function permissionsPath(roster: string | Roster): string {
-    return `${rosterPath(roster)}${PERMISSION_EXTENSION}`;
+    return urljoin(rosterPath(roster), PERMISSION_EXTENSION);
 }
 
 export function permissionPath(permission: string | Permission): string {
-    return `${API_ROOT_PATH}${PERMISSION_EXTENSION}${getId(permission)}`;
+    return urljoin(API_ROOT_PATH, PERMISSION_EXTENSION, getId(permission));
 }
