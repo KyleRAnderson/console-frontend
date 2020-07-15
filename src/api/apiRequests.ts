@@ -71,10 +71,9 @@ function setupErrorSubscriber<T>(request: Promise<AxiosResponse<T>>): Promise<Ax
     return request;
 }
 
-async function extractError<T>(request: Promise<AxiosResponse<T>>): Promise<T> {
+async function extractError<T>(request: Promise<AxiosResponse<T>>): Promise<AxiosResponse<T>> {
     try {
-        const response = await request;
-        return response.data;
+        return await request;
     } catch (err) {
         if (!Axios.isCancel(err)) {
             throw err;
@@ -83,28 +82,32 @@ async function extractError<T>(request: Promise<AxiosResponse<T>>): Promise<T> {
     }
 }
 
-function setupPromise<T>(promise: Promise<AxiosResponse<T>>): Promise<T> {
+function setupPromise<T>(promise: Promise<AxiosResponse<T>>): Promise<AxiosResponse<T>> {
     return extractError(setupErrorSubscriber(promise));
 }
 
-export function getItem<T>(path: string, config?: AxiosRequestConfig): Promise<T> {
+export function getItem<T>(path: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return setupPromise(
         Axios.get<T>(path, { headers: getRequestHeaders(), ...config }),
     );
 }
 
-export function postItem<T, U = void>(path: string, item?: T, config?: AxiosRequestConfig): Promise<U> {
+export function postItem<T, U = void>(path: string, item?: T, config?: AxiosRequestConfig): Promise<AxiosResponse<U>> {
     return setupPromise(
         Axios.post<U>(path, item, { headers: getRequestHeaders(), ...config }),
     );
 }
 
-export function deleteItem<T = void>(path: string, config?: AxiosRequestConfig): Promise<T> {
+export function deleteItem<T = void>(path: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return setupPromise(
         Axios.delete<T>(path, { headers: getRequestHeaders(), ...config }),
     );
 }
 
-export function patchItem<T = unknown, U = void>(path: string, item?: T, config?: AxiosRequestConfig): Promise<U> {
+export function patchItem<T = unknown, U = void>(
+    path: string,
+    item?: T,
+    config?: AxiosRequestConfig,
+): Promise<AxiosResponse<U>> {
     return setupPromise(Axios.patch(path, item, { headers: getRequestHeaders(), ...config }));
 }

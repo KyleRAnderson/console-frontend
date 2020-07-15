@@ -23,7 +23,7 @@ export default function MatchesAdapter(props: Props): JSX.Element {
 
     function loadMatches(): void {
         getMatches(props.hunt, { page: currentPage }, props.filters)
-            .then(({ matches, num_pages: numPages }) => {
+            .then(({ data: { matches, num_pages: numPages } }) => {
                 setNumPages(numPages);
                 setMatches(matches);
                 props.onMatchesLoaded?.();

@@ -32,7 +32,7 @@ export default function ParticipantAdapter({
             page: currentPage,
             q: searchQuery,
             ...filters,
-        }).then(({ participants, num_pages: numPages }) => {
+        }).then(({ data: { participants, num_pages: numPages } }) => {
             setParticipants(participants);
             setNumPages(numPages);
             setLoaded(true);

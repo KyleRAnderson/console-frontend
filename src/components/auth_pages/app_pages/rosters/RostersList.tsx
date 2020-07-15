@@ -22,7 +22,7 @@ export default class RostersList extends React.Component<Props, State> {
 
     componentDidMount() {
         getRosters()
-            .then((rosters) => {
+            .then(({ data: rosters }) => {
                 this.setRosters(rosters);
             })
             .catch(() => {

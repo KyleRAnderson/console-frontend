@@ -21,7 +21,7 @@ export default function RosterLoading(props: Props): JSX.Element {
 
     return (
         <GenericLoader<Roster>
-            loadFunction={() => getRoster(rosterId)}
+            loadFunction={() => getRoster(rosterId).then(({ data: roster }) => roster)}
             onLoaded={(roster) => props.onLoad(roster)}
             onError={() => setFailedToLoadRoster(true)}
         />

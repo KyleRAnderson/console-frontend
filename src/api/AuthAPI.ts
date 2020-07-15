@@ -1,7 +1,8 @@
+import { AxiosResponse } from 'axios';
+import { clearLogin, storeAuthentication } from '../auth';
 import User, { UserBase } from '../models/User';
-import * as ApiRequest from './apiRequests';
 import * as ApiPaths from '../routes/ApiPaths';
-import { storeAuthentication, clearLogin } from '../auth';
+import * as ApiRequest from './apiRequests';
 
 type LoginPost = {
     user: UserBase & { password: string };
@@ -17,21 +18,12 @@ type UpdatePasswordPatch = {
     user: { current_password: string; password: string; password_confirmation: string };
 };
 
-async function requestAwaiter(requestPromise: Promise<unknown>): Promise<boolean> {
-    try {
-        await requestPromise;
-        return true;
-    } catch (_) {
-        return false;
-    }
-}
-
 export async function login(email: string, password: string): Promise<boolean> {
     let userID = '';
     let success = false;
 
     try {
-        const user = await ApiRequest.postItem<LoginPost, User>(
+        const { data: user } = await ApiRequest.postItem<LoginPost, User>(
             ApiPaths.USERS_LOGIN_PATH,
             { user: { email: email, password: password } },
             undefined,
@@ -45,72 +37,56 @@ export async function login(email: string, password: string): Promise<boolean> {
     }
 }
 
-export function register(email: string, password: string, passwordConfirmation: string): Promise<boolean> {
-    return requestAwaiter(
-        ApiRequest.postItem<RegisterPost>(
-            ApiPaths.USERS_REGISTRATIONS_PATH,
-            { user: { email: email, password: password, password_confirmation: passwordConfirmation } },
-            undefined,
-        ),
+export function register(email: string, password: string, passwordConfirmation: string) {
+    return ApiRequest.postItem<RegisterPost, User>(
+        ApiPaths.USERS_REGISTRATIONS_PATH,
+        { user: { email: email, password: password, password_confirmation: passwordConfirmation } },
+        undefined,
     );
 }
 
-export async function logout(): Promise<boolean> {
-    const success: boolean = await requestAwaiter(ApiRequest.deleteItem(ApiPaths.USERS_LOGOUT_PATH));
-    if (success) {
-        clearLogin();
-    }
-    return success;
+export async function logout() {
+    const response = await ApiRequest.deleteItem(ApiPaths.USERS_LOGOUT_PATH);
+    /* If the request errors, then an exception will be thrown and the clearLogin() logic won't run. Thus, it only
+    clears login on success. */
+    clearLogin();
+    return response;
 }
 
-export function confirm(token: string): Promise<boolean> {
-    return requestAwaiter(
-        ApiRequest.getItem(ApiPaths.USERS_CONFIRMATION_PATH, { params: { confirmation_token: token } }),
-    );
+export function confirm(token: string) {
+    return ApiRequest.getItem(ApiPaths.USERS_CONFIRMATION_PATH, { params: { confirmation_token: token } });
 }
 
-export function resendConfirmation(emailAddress: string): Promise<boolean> {
-    return requestAwaiter(
-        ApiRequest.postItem<ConfirmationPost>(ApiPaths.USERS_CONFIRMATION_PATH, {
-            user: { email: emailAddress },
-        }),
-    );
+export function resendConfirmation(emailAddress: string) {
+    return ApiRequest.postItem<ConfirmationPost>(ApiPaths.USERS_CONFIRMATION_PATH, {
+        user: { email: emailAddress },
+    });
 }
 
 export function resetPassword(
     resetToken: string,
     newPassword: string,
     newPasswordConfirmation: string,
-): Promise<boolean> {
-    return requestAwaiter(
-        ApiRequest.patchItem<ResetPasswordPatch>(ApiPaths.USERS_PASSWORD_RESET_PATH, {
-            user: {
-                reset_password_token: resetToken,
-                password: newPassword,
-                password_confirmation: newPasswordConfirmation,
-            },
-        }),
-    );
+): Promise<AxiosResponse<void>> {
+    return ApiRequest.patchItem<ResetPasswordPatch>(ApiPaths.USERS_PASSWORD_RESET_PATH, {
+        user: {
+            reset_password_token: resetToken,
+            password: newPassword,
+            password_confirmation: newPasswordConfirmation,
+        },
+    });
 }
 
-export function updatePassword(
-    currentPassword: string,
-    newPassword: string,
-    newPasswordConfirmation: string,
-): Promise<boolean> {
-    return requestAwaiter(
-        ApiRequest.patchItem<UpdatePasswordPatch>(ApiPaths.USERS_REGISTRATIONS_PATH, {
-            user: {
-                current_password: currentPassword,
-                password: newPassword,
-                password_confirmation: newPasswordConfirmation,
-            },
-        }),
-    );
+export function updatePassword(currentPassword: string, newPassword: string, newPasswordConfirmation: string) {
+    return ApiRequest.patchItem<UpdatePasswordPatch>(ApiPaths.USERS_REGISTRATIONS_PATH, {
+        user: {
+            current_password: currentPassword,
+            password: newPassword,
+            password_confirmation: newPasswordConfirmation,
+        },
+    });
 }
 
-export function sendPasswordResetRequest(email: string): Promise<boolean> {
-    return requestAwaiter(
-        ApiRequest.postItem<ConfirmationPost>(ApiPaths.USERS_PASSWORD_RESET_PATH, { user: { email: email } }),
-    );
+export function sendPasswordResetRequest(email: string): Promise<AxiosResponse<void>> {
+    return ApiRequest.postItem<ConfirmationPost>(ApiPaths.USERS_PASSWORD_RESET_PATH, { user: { email: email } });
 }

@@ -23,7 +23,7 @@ export default function LicensesAdapter(props: Props) {
 
     function loadLicenses(): void {
         getLicenses(props.huntId, { page: currentPage, q: props.currentSearch, ...props.filters })
-            .then(({ num_pages: numPages, licenses }) => {
+            .then(({ data: { num_pages: numPages, licenses } }) => {
                 setNumPages(numPages);
                 setLicenses(
                     licenses.map((license) => {

@@ -23,7 +23,7 @@ export default function NextRound(props: Props): JSX.Element {
     function createNewRound(): void {
         createRound(props.hunt, {})
             .finally(() => setIsSubmitting(false))
-            .then(({ number }) => {
+            .then(({ data: { number } }) => {
                 createNotification({ type: 'success', message: 'Round created' });
                 props.onUpdated?.({ current_round_number: number });
             })

@@ -33,7 +33,7 @@ export default class HuntsList extends React.Component<HuntsProps> {
 
         return (
             <BlockLoader<Hunt[]>
-                loadFunction={() => getHunts(this.props.rosterId)}
+                loadFunction={() => getHunts(this.props.rosterId).then(({ data: hunts }) => hunts)}
                 onLoaded={(hunts) => this.setHunts(hunts)}
                 onError={() => this.onError()}
                 isLoaded={this.props.hunts !== undefined}
@@ -58,7 +58,7 @@ export default class HuntsList extends React.Component<HuntsProps> {
 
     createHunt(hunt: HuntPost): void {
         createHunt(this.props.rosterId, hunt)
-            .then((newHunt) => {
+            .then(({ data: newHunt }) => {
                 createNotification({ message: 'Successfully created hunt.', type: 'success' });
                 this.props.onHuntsUpdated([...(this.props.hunts || []), newHunt]);
             })

@@ -11,23 +11,19 @@ export type MatchFilters = {
     round?: number | number[];
 };
 
-export function getMatches(
-    hunt: Hunt | string,
-    pageParams: ApiRequest.PaginationParams,
-    filters?: MatchFilters,
-): Promise<PaginatedMatches> {
+export function getMatches(hunt: Hunt | string, pageParams: ApiRequest.PaginationParams, filters?: MatchFilters) {
     return ApiRequest.getItem<PaginatedMatches>(ApiPaths.matchesPath(hunt), { params: { ...pageParams, ...filters } });
 }
 
-export function getMatch(hunt: Hunt | string, matchNumber: number): Promise<Match> {
+export function getMatch(hunt: Hunt | string, matchNumber: number) {
     return ApiRequest.getItem<Match>(ApiPaths.matchPath(hunt, matchNumber));
 }
 
-export function deleteMatch(hunt: Hunt | string, matchNumber: number): Promise<void> {
+export function deleteMatch(hunt: Hunt | string, matchNumber: number) {
     return ApiRequest.deleteItem(ApiPaths.matchPath(hunt, matchNumber));
 }
 
-export function postMatch(hunt: Hunt | string, match: MatchBase): Promise<Match> {
+export function postMatch(hunt: Hunt | string, match: MatchBase) {
     return ApiRequest.postItem<MatchBase, Match>(ApiPaths.matchesPath(hunt), match);
 }
 
@@ -40,7 +36,7 @@ type RootMatchmakeParams = {
     matchmake: MatchmakeParams;
 };
 
-export function matchmake(hunt: Hunt | string, params: MatchmakeParams): Promise<void> {
+export function matchmake(hunt: Hunt | string, params: MatchmakeParams) {
     return ApiRequest.postItem<RootMatchmakeParams>(ApiPaths.matchmakePath(hunt), {
         matchmake: params,
     });

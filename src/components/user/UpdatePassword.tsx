@@ -25,15 +25,18 @@ export default function UpdatePassword(props: Props): JSX.Element {
         const passwordConfirmation = data.get(PASSWORD_CONFIRMATION_KEY);
         if (oldPassword && newPassword && passwordConfirmation) {
             setSubmissionState(SubmissionState.Submitting);
-            updatePassword(oldPassword, newPassword, passwordConfirmation).then((success) => {
-                setSubmissionState(success ? SubmissionState.SubmissionSuccess : SubmissionState.SubmissionFailed);
-                if (success) {
+            updatePassword(oldPassword, newPassword, passwordConfirmation)
+                .then(() => {
+                    setSubmissionState(SubmissionState.SubmissionSuccess);
                     createNotification({ type: 'success', message: 'Password set' });
-                } else {
+                })
+                .catch(() => {
+                    setSubmissionState(SubmissionState.SubmissionFailed);
                     createNotification({ type: 'danger', message: 'Error setting password' });
-                }
-                props.onSubmit?.();
-            });
+                })
+                .finally(() => {
+                    props.onSubmit?.();
+                });
         }
     }
 

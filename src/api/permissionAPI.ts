@@ -11,26 +11,23 @@ export type PermissionPaginatedResponse = PaginatedResponse & {
     permissions: Permission[];
 };
 
-export function getPermissions(
-    roster: string | Roster,
-    params: ApiRequest.PaginationParams,
-): Promise<PermissionPaginatedResponse> {
+export function getPermissions(roster: string | Roster, params: ApiRequest.PaginationParams) {
     return ApiRequest.getItem<PermissionPaginatedResponse>(ApiPaths.permissionsPath(roster), { params: params });
 }
 
-export function getPermission(permissionId: string): Promise<Permission> {
+export function getPermission(permissionId: string) {
     return ApiRequest.getItem<Permission>(ApiPaths.permissionPath(permissionId));
 }
 
-export function deletePermission(permission: string | Permission): Promise<void> {
+export function deletePermission(permission: string | Permission) {
     return ApiRequest.deleteItem(ApiPaths.permissionPath(permission));
 }
 
-export function createPermission(roster: string | Roster, permission: PermissionPost): Promise<Permission> {
+export function createPermission(roster: string | Roster, permission: PermissionPost) {
     return ApiRequest.postItem<PermissionPost, Permission>(ApiPaths.permissionsPath(roster), permission);
 }
 
-export function updatePermission(permission: Permission): Promise<Permission> {
+export function updatePermission(permission: Permission) {
     const post: PermissionPatch = { level: permission.level };
-    return ApiRequest.patchItem(ApiPaths.permissionPath(permission), post);
+    return ApiRequest.patchItem<PermissionPatch, Permission>(ApiPaths.permissionPath(permission), post);
 }

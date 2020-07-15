@@ -13,7 +13,7 @@ type Props = {
 export default function CreatePermission(props: Props): JSX.Element {
     function postPermission(post: PermissionPost): void {
         createPermission(props.rosterId, post)
-            .then((permission) => {
+            .then(({ data: permission }) => {
                 createNotification({ type: 'success', message: 'Permission created!' });
                 props.onCreate?.(permission);
             })

@@ -12,14 +12,16 @@ export default function ResendConfirmation(): JSX.Element {
         const email = data.get(EMAIL_KEY);
         if (email) {
             setSubmitting(true);
-            resendConfirmation(email).then((success) => {
-                if (success) {
+            resendConfirmation(email)
+                .then(() => {
                     createNotification({ type: 'success', message: 'Email sent' });
-                } else {
+                })
+                .catch(() => {
                     createNotification({ type: 'danger', message: 'Failed to send email.' });
-                }
-                setSubmitting(false);
-            });
+                })
+                .finally(() => {
+                    setSubmitting(false);
+                });
         }
     }
 

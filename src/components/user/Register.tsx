@@ -20,17 +20,18 @@ export default function Register(): JSX.Element {
         const passwordConfirmation = data.get(PASSWORD_CONFIRMATION_KEY);
         if (email && password && passwordConfirmation) {
             setSubmissionState(SubmissionState.Submitting);
-            register(email, password, passwordConfirmation).then((success) => {
-                setSubmissionState(success ? SubmissionState.SubmissionSuccess : SubmissionState.SubmissionFailed);
-                if (success) {
+            register(email, password, passwordConfirmation)
+                .then(() => {
+                    setSubmissionState(SubmissionState.SubmissionSuccess);
                     createNotification({
                         type: 'success',
                         message: 'Account created, check your email.',
                     });
-                } else {
+                })
+                .catch(() => {
+                    setSubmissionState(SubmissionState.SubmissionFailed);
                     createNotification({ type: 'danger', message: 'Registration failed' });
-                }
-            });
+                });
         }
     }
 

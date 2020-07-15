@@ -24,7 +24,7 @@ export default function HuntLoader({ hunt, ...routeProps }: Props): JSX.Element 
 
     function loadHunt(): void {
         getHunt(huntId)
-            .then((hunt) => {
+            .then(({ data: hunt }) => {
                 setLoadedHunt(hunt);
             })
             .catch(onError);

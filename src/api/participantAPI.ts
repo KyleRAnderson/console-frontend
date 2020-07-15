@@ -26,28 +26,28 @@ export function getParticipants(
     roster: Roster | string,
     params: ApiRequest.SearchPaginationParams & Partial<ParticipantFilters>,
     ordering?: ParticipantOrdering,
-): Promise<ParticipantPaginatedResponse<Participant>> {
+) {
     return ApiRequest.getItem<ParticipantPaginatedResponse<Participant>>(ApiPaths.participantsPath(roster), {
         params: { ...params, ...ordering },
     });
 }
 
-export function getParticipant(participantId: string): Promise<Participant> {
+export function getParticipant(participantId: string) {
     return ApiRequest.getItem<Participant>(ApiPaths.participantPath(participantId));
 }
 
-export function createParticipant(roster: Roster | string, participant: ParticipantPost): Promise<Participant> {
-    return ApiRequest.postItem(ApiPaths.participantsPath(roster), participant);
+export function createParticipant(roster: Roster | string, participant: ParticipantPost) {
+    return ApiRequest.postItem<ParticipantPost, Participant>(ApiPaths.participantsPath(roster), participant);
 }
 
-export function deleteParticipant(participantId: string): Promise<void> {
+export function deleteParticipant(participantId: string) {
     return ApiRequest.deleteItem(ApiPaths.participantPath(participantId));
 }
 
-export function updateParticipant(participantId: string, participant: ParticipantPost): Promise<Participant> {
+export function updateParticipant(participantId: string, participant: ParticipantPost) {
     return ApiRequest.patchItem<ParticipantPost, Participant>(ApiPaths.participantPath(participantId), participant);
 }
 
-export function uploadParticipants(roster: Roster | string, formData: FormData): Promise<void> {
+export function uploadParticipants(roster: Roster | string, formData: FormData) {
     return ApiRequest.postItem<FormData>(ApiPaths.participantsUploadPath(roster), formData);
 }

@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from 'axios';
 import Hunt from '../models/Hunt';
 import License, { LicenseBase, LicenseWithErrors } from '../models/License';
 import Participant from '../models/Participant';
@@ -21,32 +22,29 @@ export type LicenseFilters = {
  * @param huntId The hunt ID of the licenses to be fetching
  * @param params The page and records per page parameters.
  */
-export function getLicenses(
-    huntId: string,
-    params: ApiRequest.SearchPaginationParams & Partial<LicenseFilters>,
-): Promise<LicensePaginatedResponse> {
+export function getLicenses(huntId: string, params: ApiRequest.SearchPaginationParams & Partial<LicenseFilters>) {
     return ApiRequest.getItem<LicensePaginatedResponse>(ApiPaths.licensesPath(huntId), {
         params: { ...params },
     });
 }
 
-export function getLicense(license: string | License): Promise<License> {
-    return ApiRequest.getItem<License>(ApiPaths.licensePath(license));
+export function getLicense(license: string | License, config?: AxiosRequestConfig) {
+    return ApiRequest.getItem<License>(ApiPaths.licensePath(license), config);
 }
 
-export function deleteLicense(license: string | License): Promise<void> {
-    return ApiRequest.deleteItem(ApiPaths.licensePath(license));
+export function deleteLicense(license: string | License) {
+    return ApiRequest.deleteItem<void>(ApiPaths.licensePath(license));
 }
 
-export function createLicense(hunt: string | Hunt, license: LicensePost): Promise<License> {
+export function createLicense(hunt: string | Hunt, license: LicensePost) {
     return ApiRequest.postItem<LicensePost, License>(ApiPaths.licensesPath(hunt), license);
 }
 
-export function eliminateAll(hunt: string | Hunt): Promise<void> {
+export function eliminateAll(hunt: string | Hunt) {
     return ApiRequest.patchItem(ApiPaths.eliminateAllPath(hunt));
 }
 
-export function eliminateHalf(hunt: string | Hunt): Promise<void> {
+export function eliminateHalf(hunt: string | Hunt) {
     return ApiRequest.patchItem(ApiPaths.eliminateHalfPath(hunt));
 }
 
@@ -55,10 +53,7 @@ export type BulkCreateResponse = {
     failed: LicenseWithErrors[];
 };
 
-export function bulkCreateLicenses(
-    hunt: string | Hunt,
-    participants?: (string | Participant)[],
-): Promise<BulkCreateResponse> {
+export function bulkCreateLicenses(hunt: string | Hunt, participants?: (string | Participant)[]) {
     const participantIds: string[] | undefined =
         participants &&
         participants.map((p) => {

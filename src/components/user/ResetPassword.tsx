@@ -22,14 +22,15 @@ export default function ResetPassword(
         const passwordConfirmation = data.get(PASSWORD_CONFIRMATION_KEY);
         if (newPassword && passwordConfirmation) {
             setSubmissionState(SubmissionState.Submitting);
-            resetPassword(resetToken, newPassword, passwordConfirmation).then((success) => {
-                setSubmissionState(success ? SubmissionState.SubmissionSuccess : SubmissionState.SubmissionFailed);
-                if (success) {
+            resetPassword(resetToken, newPassword, passwordConfirmation)
+                .then(() => {
+                    setSubmissionState(SubmissionState.SubmissionSuccess);
                     createNotification({ type: 'success', message: 'Password set' });
-                } else {
+                })
+                .catch(() => {
+                    setSubmissionState(SubmissionState.SubmissionFailed);
                     createNotification({ type: 'danger', message: 'Error resetting password' });
-                }
-            });
+                });
         }
     }
 

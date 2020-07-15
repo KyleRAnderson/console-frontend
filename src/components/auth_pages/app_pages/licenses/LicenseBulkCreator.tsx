@@ -20,7 +20,7 @@ export default function LicenseBulkCreator({ hunt, onCreate }: Props): JSX.Eleme
         if (hunt) {
             setIsSubmitting(true);
             bulkCreateLicenses(hunt)
-                .then(({ failed }) => {
+                .then(({ data: { failed } }) => {
                     createNotification({ type: 'success', message: '👍' });
                     failed.length > 0 && setCreationErrors(failed);
                     onCreate?.();

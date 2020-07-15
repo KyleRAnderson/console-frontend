@@ -12,9 +12,13 @@ export default function UserConfirmation(
     const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.Submitting);
 
     function sendConfirmation(): void {
-        confirm(props.match.params[AppPaths.CONFIRMATION_TOKEN_PARAM]).then((success) => {
-            setSubmissionState(success ? SubmissionState.SubmissionSuccess : SubmissionState.SubmissionFailed);
-        });
+        confirm(props.match.params[AppPaths.CONFIRMATION_TOKEN_PARAM])
+            .then(() => {
+                setSubmissionState(SubmissionState.SubmissionSuccess);
+            })
+            .catch(() => {
+                setSubmissionState(SubmissionState.SubmissionFailed);
+            });
     }
 
     useEffect(() => {

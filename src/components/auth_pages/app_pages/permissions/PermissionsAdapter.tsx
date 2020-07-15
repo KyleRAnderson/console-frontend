@@ -5,7 +5,6 @@ import { Redirect, RouteComponentProps } from 'react-router-dom';
 import {
     deletePermission as deletePermissionAPI,
     getPermissions,
-    PermissionPaginatedResponse,
     updatePermission as patchPermission,
 } from '../../../../api/permissionAPI';
 import FormControlElement from '../../../../FormControlElement';
@@ -26,7 +25,7 @@ export default function PermissionsAdapter(props: Props): JSX.Element {
     const [notFound, setNotFound] = useState<boolean>(false);
 
     async function getValues(currentPage: number, recordsPerPage?: number): Promise<[Permission[], number]> {
-        const response: PermissionPaginatedResponse = await getPermissions(props.match.params[ROSTER_ID_PARAM], {
+        const { data: response } = await getPermissions(props.match.params[ROSTER_ID_PARAM], {
             page: currentPage,
             per_page: recordsPerPage,
         });
@@ -41,7 +40,7 @@ export default function PermissionsAdapter(props: Props): JSX.Element {
 
         setPermissionChanging(permission, true);
         patchPermission({ ...permission, level: event.currentTarget.value as Role })
-            .then((updated) => {
+            .then(({ data: updated }) => {
                 const permissionsCopy = [...permissions];
                 permissionsCopy[permissionsCopy.indexOf(permission)] = updated;
                 setPermissions(permissionsCopy);

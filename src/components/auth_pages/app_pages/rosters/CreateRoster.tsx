@@ -90,7 +90,7 @@ export default class CreateRoster extends React.Component<Props, State> {
 
     makeRequest(rosterName: string, participant_properties: string[]) {
         createRoster({ name: rosterName, participant_properties: participant_properties })
-            .then((roster) => {
+            .then(({ data: roster }) => {
                 this.clearForm();
                 this.notifySuccess();
                 this.props.onSuccessfulCreate?.(roster);

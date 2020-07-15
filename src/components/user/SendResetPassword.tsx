@@ -11,14 +11,17 @@ export default function SendResetPassword(): JSX.Element {
         const email = data.get(EMAIL_KEY);
         if (email) {
             setIsSubmitting(true);
-            sendPasswordResetRequest(email).then((success) => {
-                setIsSubmitting(false);
-                if (success) {
+            sendPasswordResetRequest(email)
+                // Using full function body intentionally instead of single line, since that would create a new promise.
+                .finally(() => {
+                    setIsSubmitting(false);
+                })
+                .then(() => {
                     createNotification({ type: 'success', message: 'Email sent' });
-                } else {
+                })
+                .catch(() => {
                     createNotification({ type: 'danger', message: 'Failed to send email' });
-                }
-            });
+                });
         }
     }
 
