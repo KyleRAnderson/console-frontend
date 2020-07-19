@@ -46,7 +46,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
     }
 
     let activeTab: ActiveTab;
-    switch (location.pathname) {
+    switch (location.pathname.replace(/\/$/, '')) {
         case matchesPath:
             activeTab = ActiveTab.Matches;
             break;
