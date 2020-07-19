@@ -68,6 +68,11 @@ export function matchmakePath(hunt: string | Hunt): string {
     return urljoin(matchesPath(hunt), matchmakeExtension);
 }
 
+const editMatchesExtension = 'edit';
+export function matchEditPath(hunt: string | Hunt): string {
+    return urljoin(matchesPath(hunt), editMatchesExtension);
+}
+
 export function licensePath(license: string | License): string {
     return urljoin(API_ROOT_PATH, LICENSES_EXTENSION, getId(license));
 }

@@ -1,8 +1,9 @@
-import PaginatedResponse from '../models/PaginatedResponse';
-import Match, { MatchBase } from '../models/Match';
-import * as ApiRequest from './apiRequests';
-import * as ApiPaths from '../routes/ApiPaths';
+import { AxiosError, AxiosRequestConfig } from 'axios';
 import Hunt from '../models/Hunt';
+import Match, { MatchBase } from '../models/Match';
+import PaginatedResponse from '../models/PaginatedResponse';
+import * as ApiPaths from '../routes/ApiPaths';
+import * as ApiRequest from './apiRequests';
 type PaginatedMatches = PaginatedResponse & {
     matches: Match[];
 };
@@ -40,4 +41,30 @@ export function matchmake(hunt: Hunt | string, params: MatchmakeParams) {
     return ApiRequest.postItem<RootMatchmakeParams>(ApiPaths.matchmakePath(hunt), {
         matchmake: params,
     });
+}
+
+export type EditMatchParams = {
+    /** Pairs of license IDs to make matches with. */
+    pairings: [string, string][];
+};
+
+export type EditMatchErrorResponse = {
+    /** Error messages. */
+    messages: string[];
+    /** Array of duplicate license IDs that were in the input. */
+    duplicates: string[];
+};
+
+function isMatchErrorResponse(error: unknown): boolean {
+    const tryType = error as EditMatchErrorResponse;
+    return 'messages' in tryType && 'duplicates' in tryType;
+}
+
+export function asMatchErrorResponse(error: unknown): EditMatchErrorResponse | undefined {
+    const casted = error as AxiosError<EditMatchErrorResponse>;
+    return isMatchErrorResponse(casted.response?.data) ? (casted.response?.data as EditMatchErrorResponse) : undefined;
+}
+
+export function editMatches(hunt: Hunt | string, params: EditMatchParams, config?: AxiosRequestConfig) {
+    return ApiRequest.postItem<EditMatchParams>(ApiPaths.matchEditPath(hunt), params, config);
 }

@@ -19,11 +19,11 @@ export type LicenseFilters = {
 
 /**
  * Gets the licenses associated with the hunt given by the ID.
- * @param huntId The hunt ID of the licenses to be fetching
+ * @param hunt The hunt ID of the licenses to be fetching
  * @param params The page and records per page parameters.
  */
-export function getLicenses(huntId: string, params: ApiRequest.SearchPaginationParams & Partial<LicenseFilters>) {
-    return ApiRequest.getItem<LicensePaginatedResponse>(ApiPaths.licensesPath(huntId), {
+export function getLicenses(hunt: string | Hunt, params: ApiRequest.SearchPaginationParams & Partial<LicenseFilters>) {
+    return ApiRequest.getItem<LicensePaginatedResponse>(ApiPaths.licensesPath(hunt), {
         params: { ...params },
     });
 }
