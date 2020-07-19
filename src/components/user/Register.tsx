@@ -36,7 +36,7 @@ export default function Register(): JSX.Element {
     }
 
     if (submissionState === SubmissionState.SubmissionSuccess || isLoggedIn()) {
-        return <Redirect to={AppPaths.LOGIN_PATH} />;
+        return <Redirect to={AppPaths.LOGIN_PATH} push />;
     }
 
     const fieldMappings: FieldMappings = new Map();
