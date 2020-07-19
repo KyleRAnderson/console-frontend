@@ -5,7 +5,7 @@ import { ParticipantFilters } from '../../../../api/participantAPI';
 import Hunt from '../../../../models/Hunt';
 import Participant from '../../../../models/Participant';
 import Roster from '../../../../models/Roster';
-import SearchBar from '../../../generics/SearchBar';
+import SearchBarHolder from '../../../generics/SearchBarHolder';
 import LicenseBulkCreator from '../licenses/LicenseBulkCreator';
 import HuntFilterSelect from './HuntFilterSelect';
 import ParticipantAdapter from './ParticipantAdapter';
@@ -22,7 +22,7 @@ type Props = {
 const QUERY_SEARCH_KEYS: (keyof ParticipantFilters)[] = ['exclude_hunt_id'];
 
 export default function ParticipantsView(props: Props): JSX.Element {
-    const [searchQuery, setSearchQuery] = useState<string>();
+    const [searchQuery, setSearchQuery] = useState<string | undefined>();
     const [upToDate, setUpToDate] = useState<boolean>(false);
 
     const history = useHistory();
@@ -64,7 +64,7 @@ export default function ParticipantsView(props: Props): JSX.Element {
                             <ParticipantsUploader onSuccess={reloadParticipants} roster={props.roster} />
                         </Col>
                         <Col lg="4" md="6">
-                            <SearchBar onSearch={setSearchQuery} />
+                            <SearchBarHolder onSearch={setSearchQuery} />
                         </Col>
                         {props.hunts && (
                             <>

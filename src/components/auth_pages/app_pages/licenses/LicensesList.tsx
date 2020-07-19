@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Col, Container } from 'react-bootstrap';
 import { LicenseFilters } from '../../../../api/licenseAPI';
-import SearchBar from '../../../generics/SearchBar';
+import SearchBarHolder from '../../../generics/SearchBarHolder';
 import LicenseFiltersSelector from './LicenseFiltersSelector';
 import LicensesAdapter, { Props as AdapterProps } from './LicensesAdapter';
 
@@ -14,7 +14,7 @@ export default function LicensesList(props: Omit<AdapterProps, 'filters'>): JSX.
             <Container fluid className="py-1">
                 <LicenseFiltersSelector currentFilters={filters} filtersChanged={setFilters}>
                     <Col md="4">
-                        <SearchBar onSearch={setSearch} />
+                        <SearchBarHolder onSearch={setSearch} />
                     </Col>
                 </LicenseFiltersSelector>
             </Container>
