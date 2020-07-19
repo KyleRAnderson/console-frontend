@@ -4,7 +4,6 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "lib": ["ES2017", "dom", "ES2018.Promise"],
-        "types": ["node"],
         "module": "ES6",
         "moduleResolution": "node",
         "sourceMap": true,
