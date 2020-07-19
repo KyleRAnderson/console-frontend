@@ -27,5 +27,7 @@ type LicenseWithErrors = Partial<Identifiable> &
         errors: RecordError;
     };
 
+type LicensePairing = [License, License];
+
 export default License;
-export { LicenseBase, LicenseWithErrors };
+export { LicenseBase, LicenseWithErrors, LicensePairing };
