@@ -6,7 +6,7 @@ import MatchmakeForm from './MatchmakeForm';
 
 export type Props = {
     hunt: HuntWithProperties;
-    // Called after a request to matchmake has been submitted.
+    /** Called after a request to matchmake has succeeded. */
     onMatchmake?: (matchmakeParams: MatchmakeParams) => void;
 };
 
