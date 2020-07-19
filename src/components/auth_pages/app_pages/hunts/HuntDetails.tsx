@@ -19,7 +19,7 @@ export default function HuntDetails({ hunt, updateHunt, reloadHunt }: Props): JS
 
     useEffect(() => {
         subscriptionHolder.current = new NewMatchSubscription(hunt, () => {
-            createNotification({ type: 'success', message: 'Matchmaking complete!' });
+            createNotification({ type: 'success', message: 'New Matches Loaded!' });
             setAreNewMatches(true);
         });
 

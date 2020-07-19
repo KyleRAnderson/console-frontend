@@ -5,6 +5,7 @@ import urljoin from 'url-join';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
 import RoutedModalPairGenerator, { RoutedModalPair } from '../../../generics/modalPairGenerator';
+import MatchCreator from '../matches/MatchCreator';
 import Matchmake from '../matches/Matchmake';
 import NextRound from '../rounds/NextRound';
 import AddParticipantsButton from './AddParticipantsButton';
@@ -87,10 +88,14 @@ export default function HuntActions(props: Props): JSX.Element {
             route: ACTION_ROUTES.matchmake,
             modalTitle: 'Matchmake',
         }),
-        generator.generate('New Match', {
-            content: null,
+        generator.generate('New Matches', {
+            content: (
+                <Container fluid>
+                    <MatchCreator hunt={props.currentHunt} onSuccess={hideModals} />
+                </Container>
+            ),
             route: ACTION_ROUTES.newMatch,
-            modalTitle: 'New Match',
+            modalTitle: 'New Matches',
         }),
         generator.generate('Next Round', {
             content: (
