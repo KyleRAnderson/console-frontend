@@ -56,3 +56,4 @@ export function matchesPath(hunt?: Hunt | string): string {
 export const MATCHMAKE_EXTENSION = 'matchmake';
 export const NEW_MATCH_EXTENSION = 'new_match';
 export const NEXT_ROUND_EXTENSION = 'next_round';
+export const INSTANT_PRINT_EXTENSION = 'instant_print';

@@ -48,6 +48,12 @@ export function huntsPath(roster: string | Roster): string {
     return urljoin(rosterPath(getId(roster)), HUNTS_EXTENSION);
 }
 
+export const TEMPLATE_PDF_FORM_KEY = 'template_pdf' as const;
+const TEMPLATE_PDF_EXTENSION = 'template_pdf';
+export function templatePdfPath(hunt: Hunt | string): string {
+    return urljoin(huntPath(hunt), TEMPLATE_PDF_EXTENSION);
+}
+
 export function roundsPath(hunt: string | Hunt): string {
     return urljoin(huntPath(getId(hunt)), ROUNDS_EXTENSION);
 }
@@ -63,14 +69,14 @@ export function matchesPath(hunt: string | Hunt): string {
 export function matchPath(hunt: string | Hunt, matchNumber: number): string {
     return urljoin(matchesPath(getId(hunt)), matchNumber.toString());
 }
-const matchmakeExtension = 'matchmake';
+const MATCHMAKE_EXTENSION = 'matchmake';
 export function matchmakePath(hunt: string | Hunt): string {
-    return urljoin(matchesPath(hunt), matchmakeExtension);
+    return urljoin(matchesPath(hunt), MATCHMAKE_EXTENSION);
 }
 
-const editMatchesExtension = 'edit';
+const EDIT_MATCHES_EXTENSION = 'edit';
 export function matchEditPath(hunt: string | Hunt): string {
-    return urljoin(matchesPath(hunt), editMatchesExtension);
+    return urljoin(matchesPath(hunt), EDIT_MATCHES_EXTENSION);
 }
 
 export function licensePath(license: string | License): string {
@@ -79,6 +85,11 @@ export function licensePath(license: string | License): string {
 
 export function licensesPath(hunt: string | Hunt): string {
     return urljoin(huntPath(hunt), LICENSES_EXTENSION);
+}
+
+const INSTANT_PRINT_EXTENSION = 'print';
+export function instantPrintPath(hunt: string | Hunt): string {
+    return urljoin(licensesPath(hunt), INSTANT_PRINT_EXTENSION);
 }
 
 export const ELIMINATE_ALL_EXTENSION = 'eliminate_all' as const;
