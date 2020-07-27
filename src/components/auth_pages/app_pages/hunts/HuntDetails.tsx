@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { asInstantPrintUpdate } from '../../../../api/huntAPI';
 import { HuntWithProperties } from '../../../../models/Hunt';
+import { createNotification } from '../../../../notification';
 import HuntNavigator from './HuntNavigator';
 import NewMatchSubscription from './NewMatchSubscription';
-import { createNotification } from '../../../../notification';
 
 export type Props = {
     hunt: HuntWithProperties;
@@ -18,9 +19,36 @@ export default function HuntDetails({ hunt, updateHunt, reloadHunt }: Props): JS
     const [areNewMatches, setAreNewMatches] = useState<boolean>(false);
 
     useEffect(() => {
-        subscriptionHolder.current = new NewMatchSubscription(hunt, () => {
-            createNotification({ type: 'success', message: 'New Matches Loaded!' });
-            setAreNewMatches(true);
+        subscriptionHolder.current = new NewMatchSubscription(hunt, (obj) => {
+            const objAsInstantPrintUpdate = asInstantPrintUpdate(obj);
+            if (!objAsInstantPrintUpdate) {
+                createNotification({ type: 'success', message: 'New Matches Loaded!' });
+                setAreNewMatches(true);
+            } else {
+                if (objAsInstantPrintUpdate.success) {
+                    const url = objAsInstantPrintUpdate.output_url;
+                    let message: string | React.ReactNode = 'Instant Print Completed!';
+                    let title: string | undefined;
+
+                    if (url) {
+                        title = message as string;
+                        message = (
+                            <a href={url} target="_blank" rel="noreferrer">
+                                View Output
+                            </a>
+                        );
+                    }
+                    createNotification({
+                        type: 'success',
+                        title: title,
+                        message: message,
+                        dismiss: undefined,
+                    });
+                    reloadHunt();
+                } else {
+                    createNotification({ type: 'danger', message: 'Execution of Instant Print Failed!' });
+                }
+            }
         });
 
         return () => {
