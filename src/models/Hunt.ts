@@ -11,7 +11,14 @@ type HuntBase = {
     current_round_number: number;
 };
 
-type Hunt = Timestamps & Identifiable & HuntBase;
+type Hunt = Timestamps &
+    Identifiable &
+    HuntBase & {
+        attachment_urls: {
+            printout: string | undefined | null;
+            template_pdf: string | undefined | null;
+        };
+    };
 
 type HuntWithProperties = Hunt & {
     roster: Pick<Roster, 'participant_properties'>;
