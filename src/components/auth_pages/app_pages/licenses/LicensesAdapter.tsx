@@ -5,6 +5,7 @@ import { createNotification } from '../../../../notification';
 import GenericTable, { PropertyMapping } from '../../../generics/GenericTable';
 import LoadUntilReady from '../../../generics/LoadUntilReady';
 import PaginatedElement from '../../../generics/PaginatedElement';
+import ToggleEliminated from './ToggleEliminated';
 
 export type Props = {
     huntId: string;
@@ -27,6 +28,17 @@ export default function LicensesAdapter(props: Props) {
             .catch(() => createNotification({ type: 'danger', message: 'Failed to load licenses' }));
     }
 
+    function handleUpdate(updatedLicense: License): void {
+        if (!licenses) return;
+
+        const index = licenses.findIndex(({ id }) => updatedLicense.id === id);
+        if (index >= 0) {
+            const licensesCopy = [...licenses];
+            licensesCopy[index] = updatedLicense;
+            setLicenses(licensesCopy);
+        }
+    }
+
     // Order of hooks here matters. Must update page number before loading.
     useEffect(() => {
         setCurrentPage(1);
@@ -46,6 +58,16 @@ export default function LicensesAdapter(props: Props) {
             'Eliminated',
             ({ eliminated }) => {
                 return eliminated ? 'Yes' : 'No';
+            },
+        ],
+        [
+            'Toggle',
+            (license) => {
+                return (
+                    <td key={license.id}>
+                        <ToggleEliminated license={license} onUpdated={handleUpdate} />
+                    </td>
+                );
             },
         ],
     ];
