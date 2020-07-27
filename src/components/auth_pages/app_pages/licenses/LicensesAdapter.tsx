@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { getLicenses, LicenseFilters } from '../../../../api/licenseAPI';
 import License from '../../../../models/License';
-import { ParticipantBase } from '../../../../models/Participant';
 import { createNotification } from '../../../../notification';
+import GenericTable, { PropertyMapping } from '../../../generics/GenericTable';
 import LoadUntilReady from '../../../generics/LoadUntilReady';
 import PaginatedElement from '../../../generics/PaginatedElement';
-import ParticipantsTable from '../participants/ParticipantsTable';
 
 export type Props = {
     huntId: string;
@@ -14,22 +13,16 @@ export type Props = {
     currentSearch?: string;
 };
 
-type ParticipantWithEliminated = ParticipantBase & Pick<License, 'eliminated'>;
-
 export default function LicensesAdapter(props: Props) {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [numPages, setNumPages] = useState<number>(0);
-    const [licenses, setLicenses] = useState<ParticipantWithEliminated[]>();
+    const [licenses, setLicenses] = useState<License[]>();
 
     function loadLicenses(): void {
         getLicenses(props.huntId, { page: currentPage, q: props.currentSearch, ...props.filters })
             .then(({ data: { num_pages: numPages, licenses } }) => {
                 setNumPages(numPages);
-                setLicenses(
-                    licenses.map((license) => {
-                        return { ...license.participant, eliminated: license.eliminated };
-                    }),
-                );
+                setLicenses(licenses);
             })
             .catch(() => createNotification({ type: 'danger', message: 'Failed to load licenses' }));
     }
@@ -41,20 +34,25 @@ export default function LicensesAdapter(props: Props) {
 
     useEffect(loadLicenses, [currentPage, props.filters, props.currentSearch]);
 
-    const extraColumn: [string, (participant: ParticipantWithEliminated) => string] = [
-        'Eliminated',
-        (participant) => {
-            return participant.eliminated ? 'Yes' : 'No';
-        },
+    const propertyMappings: PropertyMapping<License>[] = [
+        ['First', ({ participant: { first } }) => first],
+        ['Last', ({ participant: { last } }) => last],
+        ...props.participantProperties.map(
+            (property): PropertyMapping<License> => {
+                return [property, ({ participant: { extras } }) => extras[property]];
+            },
+        ),
+        [
+            'Eliminated',
+            ({ eliminated }) => {
+                return eliminated ? 'Yes' : 'No';
+            },
+        ],
     ];
 
     const participantsTable: React.ReactNode = (
         <LoadUntilReady isLoaded={!!licenses}>
-            <ParticipantsTable<ParticipantWithEliminated>
-                participantProperties={props.participantProperties}
-                participants={licenses as ParticipantWithEliminated[]}
-                extraColumns={[extraColumn]}
-            />
+            <GenericTable<License> propertyMappings={propertyMappings} values={licenses || []} />
         </LoadUntilReady>
     );
 
