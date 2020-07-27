@@ -10,6 +10,7 @@ import Matchmake from '../matches/Matchmake';
 import NextRound from '../rounds/NextRound';
 import AddParticipantsButton from './AddParticipantsButton';
 import ButtonBar from './ButtonBar';
+import InstantPrint from './instant_print/InstantPrint';
 
 type Props = {
     currentHunt: HuntWithProperties;
@@ -25,6 +26,7 @@ export const ACTION_ROUTES = {
     matchmake: AppPaths.MATCHMAKE_EXTENSION,
     nextRound: AppPaths.NEXT_ROUND_EXTENSION,
     newMatch: AppPaths.NEW_MATCH_EXTENSION,
+    instantPrint: AppPaths.INSTANT_PRINT_EXTENSION,
 };
 
 export default function HuntActions(props: Props): JSX.Element {
@@ -67,6 +69,10 @@ export default function HuntActions(props: Props): JSX.Element {
         }
     }
 
+    /**
+     * Dispatches the hunt change event with the updated hunt properties and hides all modals.
+     * @param updatedHuntProperties The properties about the hunt that have changed
+     */
     function dispatchAndHide(updatedHuntProperties?: Partial<HuntWithProperties>): void {
         props.onChanged?.(updatedHuntProperties);
         hideModals();
@@ -105,6 +111,15 @@ export default function HuntActions(props: Props): JSX.Element {
             ),
             route: ACTION_ROUTES.nextRound,
             modalTitle: 'Next Round',
+        }),
+        generator.generate('Instant Print', {
+            content: (
+                <Container fluid>
+                    <InstantPrint hunt={props.currentHunt} onSubmit={hideModals} onHuntUpdated={props.onChanged} />
+                </Container>
+            ),
+            route: ACTION_ROUTES.instantPrint,
+            modalTitle: 'Instant Print',
         }),
     ];
 
