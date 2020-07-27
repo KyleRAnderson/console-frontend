@@ -5,14 +5,13 @@ export type PropertyOfType<U, V> = {
     [P in keyof U]: U[P] extends V ? P : never;
 }[keyof U];
 
-/**
- * Property Mappings type for mapping properties to the table.
- * First entry in the tuple is the display value for the column's header.
- * The second value is either a string key at which to access the property on the object,
- * or a function returning a react node (including the <td>!)
- */
 export type PropertyMapping<T> = [
+    /** The display value for the column's header */
     React.ReactNode,
+    /** A binding at which to find the value. This can either be a string key at which to extract the value, or
+     * a function that accepts the object type and extracts its value. If the return value of the function is an object,
+     * then you will need to wrap a <td> around it with the key.
+     */
     PropertyOfType<T, React.ReactNode> | ((value: T) => React.ReactNode),
 ];
 
