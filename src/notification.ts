@@ -8,8 +8,8 @@ type Transition = {
 export type NotificationConfig = {
     id?: string;
     onRemoval?: (id: string, removedBy: unknown) => void;
-    title?: string;
-    message: string;
+    title?: React.ReactNode;
+    message: React.ReactNode;
     content?: React.Component | JSX.Element;
     type?: 'success' | 'danger' | 'info' | 'default' | 'warning';
     container?: 'top-left' | 'top-right' | 'top-center' | 'center' | 'bottom-left' | 'bottom-right' | 'bottom-center';
