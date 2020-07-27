@@ -40,6 +40,13 @@ export function createLicense(hunt: string | Hunt, license: LicensePost) {
     return ApiRequest.postItem<LicensePost, License>(ApiPaths.licensesPath(hunt), license);
 }
 
+export function updateLicense(license: string | License, updatedAttributes: Omit<LicensePost, 'participant_id'>) {
+    return ApiRequest.patchItem<Omit<LicensePost, 'participant_id'>, License>(
+        ApiPaths.licensePath(license),
+        updatedAttributes,
+    );
+}
+
 export function eliminateAll(hunt: string | Hunt) {
     return ApiRequest.patchItem(ApiPaths.eliminateAllPath(hunt));
 }
