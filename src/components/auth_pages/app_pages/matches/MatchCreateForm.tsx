@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import License from '../../../../models/License';
 import LicenseSearch from './LicenseSearch';
@@ -50,6 +50,17 @@ export default function MatchCreateForm({
         setPairings(pairingsCopy);
     }
 
+    function emptyPairings(): boolean {
+        return pairings.length <= 0 || pairings.some((pairing) => pairing.some((pair) => !pair));
+    }
+
+    const pairingsEmpty = emptyPairings();
+
+    // Add a row on component mount so the user starts with one.
+    useEffect(() => {
+        addRow();
+    }, []);
+
     return (
         <>
             {pairings.map((licenses, i) => {
@@ -93,7 +104,7 @@ export default function MatchCreateForm({
             })}
             {children}
             <Row className="py-3 px-5 justify-content-between">
-                <Button onClick={onSubmit} disabled={disabled} variant="success">
+                <Button onClick={onSubmit} disabled={disabled || pairingsEmpty} variant="success">
                     Create
                 </Button>
                 <button className="btn-default btn" onClick={addRow} disabled={disabled}>
