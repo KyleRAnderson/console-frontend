@@ -1,5 +1,8 @@
-import React from 'react';
-import { Route, RouteProps } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Route, RouteProps, Switch } from 'react-router-dom';
+
+/** Regex that matches leading and trailing slashes. */
+const REPLACE_REGEX = /(^\/|\/)/g;
 
 type Props = {
     children: (show: boolean) => React.ReactNode;
@@ -12,10 +15,31 @@ type Props = {
  * value for whether or not the full path matches.
  */
 export default function BooleanRoute({ children, pathExtension, ...routeProps }: Props): JSX.Element {
-    const pathRegex = new RegExp(`\/${pathExtension.replace(/(^\/|\/$)/g, '')}\/?$`);
+    const [matches, setMatches] = useState<boolean>(false);
+
+    pathExtension = pathExtension.replace(REPLACE_REGEX, '');
+
+    function Setter({ setter }: { setter: (mount: boolean) => void }): JSX.Element {
+        useEffect(() => {
+            setter(true);
+            return () => {
+                setter(false);
+            };
+        }, []);
+
+        return <></>;
+    }
+
     return (
-        <Route {...routeProps} path={`*/(${pathExtension})?`}>
-            {(props) => children(pathRegex.test(props.location.pathname))}
-        </Route>
+        <>
+            <Switch>
+                <Route exact {...routeProps} path={`*/${pathExtension}`}>
+                    {() => {
+                        return <Setter setter={(mounted) => setMatches(mounted)} />;
+                    }}
+                </Route>
+            </Switch>
+            {children(matches)}
+        </>
     );
 }
