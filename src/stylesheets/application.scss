@@ -45,6 +45,10 @@ $text-forefront: white;
     }
 }
 
+#matchmake-columns.card-columns {
+    column-gap: 0.2rem;
+}
+
 .danger-link.btn-link {
     color: $reindeer-red;
 }

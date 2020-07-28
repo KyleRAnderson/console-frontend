@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Form, Button, Row, CardColumns, Col } from 'react-bootstrap';
+import { Button, Card, CardColumns, Col, Form, Row } from 'react-bootstrap';
 import { MatchmakeParams } from '../../../../api/matchAPI';
 
 export type Props = {
@@ -82,9 +82,9 @@ export default function MatchmakeForm(props: Props): JSX.Element {
 
     return (
         <>
-            <Row>
+            <Row className="py-2">
                 <Col>
-                    <CardColumns>{propertyCards}</CardColumns>
+                    <CardColumns id="matchmake-columns">{propertyCards}</CardColumns>
                 </Col>
             </Row>
             <Row>
