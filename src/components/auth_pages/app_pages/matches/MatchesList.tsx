@@ -4,11 +4,13 @@ import MatchesAdapter, { Props as AdapterProps } from './MatchesAdapter';
 import MatchFiltersSelector from './MatchFiltersSelector';
 import { Container } from 'react-bootstrap';
 
+export type Props = Omit<AdapterProps, 'filters'>;
+
 /**
  * Component for rendering matches along with their filters
  * for easy listing of matches in a table.
  */
-export default function MatchesList(props: Omit<AdapterProps, 'filters'>): JSX.Element {
+export default function MatchesList(props: Props): JSX.Element {
     const [filters, setFilters] = useState<MatchFilters>({ ongoing: true, round: props.hunt.current_round_number });
     const previousRound = useRef<number>(props.hunt.current_round_number);
 

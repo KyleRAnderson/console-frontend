@@ -5,9 +5,10 @@ import urljoin from 'url-join';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import * as AppPaths from '../../../../routes/AppPaths';
 import LicensesList from '../licenses/LicensesList';
-import MatchesList from '../matches/MatchesList';
+import MatchesView from '../matches/MatchesView';
 import HuntActions, { ACTION_ROUTES } from './HuntActions';
 import HuntNav, { ActiveTab } from './HuntNav';
+import { matchPath } from '../../../../routes/AppPaths';
 
 type Props = {
     currentHunt: HuntWithProperties;
@@ -75,12 +76,12 @@ export default function HuntNavigator(props: Props): JSX.Element {
             <Switch>
                 <Route
                     exact
-                    path={urljoin(matchesPath, possibleRouteExtensions)}
+                    path={[urljoin(matchesPath, possibleRouteExtensions), matchPath(currentHunt)]}
                     render={(routeProps) => {
                         return (
                             <>
-                                <MatchesList
-                                    onMatchesLoaded={() => props.setNewMatches?.(false)}
+                                <MatchesView
+                                    setAreMatchesLoaded={(areLoaded) => props.setNewMatches?.(!areLoaded)}
                                     newMatches={props.newMatches}
                                     hunt={currentHunt}
                                     {...routeProps}
@@ -89,9 +90,7 @@ export default function HuntNavigator(props: Props): JSX.Element {
                         );
                     }}
                 />
-                <Route exact path={urljoin(licensesPath, possibleRouteExtensions)}>
-                    {licensesView}
-                </Route>
+                <Route exact path={urljoin(licensesPath, possibleRouteExtensions)} render={() => licensesView} />
                 <Route>
                     <Redirect to={AppPaths.huntPath(currentHunt)} />
                 </Route>

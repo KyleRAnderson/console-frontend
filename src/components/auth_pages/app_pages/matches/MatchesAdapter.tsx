@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { getMatches, MatchFilters } from '../../../../api/matchAPI';
 import { HuntWithProperties } from '../../../../models/Hunt';
 import Match from '../../../../models/Match';
@@ -14,6 +15,8 @@ export type Props = {
     newMatches?: boolean;
     /** Function to call when matches are loaded. Should be provided if newMatches is provided. */
     onMatchesLoaded?: () => void;
+    /** Function to be called when a match is selected. */
+    onMatchSelected?: (match: Match) => void;
 };
 
 export default function MatchesAdapter(props: Props): JSX.Element {
@@ -45,6 +48,18 @@ export default function MatchesAdapter(props: Props): JSX.Element {
     const propertyMappings: PropertyMapping<Match>[] = [
         ['First 1', (match) => match.licenses[0]?.participant?.first || ''],
         ['Last 1', (match) => match.licenses[0]?.participant?.last || ''],
+        [
+            'Actions',
+            (match) => {
+                return (
+                    <td key={`show_${match.id}`} className="text-center">
+                        <Button variant="outline-primary" onClick={() => props.onMatchSelected?.(match)}>
+                            View
+                        </Button>
+                    </td>
+                );
+            },
+        ],
         ['First 2', (match) => match.licenses[1]?.participant?.first || ''],
         ['Last 2', (match) => match.licenses[1]?.participant?.last || ''],
     ];
