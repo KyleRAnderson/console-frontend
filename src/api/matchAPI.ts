@@ -16,7 +16,7 @@ export function getMatches(hunt: Hunt | string, pageParams: ApiRequest.Paginatio
     return ApiRequest.getItem<PaginatedMatches>(ApiPaths.matchesPath(hunt), { params: { ...pageParams, ...filters } });
 }
 
-export function getMatch(hunt: Hunt | string, matchNumber: number) {
+export function getMatch(hunt: Hunt | string, matchNumber: number | string) {
     return ApiRequest.getItem<Match>(ApiPaths.matchPath(hunt, matchNumber));
 }
 

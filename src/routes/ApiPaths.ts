@@ -66,7 +66,7 @@ export function matchesPath(hunt: string | Hunt): string {
     return urljoin(huntPath(getId(hunt)), MATCHES_EXTENSION);
 }
 
-export function matchPath(hunt: string | Hunt, matchNumber: number): string {
+export function matchPath(hunt: string | Hunt, matchNumber: number | string): string {
     return urljoin(matchesPath(getId(hunt)), matchNumber.toString());
 }
 const MATCHMAKE_EXTENSION = 'matchmake';
