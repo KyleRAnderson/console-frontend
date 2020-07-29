@@ -22,7 +22,12 @@ type Props = {
 
 const BUTTON_VARIANT: ButtonProps['variant'] = 'outline-dark';
 
-export const ACTION_ROUTES = {
+export const ACTION_ROUTES: {
+    readonly matchmake: string;
+    readonly nextRound: string;
+    readonly newMatch: string;
+    readonly instantPrint: string;
+} = {
     matchmake: AppPaths.MATCHMAKE_EXTENSION,
     nextRound: AppPaths.NEXT_ROUND_EXTENSION,
     newMatch: AppPaths.NEW_MATCH_EXTENSION,
@@ -64,6 +69,7 @@ export default function HuntActions(props: Props): JSX.Element {
     }
 
     function showModal(path: string): void {
+        path = path.replace(/[*\/]/g, '');
         if (!currentModalPath(path)) {
             history.push(urljoin(pathWithoutModals(), path));
         }
@@ -91,7 +97,7 @@ export default function HuntActions(props: Props): JSX.Element {
                     <Matchmake hunt={props.currentHunt} onMatchmake={hideModals} />
                 </Container>
             ),
-            route: ACTION_ROUTES.matchmake,
+            route: `*/${ACTION_ROUTES.matchmake}`,
             modalTitle: 'Matchmake',
         }),
         generator.generate('New Matches', {
@@ -100,7 +106,7 @@ export default function HuntActions(props: Props): JSX.Element {
                     <MatchCreator hunt={props.currentHunt} onSuccess={hideModals} />
                 </Container>
             ),
-            route: ACTION_ROUTES.newMatch,
+            route: `*/${ACTION_ROUTES.newMatch}`,
             modalTitle: 'New Matches',
         }),
         generator.generate('Next Round', {
@@ -109,7 +115,7 @@ export default function HuntActions(props: Props): JSX.Element {
                     <NextRound hunt={props.currentHunt} onUpdated={dispatchAndHide} />
                 </Container>
             ),
-            route: ACTION_ROUTES.nextRound,
+            route: `*/${ACTION_ROUTES.nextRound}`,
             modalTitle: 'Next Round',
         }),
         generator.generate('Instant Print', {
@@ -118,7 +124,7 @@ export default function HuntActions(props: Props): JSX.Element {
                     <InstantPrint hunt={props.currentHunt} onSubmit={hideModals} onHuntUpdated={props.onChanged} />
                 </Container>
             ),
-            route: ACTION_ROUTES.instantPrint,
+            route: `*/${ACTION_ROUTES.instantPrint}`,
             modalTitle: 'Instant Print',
         }),
     ];

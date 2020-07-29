@@ -3,9 +3,6 @@ import { Modal } from 'react-bootstrap';
 import { ModalHeaderProps } from 'react-bootstrap/ModalHeader';
 import BooleanRoute from './BooleanRoute';
 
-/** Regex that matches leading and trailing slashes. */
-const REPLACE_REGEX = /(^\/|\/)/g;
-
 export type Props = {
     /** Options to be provided to the modal itself. */
     modalOptions?: Omit<React.ComponentProps<typeof Modal>, 'show'>;
@@ -39,7 +36,7 @@ export default function RoutedModal({
         return <></>;
     }
     return (
-        <BooleanRoute path={`*/${route.replace(REPLACE_REGEX, '')}`}>
+        <BooleanRoute path={route}>
             {(show) => {
                 return (
                     <Modal {...modalProps} show={show}>
