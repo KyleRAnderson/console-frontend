@@ -4,7 +4,7 @@ import { updateLicense } from '../../../../api/licenseAPI';
 import License from '../../../../models/License';
 
 export type Props = {
-    license: License;
+    license: Pick<License, 'id' | 'eliminated'>;
     /** Function to be called when a license object is updated. Argument is a full new license object. */
     onUpdated?: (updatedRecord: License) => void;
 };
