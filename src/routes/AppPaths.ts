@@ -53,6 +53,11 @@ export function matchesPath(hunt?: Hunt | string): string {
     return urljoin(huntPath(hunt), MATCHES_EXTENSION);
 }
 
+export const MATCH_NUMBER_PARAM = 'matchNumber' as const;
+export function matchPath(hunt: Hunt | string, matchNumber = `:${MATCH_NUMBER_PARAM}`): string {
+    return urljoin(matchesPath(hunt), 'show', matchNumber);
+}
+
 export const MATCHMAKE_EXTENSION = 'matchmake';
 export const NEW_MATCH_EXTENSION = 'new_match';
 export const NEXT_ROUND_EXTENSION = 'next_round';
