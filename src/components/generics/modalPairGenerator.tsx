@@ -6,7 +6,7 @@ type ButtonProps = React.ComponentProps<typeof Button>;
 type ButtonPropsNoClick = Omit<ButtonProps, 'onClick' | 'children'>;
 type ClickHandler = (route: string, event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 
-type DefaultModalProps = Pick<RoutedModalProps, 'modalOptions' | 'headerOptions'>;
+type DefaultModalProps = Pick<RoutedModalProps, 'modalOptions' | 'headerOptions' | 'onHide'>;
 
 export type RoutedModalPair = { routedModal: React.ReactNode; button: React.ReactNode };
 

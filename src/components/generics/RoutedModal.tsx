@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { ModalHeaderProps } from 'react-bootstrap/ModalHeader';
-import BooleanRoute from './BooleanRoute';
+import { Route } from 'react-router-dom';
 
 export type Props = {
     /** Options to be provided to the modal itself. */
-    modalOptions?: Omit<React.ComponentProps<typeof Modal>, 'show'>;
+    modalOptions?: Omit<React.ComponentProps<typeof Modal>, 'show' | 'onHide' | 'onExited'>;
     /** Options to be provided to the generated Modal.Header */
     headerOptions?: ModalHeaderProps;
     /** The element to display in the modal's title. */
@@ -16,7 +16,27 @@ export type Props = {
     route: string;
     /** The modal's content element. */
     content: React.ReactNode;
+    /** Function to call when this modal has closed. Route is the same value as the passed in route prop.*/
+    onHide?: (route: string) => void;
 };
+
+/**
+ * @param param0 The modal child of this componenet. Should accept a show prop.
+ */
+function ModalHolder({
+    children,
+}: {
+    children: (show: boolean, setShow: (show: boolean) => void) => React.ReactNode;
+}): JSX.Element {
+    const [show, setShow] = useState<boolean>(true);
+
+    // Show modal on mount, since this means that the route matched.
+    useEffect(() => {
+        setShow(true);
+    }, []);
+
+    return <>{children(show, setShow)}</>;
+}
 
 export default function RoutedModal({
     headerOptions,
@@ -25,6 +45,7 @@ export default function RoutedModal({
     content,
     route,
     modalOptions: modalProps,
+    onHide,
 }: Props): JSX.Element {
     const modalHeader = modalTitle && (
         <Modal.Header {...headerOptions}>
@@ -35,17 +56,31 @@ export default function RoutedModal({
     if (!content) {
         return <></>;
     }
+
     return (
-        <BooleanRoute path={route}>
-            {(show) => {
+        <Route
+            exact
+            path={route}
+            render={() => {
                 return (
-                    <Modal {...modalProps} show={show}>
-                        {modalHeader}
-                        <Modal.Body>{content}</Modal.Body>
-                        {modalFooter}
-                    </Modal>
+                    <ModalHolder>
+                        {(show, setShow) => {
+                            return (
+                                <Modal
+                                    {...modalProps}
+                                    show={show}
+                                    onHide={() => setShow(false)}
+                                    onExited={() => onHide?.(route)}
+                                >
+                                    {modalHeader}
+                                    <Modal.Body>{content}</Modal.Body>
+                                    {modalFooter}
+                                </Modal>
+                            );
+                        }}
+                    </ModalHolder>
                 );
             }}
-        </BooleanRoute>
+        />
     );
 }

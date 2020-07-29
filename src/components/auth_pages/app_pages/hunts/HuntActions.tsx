@@ -87,7 +87,7 @@ export default function HuntActions(props: Props): JSX.Element {
     const generator: RoutedModalPairGenerator = new RoutedModalPairGenerator(
         showModal,
         { variant: BUTTON_VARIANT },
-        { modalOptions: { size: 'lg', onHide: hideModals }, headerOptions: { closeButton: true } },
+        { modalOptions: { size: 'lg' }, headerOptions: { closeButton: true }, onHide: hideModals },
     );
 
     const routedModals: RoutedModalPair[] = [
