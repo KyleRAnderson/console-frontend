@@ -12,7 +12,7 @@ type Match = Identifiable &
     Required<MatchBase> & {
         round_id: string;
         local_id: number;
-        licenses: Pick<License, 'id' | 'eliminated' | 'participant'>[];
+        licenses: Pick<License, 'id' | 'eliminated' | 'participant' | 'match_numbers'>[];
     };
 
 export default Match;

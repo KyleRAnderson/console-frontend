@@ -11,7 +11,7 @@ type LicenseBase = {
 type License = Identifiable &
     Timestamps &
     Required<Omit<LicenseBase, 'participant_id'>> & {
-        match_ids: string[];
+        match_numbers: number[];
         hunt_id: string;
         participant: ParticipantBase;
     };
