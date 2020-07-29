@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getLicenses, LicenseFilters } from '../../../../api/licenseAPI';
 import License from '../../../../models/License';
 import { createNotification } from '../../../../notification';
@@ -46,31 +46,33 @@ export default function LicensesAdapter(props: Props) {
 
     useEffect(loadLicenses, [currentPage, props.filters, props.currentSearch]);
 
-    const propertyMappings: PropertyMapping<License>[] = [
-        ['First', ({ participant: { first } }) => first],
-        ['Last', ({ participant: { last } }) => last],
-        ...props.participantProperties.map(
-            (property): PropertyMapping<License> => {
-                return [property, ({ participant: { extras } }) => extras[property]];
-            },
-        ),
-        [
-            'Eliminated',
-            ({ eliminated }) => {
-                return eliminated ? 'Yes' : 'No';
-            },
-        ],
-        [
-            'Toggle',
-            (license) => {
-                return (
-                    <td key={license.id}>
-                        <ToggleEliminated license={license} onUpdated={handleUpdate} />
-                    </td>
-                );
-            },
-        ],
-    ];
+    const propertyMappings = useMemo<PropertyMapping<License>[]>(() => {
+        return [
+            ['First', ({ participant: { first } }) => first],
+            ['Last', ({ participant: { last } }) => last],
+            ...props.participantProperties.map(
+                (property): PropertyMapping<License> => {
+                    return [property, ({ participant: { extras } }) => extras[property]];
+                },
+            ),
+            [
+                'Eliminated',
+                ({ eliminated }) => {
+                    return eliminated ? 'Yes' : 'No';
+                },
+            ],
+            [
+                'Toggle',
+                (license) => {
+                    return (
+                        <td key={license.id}>
+                            <ToggleEliminated license={license} onUpdated={handleUpdate} />
+                        </td>
+                    );
+                },
+            ],
+        ];
+    }, [props.participantProperties]);
 
     const participantsTable: React.ReactNode = (
         <LoadUntilReady isLoaded={!!licenses}>
