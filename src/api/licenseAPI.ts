@@ -73,7 +73,10 @@ export function bulkCreateLicenses(hunt: string | Hunt, participants?: (string |
 }
 
 /** Arguments used to set off instant print. Need to use a map because the order of the keys is important! */
-export type InstantPrintArgs = ReadonlyMap<string, 'asc' | 'desc'>;
+export type InstantPrintArgs = {
+    orderings?: ReadonlyMap<string, 'asc' | 'desc'>;
+    message?: string | null;
+};
 
 function isInstantPrintError(error: AxiosError<unknown>): boolean {
     return typeof error.response?.data === 'string';
@@ -90,6 +93,7 @@ export function asInstantPrintError(error: AxiosError<unknown>): string | undefi
 
 export function instantPrint(hunt: string | Hunt, instantPrintArgs?: InstantPrintArgs): Promise<AxiosResponse<void>> {
     return ApiRequest.postItem<{ orderings?: [string, 'asc' | 'desc'][] }, void>(ApiPaths.instantPrintPath(hunt), {
-        orderings: instantPrintArgs && [...instantPrintArgs],
+        ...instantPrintArgs,
+        orderings: instantPrintArgs?.orderings && [...instantPrintArgs.orderings],
     });
 }

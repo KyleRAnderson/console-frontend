@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Col, Form } from 'react-bootstrap';
 import { InstantPrintArgs } from '../../../../../api/licenseAPI';
 import { HuntWithProperties } from '../../../../../models/Hunt';
+import FormControlElement from '../../../../../FormControlElement';
 
 export type Props = {
     hunt: HuntWithProperties;
@@ -10,7 +11,8 @@ export type Props = {
 };
 
 export default function InstantPrintForm(props: Props): JSX.Element {
-    const [orderings, setOrderings] = useState<InstantPrintArgs>(new Map());
+    const [orderings, setOrderings] = useState<ReadonlyMap<string, 'asc' | 'desc'>>(new Map());
+    const [customMessage, setCustomMessage] = useState<string>('');
 
     function getRemainingOrderingOptions(): string[] {
         return props.hunt.roster.participant_properties.filter((property) => !orderings.has(property));
@@ -31,7 +33,8 @@ export default function InstantPrintForm(props: Props): JSX.Element {
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
-        props.onSubmit?.(orderings);
+        // If the message is empty, just make it undefined so we don't send anything at all.
+        props.onSubmit?.({ orderings: orderings, message: customMessage || undefined });
     }
 
     function withNewOrderings(callable: (newOrdering: Map<string, 'asc' | 'desc'>) => void) {
@@ -46,6 +49,12 @@ export default function InstantPrintForm(props: Props): JSX.Element {
 
     function setOrdering(propertyName: string, direction: 'asc' | 'desc'): void {
         withNewOrderings((newOrderings) => newOrderings.set(propertyName, direction));
+    }
+
+    function handleMessageChange(event: React.ChangeEvent<FormControlElement>): void {
+        const value = event.target.value;
+        // If empty string, set to undefined instead.
+        setCustomMessage(value);
     }
 
     return (
@@ -120,6 +129,17 @@ export default function InstantPrintForm(props: Props): JSX.Element {
                         Add Ordering
                     </Button>
                 </Col>
+            </Form.Row>
+            <Form.Row>
+                <Form.Group>
+                    <Form.Label>Message</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Custom message"
+                        value={customMessage}
+                        onChange={handleMessageChange}
+                    />
+                </Form.Group>
             </Form.Row>
             <Form.Row className="py-1">
                 <Button variant="success" type="submit" disabled={props.disabled}>
