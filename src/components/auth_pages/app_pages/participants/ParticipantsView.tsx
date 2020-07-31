@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Col, Container, Form } from 'react-bootstrap';
 import { useHistory, useLocation } from 'react-router-dom';
 import { ParticipantFilters } from '../../../../api/participantAPI';
@@ -22,7 +22,7 @@ type Props = {
 const QUERY_SEARCH_KEYS: (keyof ParticipantFilters)[] = ['exclude_hunt_id'];
 
 export default function ParticipantsView(props: Props): JSX.Element {
-    const [searchQuery, setSearchQuery] = useState<string | undefined>();
+    const [searchQuery, setSearchQuery] = useState<string>('');
     const [upToDate, setUpToDate] = useState<boolean>(false);
 
     const history = useHistory();
@@ -32,12 +32,17 @@ export default function ParticipantsView(props: Props): JSX.Element {
     function parseSearchToFilters(): ParticipantFilters {
         const filtersInSearch: ParticipantFilters = {};
         for (const key of QUERY_SEARCH_KEYS) {
-            filtersInSearch[key] = parsedSearch.get(key) || undefined;
+            const value = parsedSearch.get(key);
+            if (value) {
+                filtersInSearch[key] = value;
+            }
         }
         return filtersInSearch;
     }
 
-    const filters = parseSearchToFilters();
+    // This prevents the filters object from changing on every render, which would
+    // cause all children that depend on this value to re-render as well.
+    const filters = useMemo(() => parseSearchToFilters(), [search]);
 
     function setSearchFromFilters(filters: ParticipantFilters): void {
         for (const key of QUERY_SEARCH_KEYS) {

@@ -30,7 +30,7 @@ export default function ParticipantAdapter({
     function loadParticipants(): void {
         getParticipants(roster.id, {
             page: currentPage,
-            q: searchQuery,
+            q: searchQuery || undefined, // Rather than send empty string, just don't send.
             ...filters,
         }).then(({ data: { participants, num_pages: numPages } }) => {
             setParticipants(participants);
@@ -43,9 +43,16 @@ export default function ParticipantAdapter({
     useEffect(() => {
         setCurrentPage(1);
     }, [searchQuery, filters]);
-    useEffect(loadParticipants, [searchQuery, roster, filters, currentPage]);
     useEffect(() => {
-        !loaded && loadParticipants();
+        // Don't load when not loaded, the next useEffect will handle that.
+        if (loaded) {
+            loadParticipants();
+        }
+    }, [searchQuery, roster, currentPage, filters]);
+    useEffect(() => {
+        if (!loaded) {
+            loadParticipants();
+        }
     }, [loaded]);
 
     const participantsTable: React.ReactNode = (
