@@ -79,7 +79,7 @@ export function matchEditPath(hunt: string | Hunt): string {
     return urljoin(matchesPath(hunt), EDIT_MATCHES_EXTENSION);
 }
 
-export function licensePath(license: string | License): string {
+export function licensePath(license: string | Pick<License, 'id'>): string {
     return urljoin(API_ROOT_PATH, LICENSES_EXTENSION, getId(license));
 }
 

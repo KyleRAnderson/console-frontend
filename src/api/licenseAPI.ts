@@ -32,7 +32,7 @@ export function getLicense(license: string | License, config?: AxiosRequestConfi
     return ApiRequest.getItem<License>(ApiPaths.licensePath(license), config);
 }
 
-export function deleteLicense(license: string | License) {
+export function deleteLicense(license: string | Pick<License, 'id'>) {
     return ApiRequest.deleteItem<void>(ApiPaths.licensePath(license));
 }
 
