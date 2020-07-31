@@ -7,10 +7,10 @@ const SEARCH_DELAY = 750;
 
 export type Props = Omit<React.ComponentProps<typeof Form.Control>, 'type' | 'onChange' | 'value'> & {
     /** Value to be searched on. */
-    onSearch: () => void;
+    onSearch: (value: string) => void;
     /** The current value in the search bar. */
-    searchValue: string | undefined;
-    setSearchValue: (newValue: string | undefined) => void;
+    searchValue: string;
+    setSearchValue: (newValue: string) => void;
 };
 
 /**
@@ -20,9 +20,12 @@ export default function SearchBar({ onSearch, searchValue, setSearchValue, ...co
     const delayTimer = useRef<NodeJS.Timeout | undefined>();
     function handleChange(event: React.ChangeEvent<FormControlElement>): void {
         delayTimer.current && clearTimeout(delayTimer.current);
-        const value = event.target.value.length > 0 ? event.target.value : undefined;
-        delayTimer.current = global.setTimeout(onSearch, SEARCH_DELAY);
+        const value = event.target.value;
+
+        // Important that we pass the value here instead of in SearchBarHolder for instance, since it would still have the old value.
+        // Other option would be to set up the timeout in a useEffect, but that's just lame.
         setSearchValue(value);
+        delayTimer.current = global.setTimeout(() => onSearch(value), SEARCH_DELAY);
     }
 
     return (
