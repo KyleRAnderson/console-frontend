@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { getLicenses, LicenseFilters } from '../../../../api/licenseAPI';
 import License from '../../../../models/License';
 import { createNotification } from '../../../../notification';
@@ -6,6 +6,9 @@ import GenericTable, { PropertyMapping } from '../../../generics/GenericTable';
 import LoadUntilReady from '../../../generics/LoadUntilReady';
 import PaginatedElement from '../../../generics/PaginatedElement';
 import ToggleEliminated from './ToggleEliminated';
+import { ButtonGroup } from 'react-bootstrap';
+import DeleteButton from './DeleteButton';
+import MatchesPopover from './MatchesPopover';
 
 export type Props = {
     huntId: string;
@@ -28,16 +31,36 @@ export default function LicensesAdapter(props: Props) {
             .catch(() => createNotification({ type: 'danger', message: 'Failed to load licenses' }));
     }
 
-    function handleUpdate(updatedLicense: License): void {
-        if (!licenses) return;
+    const findIndexById = useCallback(
+        function findIndexById(licenseId: string): number {
+            return licenses ? licenses.findIndex(({ id }) => licenseId === id) : -1;
+        },
+        [licenses],
+    );
 
-        const index = licenses.findIndex(({ id }) => updatedLicense.id === id);
-        if (index >= 0) {
-            const licensesCopy = [...licenses];
-            licensesCopy[index] = updatedLicense;
-            setLicenses(licensesCopy);
-        }
-    }
+    const handleUpdate = useCallback(
+        function handleUpdate(updatedLicense: License): void {
+            const index = findIndexById(updatedLicense.id);
+            if (index >= 0) {
+                const licensesCopy = [...(licenses as License[])]; // findIndexById returns -1 if licenses not defined.
+                licensesCopy[index] = updatedLicense;
+                setLicenses(licensesCopy);
+            }
+        },
+        [findIndexById],
+    );
+
+    const handleRemoved = useCallback(
+        function handleRemoved(removedLicenseId: string): void {
+            const index = findIndexById(removedLicenseId);
+            if (index >= 0) {
+                const licensesCopy = [...(licenses as License[])]; // findIndexById returns -1 if licenses not defined.
+                licensesCopy.splice(index, 1);
+                setLicenses(licensesCopy);
+            }
+        },
+        [findIndexById],
+    );
 
     // Order of hooks here matters. Must update page number before loading.
     useEffect(() => {
@@ -45,6 +68,25 @@ export default function LicensesAdapter(props: Props) {
     }, [props.filters, props.currentSearch]);
 
     useEffect(loadLicenses, [currentPage, props.filters, props.currentSearch]);
+
+    const generateActionButtons = useCallback(
+        function generateActionButtons(license: License): React.ReactNode {
+            return (
+                <td key={license.id}>
+                    <ButtonGroup>
+                        <ToggleEliminated license={license} onUpdated={handleUpdate} />
+                        <DeleteButton license={license} onDelete={handleRemoved} />
+                        <MatchesPopover
+                            hunt={props.huntId}
+                            licenseId={license.id}
+                            matchNumbers={license.match_numbers}
+                        />
+                    </ButtonGroup>
+                </td>
+            );
+        },
+        [handleUpdate, handleRemoved],
+    );
 
     const propertyMappings = useMemo<PropertyMapping<License>[]>(() => {
         return [
@@ -61,18 +103,9 @@ export default function LicensesAdapter(props: Props) {
                     return eliminated ? 'Yes' : 'No';
                 },
             ],
-            [
-                'Toggle',
-                (license) => {
-                    return (
-                        <td key={license.id}>
-                            <ToggleEliminated license={license} onUpdated={handleUpdate} />
-                        </td>
-                    );
-                },
-            ],
+            ['Actions', generateActionButtons],
         ];
-    }, [props.participantProperties]);
+    }, [props.participantProperties, generateActionButtons]);
 
     const participantsTable: React.ReactNode = (
         <LoadUntilReady isLoaded={!!licenses}>
