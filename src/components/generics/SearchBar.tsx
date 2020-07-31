@@ -21,7 +21,7 @@ export default function SearchBar({ onSearch, searchValue, setSearchValue, ...co
     function handleChange(event: React.ChangeEvent<FormControlElement>): void {
         delayTimer.current && clearTimeout(delayTimer.current);
         const value = event.target.value.length > 0 ? event.target.value : undefined;
-        delayTimer.current = setTimeout(onSearch, SEARCH_DELAY);
+        delayTimer.current = global.setTimeout(onSearch, SEARCH_DELAY);
         setSearchValue(value);
     }
 

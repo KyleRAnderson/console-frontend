@@ -53,7 +53,7 @@ export default function LicenseSearch(props: Props): JSX.Element {
     function handleInputChange(newValue: string): void {
         if (newValue.length > 0) {
             delay.current && clearTimeout(delay.current);
-            delay.current = setTimeout(() => getLicenses(newValue), WAIT_TIME);
+            delay.current = global.setTimeout(() => getLicenses(newValue), WAIT_TIME);
         } else {
             setOptions([]);
         }
