@@ -26,7 +26,12 @@ export default function ToggleEliminated({ license: { id, eliminated }, onUpdate
     }
 
     return (
-        <Button type="button" variant={eliminated ? 'success' : 'danger'} onClick={handleClick} disabled={isSubmitting}>
+        <Button
+            type="button"
+            variant={eliminated ? 'success' : 'warning'}
+            onClick={handleClick}
+            disabled={isSubmitting}
+        >
             {eliminated ? 'Revive' : 'Eliminate'}
         </Button>
     );
