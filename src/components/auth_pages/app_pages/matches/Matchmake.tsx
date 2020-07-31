@@ -20,6 +20,9 @@ export default function Matchmake(props: Props): JSX.Element {
             .then(() => {
                 createNotification({ type: 'info', message: 'Matchmake request submitted...' });
                 props.onMatchmake?.(matchmakeParams);
+            })
+            .catch(() => {
+                createNotification({ type: 'danger', message: 'Failed to matchmake' });
             });
     }
 
