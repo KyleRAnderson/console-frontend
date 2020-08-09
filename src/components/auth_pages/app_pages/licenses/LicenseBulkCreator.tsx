@@ -35,7 +35,7 @@ export default function LicenseBulkCreator({ hunt, onCreate }: Props): JSX.Eleme
 
     return (
         <>
-            <Button disabled={isSubmitting} onClick={handleClick} variant="outline-success">
+            <Button disabled={isSubmitting || !hunt} onClick={handleClick} variant="outline-success">
                 Add All
             </Button>
             {
