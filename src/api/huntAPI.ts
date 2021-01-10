@@ -1,4 +1,3 @@
-import { isNullOrUndefined } from 'util';
 import Hunt, { HuntBase, HuntWithProperties } from '../models/Hunt';
 import Roster from '../models/Roster';
 import * as ApiPaths from '../routes/ApiPaths';
@@ -47,9 +46,9 @@ export type InstantPrintUpdate = {
 
 function isInstantPrintUpdate(obj: unknown): boolean {
     return (
-        !isNullOrUndefined(obj) &&
+        !(obj === null || obj === undefined) &&
         typeof obj === 'object' &&
-        'success' in (obj as object) &&
+        'success' in (obj as Record<string, unknown>) &&
         typeof (obj as InstantPrintUpdate).success === 'boolean'
     );
 }

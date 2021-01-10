@@ -1,20 +1,20 @@
-import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from "axios";
-import MiniSignal from "mini-signals";
+import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
+import MiniSignal from 'mini-signals';
 
 export type PaginationParams = {
-  page: number;
-  per_page?: number;
+    page: number;
+    per_page?: number;
 };
 
 export type SearchParams = {
-  q?: string;
+    q?: string;
 };
 
 export type SearchPaginationParams = PaginationParams & SearchParams;
 
 export type FailureCodeSubscriber = {
-  callback: (response: AxiosError) => void;
-  code: number;
+    callback: (response: AxiosError) => void;
+    code: number;
 };
 
 const failureSignals: { [key: number]: MiniSignal } = {};
@@ -24,115 +24,93 @@ const failureSignals: { [key: number]: MiniSignal } = {};
  * @param name The key of the cookie to be read
  */
 function readCookie(name: string): string | undefined {
-  name = name.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"); // Escape regex characters
-  const matches = document.cookie.match(
-    "(^|;)\\s*" + name + "\\s*=\\s*([^;]+)"
-  );
-  return matches?.pop();
+    name = name.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // Escape regex characters
+    const matches = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return matches?.pop();
 }
 
 function getCSRFToken(): string | undefined {
-  const cookieValue: string | undefined = readCookie("X-CSRF-Token");
-  let csrfToken: string | undefined;
-  if (cookieValue) {
-    csrfToken = decodeURIComponent(cookieValue);
-  }
-  return csrfToken;
+    const cookieValue: string | undefined = readCookie('X-CSRF-Token');
+    let csrfToken: string | undefined;
+    if (cookieValue) {
+        csrfToken = decodeURIComponent(cookieValue);
+    }
+    return csrfToken;
 }
 
 function getRequestHeaders(): {
-  "X-CSRF-Token"?: string;
-  "Content-Type": string;
+    'X-CSRF-Token'?: string;
+    'Content-Type': string;
 } {
-  return {
-    "X-CSRF-Token": getCSRFToken(),
-    "Content-Type": "application/json",
-  };
+    return {
+        'X-CSRF-Token': getCSRFToken(),
+        'Content-Type': 'application/json',
+    };
 }
 
 function callSubscribers(error: AxiosError): void {
-  if (error.response !== undefined) {
-    failureSignals[error.response.status]?.dispatch(error);
-  }
-}
-
-export function subscribeToFailureCode(
-  callback: FailureCodeSubscriber
-): MiniSignal.MiniSignalBinding {
-  if (!(400 <= callback.code && callback.code <= 599)) {
-    // Very loose error checking.
-    throw new Error(`Invalid HTTP failure code: ${callback.code}.`);
-  }
-  if (!failureSignals[callback.code]) {
-    failureSignals[callback.code] = new MiniSignal();
-  }
-  return failureSignals[callback.code].add(callback.callback);
-}
-
-function setupErrorSubscriber<T>(
-  request: Promise<AxiosResponse<T>>
-): Promise<AxiosResponse<T>> {
-  request.catch((error) => {
-    if ((error as AxiosError).response !== undefined) {
-      callSubscribers(error);
+    if (error.response !== undefined) {
+        failureSignals[error.response.status]?.dispatch(error);
     }
-  });
-  return request;
 }
 
-async function extractError<T>(
-  request: Promise<AxiosResponse<T>>
-): Promise<AxiosResponse<T>> {
-  try {
-    return await request;
-  } catch (err) {
-    if (!Axios.isCancel(err)) {
-      throw err;
+export function subscribeToFailureCode(callback: FailureCodeSubscriber): MiniSignal.MiniSignalBinding {
+    if (!(400 <= callback.code && callback.code <= 599)) {
+        // Very loose error checking.
+        throw new Error(`Invalid HTTP failure code: ${callback.code}.`);
     }
-    throw undefined;
-  }
+    if (!failureSignals[callback.code]) {
+        failureSignals[callback.code] = new MiniSignal();
+    }
+    return failureSignals[callback.code].add(callback.callback);
 }
 
-function setupPromise<T>(
-  promise: Promise<AxiosResponse<T>>
-): Promise<AxiosResponse<T>> {
-  return extractError(setupErrorSubscriber(promise));
+function setupErrorSubscriber<T>(request: Promise<AxiosResponse<T>>): Promise<AxiosResponse<T>> {
+    request.catch((error) => {
+        if ((error as AxiosError).response !== undefined) {
+            callSubscribers(error);
+        }
+    });
+    return request;
 }
 
-export function getItem<T>(
-  path: string,
-  config?: AxiosRequestConfig
-): Promise<AxiosResponse<T>> {
-  return setupPromise(
-    Axios.get<T>(path, { headers: getRequestHeaders(), ...config })
-  );
+async function extractError<T>(request: Promise<AxiosResponse<T>>): Promise<AxiosResponse<T>> {
+    try {
+        return await request;
+    } catch (err) {
+        if (!Axios.isCancel(err)) {
+            throw err;
+        }
+        throw undefined;
+    }
 }
 
-export function postItem<T, U = void>(
-  path: string,
-  item?: T,
-  config?: AxiosRequestConfig
-): Promise<AxiosResponse<U>> {
-  return setupPromise(
-    Axios.post<U>(path, item, { headers: getRequestHeaders(), ...config })
-  );
+function setupPromise<T>(promise: Promise<AxiosResponse<T>>): Promise<AxiosResponse<T>> {
+    return extractError(setupErrorSubscriber(promise));
 }
 
-export function deleteItem<T = void>(
-  path: string,
-  config?: AxiosRequestConfig
-): Promise<AxiosResponse<T>> {
-  return setupPromise(
-    Axios.delete<T>(path, { headers: getRequestHeaders(), ...config })
-  );
+export function getItem<T>(path: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return setupPromise(
+        Axios.get<T>(path, { headers: getRequestHeaders(), ...config }),
+    );
+}
+
+export function postItem<T, U = void>(path: string, item?: T, config?: AxiosRequestConfig): Promise<AxiosResponse<U>> {
+    return setupPromise(
+        Axios.post<U>(path, item, { headers: getRequestHeaders(), ...config }),
+    );
+}
+
+export function deleteItem<T = void>(path: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return setupPromise(
+        Axios.delete<T>(path, { headers: getRequestHeaders(), ...config }),
+    );
 }
 
 export function patchItem<T = unknown, U = void>(
-  path: string,
-  item?: T,
-  config?: AxiosRequestConfig
+    path: string,
+    item?: T,
+    config?: AxiosRequestConfig,
 ): Promise<AxiosResponse<U>> {
-  return setupPromise(
-    Axios.patch(path, item, { headers: getRequestHeaders(), ...config })
-  );
+    return setupPromise(Axios.patch(path, item, { headers: getRequestHeaders(), ...config }));
 }

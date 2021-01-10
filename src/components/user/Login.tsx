@@ -10,7 +10,7 @@ import SubmissionState from './SubmissionState';
 const EMAIL_KEY = Symbol('email');
 const PASSWORD_KEY = Symbol('password');
 
-export default function Login(props: RouteComponentProps<{}, never, { from: string }>): JSX.Element {
+export default function Login(props: RouteComponentProps<Record<string, never>, never, { from: string }>): JSX.Element {
     const [submissionState, setSubmissionState] = useState<SubmissionState>(SubmissionState.Pending);
 
     function handleSubmit(data: AuthData): void {
