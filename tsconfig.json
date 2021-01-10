@@ -1,24 +1,26 @@
 {
     "compilerOptions": {
-        "declaration": false,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "lib": ["ES2017", "dom", "ES2018.Promise"],
-        "module": "ES6",
-        "moduleResolution": "node",
-        "sourceMap": true,
         "target": "ES2017",
-        "jsx": "react",
-        "allowSyntheticDefaultImports": true,
-        "strict": true,
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
         "allowJs": true,
         "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
-        "noUnusedParameters": true,
-        "noUnusedLocals": true
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx"
     },
-    "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
-    "include": ["app", "javascript", "decs.d.ts"],
-    "compileOnSave": false
+    "include": [
+        "src"
+    ]
 }
