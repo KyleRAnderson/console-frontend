@@ -8,4 +8,4 @@ type RoundBase = {
 type Round = Timestamps & Identifiable & RoundBase;
 
 export default Round;
-export { RoundBase };
+export type { RoundBase };

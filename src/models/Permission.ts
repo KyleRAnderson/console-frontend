@@ -1,15 +1,18 @@
-import Identifiable from './Identifiable';
-import Timestamps from './Timestamps';
-import { UserBase } from './User';
+import Identifiable from "./Identifiable";
+import Timestamps from "./Timestamps";
+import { UserBase } from "./User";
 
-const ROLES = ['owner', 'administrator', 'operator', 'viewer'] as const;
+const ROLES = ["owner", "administrator", "operator", "viewer"] as const;
 type Role = typeof ROLES[number];
 
 type PermissionBase = {
-    level: Role;
+  level: Role;
 };
 
-type Permission = Identifiable & Timestamps & PermissionBase & { email: Pick<UserBase, 'email'> };
+type Permission = Identifiable &
+  Timestamps &
+  PermissionBase & { email: Pick<UserBase, "email"> };
 
 export default Permission;
-export { ROLES, Role, PermissionBase };
+export type { Role, PermissionBase };
+export { ROLES };

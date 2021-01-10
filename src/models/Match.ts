@@ -16,4 +16,4 @@ type Match = Identifiable &
     };
 
 export default Match;
-export { MatchBase };
+export type { MatchBase };

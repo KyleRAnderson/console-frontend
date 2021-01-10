@@ -30,4 +30,4 @@ type LicenseWithErrors = Partial<Identifiable> &
 type LicensePairing = [License, License];
 
 export default License;
-export { LicenseBase, LicenseWithErrors, LicensePairing };
+export type { LicenseBase, LicenseWithErrors, LicensePairing };

@@ -10,4 +10,4 @@ type ParticipantBase = {
 type Participant = Identifiable & Timestamps & ParticipantBase;
 
 export default Participant;
-export { ParticipantBase };
+export type { ParticipantBase };

@@ -9,4 +9,4 @@ type RosterBase = {
 
 type Roster = Timestamps & Identifiable & RosterBase;
 export default Roster;
-export { RosterBase };
+export type { RosterBase };
