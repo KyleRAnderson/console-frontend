@@ -22,35 +22,6 @@ export type FailureCodeSubscriber = {
 
 const failureSignals: { [key: number]: MiniSignal } = {};
 
-/**
- * Reads a cookie at the given key, returning its value, or undefined if it isn't set.
- * @param name The key of the cookie to be read
- */
-function readCookie(name: string): string | undefined {
-    name = name.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // Escape regex characters
-    const matches = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-    return matches?.pop();
-}
-
-function getCSRFToken(): string | undefined {
-    const cookieValue: string | undefined = readCookie('X-CSRF-Token');
-    let csrfToken: string | undefined;
-    if (cookieValue) {
-        csrfToken = decodeURIComponent(cookieValue);
-    }
-    return csrfToken;
-}
-
-function getRequestHeaders(): {
-    'X-CSRF-Token'?: string;
-    'Content-Type': string;
-} {
-    return {
-        'X-CSRF-Token': getCSRFToken(),
-        'Content-Type': 'application/json',
-    };
-}
-
 function callSubscribers(error: AxiosError): void {
     if (error.response !== undefined) {
         failureSignals[error.response.status]?.dispatch(error);
@@ -93,21 +64,15 @@ function setupPromise<T>(promise: Promise<AxiosResponse<T>>): Promise<AxiosRespo
 }
 
 export function getItem<T>(path: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return setupPromise(
-        Axios.get<T>(path, { headers: getRequestHeaders(), ...config }),
-    );
+    return setupPromise(Axios.get<T>(path, config));
 }
 
 export function postItem<T, U = void>(path: string, item?: T, config?: AxiosRequestConfig): Promise<AxiosResponse<U>> {
-    return setupPromise(
-        Axios.post<U>(path, item, { headers: getRequestHeaders(), ...config }),
-    );
+    return setupPromise(Axios.post<U>(path, item, config));
 }
 
 export function deleteItem<T = void>(path: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return setupPromise(
-        Axios.delete<T>(path, { headers: getRequestHeaders(), ...config }),
-    );
+    return setupPromise(Axios.delete<T>(path, config));
 }
 
 export function patchItem<T = unknown, U = void>(
@@ -115,5 +80,5 @@ export function patchItem<T = unknown, U = void>(
     item?: T,
     config?: AxiosRequestConfig,
 ): Promise<AxiosResponse<U>> {
-    return setupPromise(Axios.patch(path, item, { headers: getRequestHeaders(), ...config }));
+    return setupPromise(Axios.patch(path, item, config));
 }
