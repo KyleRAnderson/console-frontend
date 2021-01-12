@@ -22,6 +22,8 @@ export async function login(email: string, password: string): Promise<boolean> {
     let userID = '';
     let success = false;
 
+    await ApiRequest.getItem(ApiPaths.API_ROOT_PATH);
+
     try {
         const { data: user } = await ApiRequest.postItem<LoginPost, User>(
             ApiPaths.USERS_LOGIN_PATH,

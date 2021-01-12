@@ -1,5 +1,8 @@
-import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
+import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import MiniSignal from 'mini-signals';
+import initializeAxios from './axios_initializer';
+
+initializeAxios();
 
 export type PaginationParams = {
     page: number;
