@@ -10,6 +10,6 @@ type Props = {
 /**
  * Component that simply doesn't show its children until the data has been loaded.
  */
-export default function LoadUntilReady({ isLoaded, children }: Props) {
+export default function LoadUntilReady({ isLoaded, children }: Props): JSX.Element {
     return isLoaded ? <>{children}</> : <Loading />;
 }

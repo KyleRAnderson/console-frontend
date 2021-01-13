@@ -45,6 +45,6 @@ const defaultConfig: Partial<NotificationConfig> = {
     },
 };
 
-export function createNotification(config: NotificationConfig) {
+export function createNotification(config: NotificationConfig): void {
     store.addNotification({ ...defaultConfig, ...config });
 }

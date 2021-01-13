@@ -2,7 +2,7 @@ import React from 'react';
 import { Col } from 'react-bootstrap';
 import Hunt from '../../../../../models/Hunt';
 
-export default function InstantPrintLinks({ hunt }: { hunt: Hunt }) {
+export default function InstantPrintLinks({ hunt }: { hunt: Hunt }): JSX.Element {
     const noPrintout = !hunt.attachment_urls.printout;
     const noTemplate = !hunt.attachment_urls.template_pdf;
 

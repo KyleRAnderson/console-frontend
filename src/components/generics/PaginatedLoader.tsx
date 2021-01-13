@@ -44,11 +44,11 @@ export default class PaginatedLoader<Model> extends React.Component<Props<Model>
         this.onError = this.onError.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
         this.updateBinding = this.props.updateSignal?.add(() => this.setState({ ...this.state, loaded: false }));
     }
 
-    componentWillUnmount() {
+    componentWillUnmount(): void {
         this.updateBinding?.detach();
     }
 
@@ -65,7 +65,7 @@ export default class PaginatedLoader<Model> extends React.Component<Props<Model>
         }
     }
 
-    render() {
+    render(): JSX.Element {
         const paginationBar: React.ReactNode = (
             <Container>
                 <PaginationBar

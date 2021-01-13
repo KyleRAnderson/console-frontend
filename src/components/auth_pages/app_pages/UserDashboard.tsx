@@ -17,7 +17,7 @@ type Props = RouteComponentProps & {
     setMenuItem?: (item: React.ReactNode) => void;
 };
 
-export default function UserDashboard(props: Props) {
+export default function UserDashboard(props: Props): JSX.Element {
     const [currentRoster, setCurrentRoster] = useState<Roster | undefined>(undefined);
     const [currentHunt, setCurrentHunt] = useState<HuntWithProperties | undefined>(undefined);
 

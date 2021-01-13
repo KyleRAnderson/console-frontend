@@ -22,6 +22,7 @@ export async function login(email: string, password: string): Promise<boolean> {
     let userID = '';
     let success = false;
 
+    // TODO see if there's a way we can get the CSRF token without this pointless request. Also make sure that there aren't other places the user might end up without a CSRF token.
     await ApiRequest.getItem(ApiPaths.API_ROOT_PATH);
 
     try {
@@ -39,7 +40,7 @@ export async function login(email: string, password: string): Promise<boolean> {
     }
 }
 
-export function register(email: string, password: string, passwordConfirmation: string) {
+export function register(email: string, password: string, passwordConfirmation: string): Promise<AxiosResponse<User>> {
     return ApiRequest.postItem<RegisterPost, User>(
         ApiPaths.USERS_REGISTRATIONS_PATH,
         { user: { email: email, password: password, password_confirmation: passwordConfirmation } },
@@ -47,7 +48,7 @@ export function register(email: string, password: string, passwordConfirmation: 
     );
 }
 
-export async function logout() {
+export async function logout(): Promise<AxiosResponse<void>> {
     const response = await ApiRequest.deleteItem(ApiPaths.USERS_LOGOUT_PATH);
     /* If the request errors, then an exception will be thrown and the clearLogin() logic won't run. Thus, it only
     clears login on success. */
@@ -55,11 +56,11 @@ export async function logout() {
     return response;
 }
 
-export function confirm(token: string) {
+export function confirm(token: string): Promise<AxiosResponse<void>> {
     return ApiRequest.getItem(ApiPaths.USERS_CONFIRMATION_PATH, { params: { confirmation_token: token } });
 }
 
-export function resendConfirmation(emailAddress: string) {
+export function resendConfirmation(emailAddress: string): Promise<AxiosResponse<void>> {
     return ApiRequest.postItem<ConfirmationPost>(ApiPaths.USERS_CONFIRMATION_PATH, {
         user: { email: emailAddress },
     });
@@ -79,7 +80,11 @@ export function resetPassword(
     });
 }
 
-export function updatePassword(currentPassword: string, newPassword: string, newPasswordConfirmation: string) {
+export function updatePassword(
+    currentPassword: string,
+    newPassword: string,
+    newPasswordConfirmation: string,
+): Promise<AxiosResponse<void>> {
     return ApiRequest.patchItem<UpdatePasswordPatch>(ApiPaths.USERS_REGISTRATIONS_PATH, {
         user: {
             current_password: currentPassword,

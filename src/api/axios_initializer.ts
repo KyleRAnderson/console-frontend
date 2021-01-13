@@ -1,7 +1,8 @@
 import Axios from 'axios';
 
 export default function initializeAxios(): void {
-    Axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL; // TODO make this environment-configurable.
+    Axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+    console.log('Base URL', Axios.defaults.baseURL); // FIXME remove
     // Configure Axios to deal with CSRF tokens for us.
     Axios.defaults.xsrfCookieName = 'X-CSRF-Token';
     Axios.defaults.xsrfHeaderName = 'X-CSRF-Token';

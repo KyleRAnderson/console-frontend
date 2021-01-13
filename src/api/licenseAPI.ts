@@ -22,36 +22,42 @@ export type LicenseFilters = {
  * @param hunt The hunt ID of the licenses to be fetching
  * @param params The page and records per page parameters.
  */
-export function getLicenses(hunt: string | Hunt, params: ApiRequest.SearchPaginationParams & Partial<LicenseFilters>) {
+export function getLicenses(
+    hunt: string | Hunt,
+    params: ApiRequest.SearchPaginationParams & Partial<LicenseFilters>,
+): Promise<AxiosResponse<LicensePaginatedResponse>> {
     return ApiRequest.getItem<LicensePaginatedResponse>(ApiPaths.licensesPath(hunt), {
         params: { ...params },
     });
 }
 
-export function getLicense(license: string | License, config?: AxiosRequestConfig) {
+export function getLicense(license: string | License, config?: AxiosRequestConfig): Promise<AxiosResponse<License>> {
     return ApiRequest.getItem<License>(ApiPaths.licensePath(license), config);
 }
 
-export function deleteLicense(license: string | Pick<License, 'id'>) {
+export function deleteLicense(license: string | Pick<License, 'id'>): Promise<AxiosResponse<void>> {
     return ApiRequest.deleteItem<void>(ApiPaths.licensePath(license));
 }
 
-export function createLicense(hunt: string | Hunt, license: LicensePost) {
+export function createLicense(hunt: string | Hunt, license: LicensePost): Promise<AxiosResponse<License>> {
     return ApiRequest.postItem<LicensePost, License>(ApiPaths.licensesPath(hunt), license);
 }
 
-export function updateLicense(license: string | License, updatedAttributes: Omit<LicensePost, 'participant_id'>) {
+export function updateLicense(
+    license: string | License,
+    updatedAttributes: Omit<LicensePost, 'participant_id'>,
+): Promise<AxiosResponse<License>> {
     return ApiRequest.patchItem<Omit<LicensePost, 'participant_id'>, License>(
         ApiPaths.licensePath(license),
         updatedAttributes,
     );
 }
 
-export function eliminateAll(hunt: string | Hunt) {
+export function eliminateAll(hunt: string | Hunt): Promise<AxiosResponse<void>> {
     return ApiRequest.patchItem(ApiPaths.eliminateAllPath(hunt));
 }
 
-export function eliminateHalf(hunt: string | Hunt) {
+export function eliminateHalf(hunt: string | Hunt): Promise<AxiosResponse<void>> {
     return ApiRequest.patchItem(ApiPaths.eliminateHalfPath(hunt));
 }
 
@@ -60,7 +66,10 @@ export type BulkCreateResponse = {
     failed: LicenseWithErrors[];
 };
 
-export function bulkCreateLicenses(hunt: string | Hunt, participants?: (string | Participant)[]) {
+export function bulkCreateLicenses(
+    hunt: string | Hunt,
+    participants?: (string | Participant)[],
+): Promise<AxiosResponse<BulkCreateResponse>> {
     const participantIds: string[] | undefined =
         participants &&
         participants.map((p) => {

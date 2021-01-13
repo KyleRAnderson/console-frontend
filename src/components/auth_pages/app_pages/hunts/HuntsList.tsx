@@ -17,7 +17,7 @@ type HuntsProps = {
 };
 
 export default class HuntsList extends React.Component<HuntsProps> {
-    render() {
+    render(): JSX.Element {
         const actionButtons: (hunt: Hunt) => React.ReactNode = (hunt) => {
             return (
                 <>
@@ -52,7 +52,7 @@ export default class HuntsList extends React.Component<HuntsProps> {
         createNotification({ message: 'Error loading hunts.', type: 'danger' });
     }
 
-    goToHunt(hunt: Hunt) {
+    goToHunt(hunt: Hunt): void {
         this.props.onHuntSelect?.(hunt);
     }
 

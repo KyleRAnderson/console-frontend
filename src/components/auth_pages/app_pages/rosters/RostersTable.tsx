@@ -8,7 +8,7 @@ export type RosterTableProps = {
     actionButtons?: (roster: Roster) => React.ReactNode;
 };
 
-export default function rostersTable(props: RosterTableProps) {
+export default function rostersTable(props: RosterTableProps): JSX.Element {
     const rosters = props.rosters;
 
     function buttonGroupForRoster(roster: Roster): React.ReactNode {

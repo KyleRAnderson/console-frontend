@@ -12,7 +12,7 @@ export type Props = {
     onHuntUpdated?: (updatedAttributes: Partial<Hunt>) => void;
 };
 
-export default function TemplateUploader({ hunt, onHuntUpdated }: Props) {
+export default function TemplateUploader({ hunt, onHuntUpdated }: Props): JSX.Element {
     function uploadFile(file: File): void {
         const formData = new FormData();
         formData.set(TEMPLATE_PDF_FORM_KEY, file);

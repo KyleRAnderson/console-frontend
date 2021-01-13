@@ -16,7 +16,7 @@ export default class NewMatchSubscription {
         });
     }
 
-    cleanup() {
+    cleanup(): void {
         this.subscription.unsubscribe();
     }
 }

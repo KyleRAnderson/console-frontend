@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import Hunt, { HuntBase, HuntWithProperties } from '../models/Hunt';
 import Roster from '../models/Roster';
 import * as ApiPaths from '../routes/ApiPaths';
@@ -5,23 +6,23 @@ import * as ApiRequest from './apiRequests';
 
 export type HuntPost = Pick<HuntBase, 'name'>;
 
-export function getHunts(roster: string | Roster) {
+export function getHunts(roster: string | Roster): Promise<AxiosResponse<Hunt[]>> {
     return ApiRequest.getItem<Hunt[]>(ApiPaths.huntsPath(roster));
 }
 
-export function getHunt(hunt: string | Hunt) {
+export function getHunt(hunt: string | Hunt): Promise<AxiosResponse<HuntWithProperties>> {
     return ApiRequest.getItem<HuntWithProperties>(ApiPaths.huntPath(hunt));
 }
 
-export function deleteHunt(hunt: string | Hunt) {
+export function deleteHunt(hunt: string | Hunt): Promise<AxiosResponse<void>> {
     return ApiRequest.deleteItem(ApiPaths.huntPath(hunt));
 }
 
-export function createHunt(roster: string | Roster, hunt: HuntPost) {
+export function createHunt(roster: string | Roster, hunt: HuntPost): Promise<AxiosResponse<Hunt>> {
     return ApiRequest.postItem<HuntPost, Hunt>(ApiPaths.huntsPath(roster), hunt);
 }
 
-export function updateHunt(hunt: string | Hunt, post: Partial<HuntPost>) {
+export function updateHunt(hunt: string | Hunt, post: Partial<HuntPost>): Promise<AxiosResponse<Hunt>> {
     return ApiRequest.patchItem<Partial<HuntPost>, Hunt>(ApiPaths.huntPath(hunt), post);
 }
 
@@ -31,11 +32,11 @@ export function updateHunt(hunt: string | Hunt, post: Partial<HuntPost>) {
  * @param formData The form data containing the template to be uploaded. This must have the TEMPLATE_PDF_FORM_KEY
  * key present.
  */
-export function attachTemplatePdf(hunt: string | Hunt, formData: FormData) {
+export function attachTemplatePdf(hunt: string | Hunt, formData: FormData): Promise<AxiosResponse<{ url: string }>> {
     return ApiRequest.postItem<FormData, { url: string }>(ApiPaths.templatePdfPath(hunt), formData);
 }
 
-export function deleteTemplatePdf(hunt: string | Hunt) {
+export function deleteTemplatePdf(hunt: string | Hunt): Promise<AxiosResponse<void>> {
     return ApiRequest.deleteItem(ApiPaths.templatePdfPath(hunt));
 }
 

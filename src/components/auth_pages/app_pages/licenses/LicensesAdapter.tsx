@@ -17,7 +17,7 @@ export type Props = {
     currentSearch?: string;
 };
 
-export default function LicensesAdapter(props: Props) {
+export default function LicensesAdapter(props: Props): JSX.Element {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [numPages, setNumPages] = useState<number>(0);
     const [licenses, setLicenses] = useState<License[]>();

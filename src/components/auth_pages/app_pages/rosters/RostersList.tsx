@@ -20,7 +20,7 @@ export default class RostersList extends React.Component<Props, State> {
         this.state = { rosters: [] };
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
         getRosters()
             .then(({ data: rosters }) => {
                 this.setRosters(rosters);
@@ -33,11 +33,11 @@ export default class RostersList extends React.Component<Props, State> {
             });
     }
 
-    setRosters(rosters: Roster[]) {
+    setRosters(rosters: Roster[]): void {
         this.setState({ ...this.state, rosters: rosters });
     }
 
-    render() {
+    render(): JSX.Element {
         const actionButtons: (roster: Roster) => React.ReactNode = (roster) => {
             return (
                 <>

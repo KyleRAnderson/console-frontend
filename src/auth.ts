@@ -35,7 +35,7 @@ export function clearLogin(): void {
     localStorage.removeItem(idKey);
 }
 
-export function storeAuthentication(email: string, userID: string) {
+export function storeAuthentication(email: string, userID: string): void {
     localStorage.setItem(emailKey, email);
     localStorage.setItem(signedInKey, true.toString());
     localStorage.setItem(idKey, userID);

@@ -20,7 +20,7 @@ export default class CreateRoster extends React.Component<Props, State> {
 
     state: State = { ...CreateRoster.defaultState };
 
-    render() {
+    render(): JSX.Element {
         return (
             <Container fluid>
                 <Form onSubmit={(event: React.FormEvent<HTMLFormElement>) => this.submitForm(event)}>
@@ -71,11 +71,11 @@ export default class CreateRoster extends React.Component<Props, State> {
         this.setState({ ...this.state, name: value });
     }
 
-    clearForm() {
+    clearForm(): void {
         this.setState({ ...CreateRoster.defaultState });
     }
 
-    notifySuccess(success = true, message = '') {
+    notifySuccess(success = true, message = ''): void {
         let title: string = success ? 'Roster Created' : 'Error Creating Roster';
         if (message.length === 0) {
             message = title;
@@ -88,7 +88,7 @@ export default class CreateRoster extends React.Component<Props, State> {
         });
     }
 
-    makeRequest(rosterName: string, participant_properties: string[]) {
+    makeRequest(rosterName: string, participant_properties: string[]): void {
         createRoster({ name: rosterName, participant_properties: participant_properties })
             .then(({ data: roster }) => {
                 this.clearForm();

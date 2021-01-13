@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import UserDashboard from './UserDashboard';
 import UserNavbar from './UserNavbar';
 
-function AppPage(props: RouteComponentProps) {
+function AppPage(props: RouteComponentProps): JSX.Element {
     const [extraNavItems, setExtraNavItems] = useState<React.ReactNode>([]);
 
     return (
