@@ -22,9 +22,6 @@ export async function login(email: string, password: string): Promise<boolean> {
     let userID = '';
     let success = false;
 
-    // TODO see if there's a way we can get the CSRF token without this pointless request. Also make sure that there aren't other places the user might end up without a CSRF token.
-    await ApiRequest.getItem(ApiPaths.API_ROOT_PATH);
-
     try {
         const { data: user } = await ApiRequest.postItem<LoginPost, User>(
             ApiPaths.USERS_LOGIN_PATH,
