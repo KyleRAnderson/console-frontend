@@ -7,7 +7,7 @@ export type Props = {
     /** Options to be provided to the modal itself. */
     modalOptions?: Omit<React.ComponentProps<typeof Modal>, 'show' | 'onHide' | 'onExited'>;
     /** Options to be provided to the generated Modal.Header */
-    headerOptions?: ModalHeaderProps;
+    headerOptions?: Omit<ModalHeaderProps, 'ref'>;
     /** The element to display in the modal's title. */
     modalTitle?: React.ReactNode;
     /** The element to display in the modal's footer. */
