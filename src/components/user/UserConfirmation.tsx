@@ -25,17 +25,28 @@ export default function UserConfirmation(
         sendConfirmation();
     }, []);
 
+    useEffect(() => {
+        switch (submissionState) {
+            case SubmissionState.SubmissionSuccess:
+                createNotification({ type: 'success', message: 'User Confirmed!' });
+                break;
+            case SubmissionState.SubmissionFailed:
+                createNotification({
+                    type: 'danger',
+                    message: 'Failed to confirm user, token may have expired.',
+                });
+                break;
+            default:
+                break;
+        }
+    }, [submissionState]);
+
     let element: React.ReactNode;
     switch (submissionState) {
         case SubmissionState.SubmissionSuccess:
-            createNotification({ type: 'success', message: 'User Confirmed!' });
             element = <Redirect to={AppPaths.LOGIN_PATH} />;
             break;
         case SubmissionState.SubmissionFailed:
-            createNotification({
-                type: 'danger',
-                message: 'Failed to confirm user, token may have expired.',
-            });
             element = <Redirect to={AppPaths.ROOT} />;
             break;
         default:
