@@ -24,7 +24,7 @@ export default function LicenseSearch(props: Props): JSX.Element {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<OptionType[]>([]);
 
-    function handleChange(value: ValueType<OptionType>): void {
+    function handleChange(value: ValueType<OptionType, false>): void {
         if (value && !Array.isArray(value)) {
             props.onLicenseSelected((value as OptionType).value);
         }

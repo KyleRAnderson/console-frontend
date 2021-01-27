@@ -48,13 +48,13 @@ export default function MatchFiltersSelector({ numRounds, currentFilters, ...pro
                 : currentFilters.round.sort().map(roundNumberToOptionType))) ||
         [];
 
-    function handleSelectChange(value: ValueType<OptionType>): void {
+    function handleSelectChange(value: ValueType<OptionType, true>): void {
         let newSelectedRoundNumbers: MatchFilters['round'];
         if (value) {
             if (Array.isArray(value)) {
                 newSelectedRoundNumbers = (value as OptionsType<OptionType>).map(({ value }) => parseInt(value));
             } else {
-                newSelectedRoundNumbers = parseInt((value as OptionType).value);
+                newSelectedRoundNumbers = parseInt(((value as unknown) as OptionType).value); // TODO this cast here makes me nervous
             }
         } else {
             newSelectedRoundNumbers = undefined;
@@ -68,7 +68,7 @@ export default function MatchFiltersSelector({ numRounds, currentFilters, ...pro
                 <Col md="4">
                     <Form.Group controlId="roundSelector">
                         <Form.Label>Round</Form.Label>
-                        <Select<OptionType>
+                        <Select<OptionType, true>
                             isDisabled={numRounds === 0}
                             isMulti
                             name="rounds"
