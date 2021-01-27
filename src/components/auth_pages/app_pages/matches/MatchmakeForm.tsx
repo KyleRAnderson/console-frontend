@@ -13,9 +13,9 @@ type PropertyTracker = {
     [property: string]: string;
 };
 
-const WITHIN_LABEL = 'Within';
-const BETWEEN_LABEL = 'Between';
-const NONE_LABEL = 'None';
+const WITHIN_LABEL = 'Within' as const;
+const BETWEEN_LABEL = 'Between' as const;
+const NONE_LABEL = 'None' as const;
 
 export default function MatchmakeForm(props: Props): JSX.Element {
     const startingTracker: PropertyTracker = props.participantProperties.reduce<PropertyTracker>((total, property) => {
