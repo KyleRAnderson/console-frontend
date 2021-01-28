@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Modal } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import Hunt from '../../../../../models/Hunt';
@@ -26,6 +26,10 @@ export default function MatchRoutedModal({ hunt, onHide, match, setMatch, ...mat
         setShowModal(true);
     }, [match]);
 
+    const onReload = useCallback(() => {
+        setMatch(null);
+    }, [setMatch]);
+
     return (
         <Route
             exact
@@ -37,12 +41,7 @@ export default function MatchRoutedModal({ hunt, onHide, match, setMatch, ...mat
                             <Modal.Title>Match {match?.local_id || 'Loading...'}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <MatchRouteLoader
-                                hunt={hunt}
-                                onLoaded={setMatch}
-                                isLoaded={!!match}
-                                onReload={() => setMatch(null)}
-                            >
+                            <MatchRouteLoader hunt={hunt} onLoaded={setMatch} isLoaded={!!match} onReload={onReload}>
                                 {match && (
                                     <Container fluid>
                                         <MatchDetails
