@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import License from '../../../../../models/License';
 import Match from '../../../../../models/Match';
@@ -80,14 +80,20 @@ export default function MatchDetails({ match, onMatchUpdated, onSwitchMatch }: P
 
     return (
         <>
-            {/* Full Name */}
-            <Row>{licensesDisplay.map(([first]) => first)}</Row>
-            {/* Properties */}
-            <Row>{licensesDisplay.map(([, second]) => second)}</Row>
-            {/* Matches */}
-            <Row>{licensesDisplay.map(([, , third]) => third)}</Row>
-            {/* Eliminate Button */}
-            <Row>{licensesDisplay.map(([, , , fourth]) => fourth)}</Row>
+            {licensesDisplay.map(([first, second, third, fourth], i) => {
+                return (
+                    <Fragment key={i}>
+                        {/* Full Name */}
+                        <Row>{first}</Row>
+                        {/* Properties */}
+                        <Row>{second}</Row>
+                        {/* Matches */}
+                        <Row>{third}</Row>
+                        {/* Eliminate Button */}
+                        <Row>{fourth}</Row>
+                    </Fragment>
+                );
+            })}
         </>
     );
 }
