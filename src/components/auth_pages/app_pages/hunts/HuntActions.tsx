@@ -62,14 +62,14 @@ export default function HuntActions(props: Props): JSX.Element {
 
     function hideModals(): void {
         const newPath = pathWithoutModals();
-        if (newPath != location.pathname) {
+        if (newPath !== location.pathname) {
             // Just remove the last part of the URL.
             history.push(newPath);
         }
     }
 
     function showModal(path: string): void {
-        path = path.replace(/[*\/]/g, '');
+        path = path.replace(/[*/]/g, '');
         if (!currentModalPath(path)) {
             history.push(urljoin(pathWithoutModals(), path));
         }

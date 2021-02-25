@@ -3,9 +3,7 @@ import MiniSignal from 'mini-signals';
 
 export const PASSWORD_MAX_LENGTH = 128,
     PASSWORD_MIN_LENGTH = 6;
-export const PASSWORD_REGEX = new RegExp(
-    `^[A-Za-z0-9\.!@#$%\^&\*\(\)_\+\-=]{${PASSWORD_MIN_LENGTH},${PASSWORD_MAX_LENGTH}}$`,
-);
+export const PASSWORD_REGEX = new RegExp(`^[A-Za-z0-9.!@#$%^&*()_+-=]{${PASSWORD_MIN_LENGTH},${PASSWORD_MAX_LENGTH}}$`);
 
 const emailKey = 'email';
 const idKey = 'id';

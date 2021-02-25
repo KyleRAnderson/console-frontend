@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Nav } from 'react-bootstrap';
-import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import { HuntWithProperties } from '../../../models/Hunt';
 import Roster from '../../../models/Roster';
 import * as AppPaths from '../../../routes/AppPaths';
@@ -13,13 +13,14 @@ import RostersList from './rosters/RostersList';
  * setMenuItem: A function to call to set a menu item for this user's dashboard,
  * so that it displays on top.
  */
-type Props = RouteComponentProps & {
+type UserDashboardProps = {
     setMenuItem?: (item: React.ReactNode) => void;
 };
 
-export default function UserDashboard(props: Props): JSX.Element {
+export default function UserDashboard({ setMenuItem }: UserDashboardProps): JSX.Element {
     const [currentRoster, setCurrentRoster] = useState<Roster | undefined>(undefined);
     const [currentHunt, setCurrentHunt] = useState<HuntWithProperties | undefined>(undefined);
+    const history = useHistory();
 
     function setNewCurrentRoster(roster: Roster): void {
         setCurrentRoster(roster);
@@ -27,24 +28,24 @@ export default function UserDashboard(props: Props): JSX.Element {
 
     function showRoster(roster: Roster): void {
         setNewCurrentRoster(roster);
-        props.history.push(AppPaths.rosterPath(roster));
+        history.push(AppPaths.rosterPath(roster));
     }
 
     function setNewCurrentHunt(hunt: HuntWithProperties): void {
         setCurrentHunt(hunt);
-        props.history.push(AppPaths.huntPath(hunt));
+        history.push(AppPaths.huntPath(hunt));
     }
 
     useEffect(() => {
         if (currentRoster) {
-            props.setMenuItem?.(
+            setMenuItem?.(
                 <>
                     <Nav.Link href={AppPaths.rosterPath(currentRoster)}>{currentRoster.name}</Nav.Link>
                     <Nav.Link href={AppPaths.permissionsPath(currentRoster)}>Permissions</Nav.Link>
                 </>,
             );
         }
-    }, [currentRoster]);
+    }, [currentRoster, setMenuItem]);
 
     return (
         <>

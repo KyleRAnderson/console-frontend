@@ -54,7 +54,7 @@ export default function MatchFiltersSelector({ numRounds, currentFilters, ...pro
             if (Array.isArray(value)) {
                 newSelectedRoundNumbers = (value as OptionsType<OptionType>).map(({ value }) => parseInt(value));
             } else {
-                newSelectedRoundNumbers = parseInt(((value as unknown) as OptionType).value); // TODO this cast here makes me nervous
+                newSelectedRoundNumbers = parseInt(((value as unknown) as OptionType).value); // TODO see if we can do better here with the typings.
             }
         } else {
             newSelectedRoundNumbers = undefined;

@@ -32,7 +32,7 @@ export default function PaginationBar(props: Props): JSX.Element {
             ? [
                   <Pagination.First
                       key="first"
-                      disabled={props.currentPage == 1}
+                      disabled={props.currentPage === 1}
                       onClick={() => props.onSetPage?.(1)}
                   />,
                   <Pagination.Last
@@ -48,7 +48,7 @@ export default function PaginationBar(props: Props): JSX.Element {
             ? [
                   <Pagination.Prev
                       key="previous"
-                      disabled={props.currentPage == 1}
+                      disabled={props.currentPage === 1}
                       onClick={() => props.onSetPage?.(props.currentPage - 1)}
                   />,
                   <Pagination.Next

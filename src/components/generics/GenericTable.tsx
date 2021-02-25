@@ -48,7 +48,7 @@ export default function GenericTable<T>(props: GenericTableProps<T>): JSX.Elemen
     const { propertyMappings: _propertyMappings, values: _values, ...tableProps }: GenericTableProps<T> = props;
 
     let noData: React.ReactNode = null;
-    if (props.values.length == 0) {
+    if (props.values.length === 0) {
         noData = (
             <Container fluid>
                 <Row className="justify-content-center">

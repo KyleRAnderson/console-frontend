@@ -13,10 +13,7 @@ export type Props = Omit<MatchesListProps, 'onMatchesLoaded'> & {
 };
 
 /** View component for a match list and any other match items. */
-export default function MatchesView({
-    setAreMatchesLoaded: setAreMatchesLoaded,
-    ...matchesListProps
-}: Props): JSX.Element {
+export default function MatchesView({ setAreMatchesLoaded, ...matchesListProps }: Props): JSX.Element {
     const [currentMatch, setCurrentMatch] = useState<Match | undefined | null>();
     const history = useHistory();
 
