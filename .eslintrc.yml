@@ -15,9 +15,6 @@ parserOptions:
     ecmaFeatures:
         jsx: true # Allows for the parsing of JSX
 rules:
-    semi:
-        - error
-        - always
     # Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     '@typescript-eslint/explicit-function-return-type': 'off'
     '@typescript-eslint/camelcase':
@@ -27,6 +24,8 @@ rules:
     '@typescript-eslint/no-unused-vars':
         - warn
         - varsIgnorePattern: _.*
+    '@typescript-eslint/no-explicit-any': 'error'
+    prettier/prettier: warn
 settings:
     react:
         # Tells eslint-plugin-react to automatically detect the version of React to use
