@@ -1,7 +1,8 @@
 import Axios from 'axios';
+import config from '../config';
 
 export default function initializeAxios(): void {
-    Axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+    Axios.defaults.baseURL = config.REACT_APP_API_BASE_URL;
     // Configure Axios to deal with CSRF tokens for us.
     Axios.defaults.xsrfCookieName = 'X-CSRF-Token';
     Axios.defaults.xsrfHeaderName = 'X-CSRF-Token';

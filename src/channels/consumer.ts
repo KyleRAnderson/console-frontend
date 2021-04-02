@@ -5,11 +5,12 @@
 import { createConsumer } from '@rails/actioncable';
 import { Cable } from 'actioncable';
 import urljoin from 'url-join';
+import config from '../config';
 import * as ApiPaths from '../routes/ApiPaths';
 
 type AppCable = {
     cable: Cable;
 };
 
-const App: AppCable = { cable: createConsumer(urljoin(process.env.REACT_APP_API_BASE_URL || '', ApiPaths.CABLE_PATH)) };
+const App: AppCable = { cable: createConsumer(urljoin(config.REACT_APP_API_BASE_URL || '', ApiPaths.CABLE_PATH)) };
 export default App;
